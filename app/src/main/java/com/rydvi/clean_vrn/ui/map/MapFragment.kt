@@ -1,4 +1,4 @@
-package com.rydvi.clean_vrn.ui.send
+package com.rydvi.clean_vrn.ui.map
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.rydvi.clean_vrn.R
 
-class SendFragment : Fragment() {
+class MapFragment : Fragment() {
 
-    private lateinit var sendViewModel: SendViewModel
+    private lateinit var slideshowViewModel: MapViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sendViewModel =
-            ViewModelProviders.of(this).get(SendViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_send, container, false)
-        val textView: TextView = root.findViewById(R.id.text_send)
-        sendViewModel.text.observe(this, Observer {
+        slideshowViewModel =
+            ViewModelProviders.of(this).get(MapViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
+        val textView: TextView = root.findViewById(R.id.text_slideshow)
+        slideshowViewModel.text.observe(this, Observer {
             textView.text = it
         })
         return root
