@@ -9,6 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.games.GamesListActivity"></activity>
+        <activity
+            android:name=".ui.organizators.OrganizatorListActivity"
+            android:label="@string/title_organizator_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rydvi.clean_vrn.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.organizators.OrganizatorDetailActivity"
+            android:label="@string/title_organizator_detail"
+            android:parentActivityName=".ui.organizators.OrganizatorListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rydvi.clean_vrn.ui.organizators.OrganizatorListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.games.GameDetailActivity"
+            android:label="@string/menu_games"
+            android:parentActivityName=".ui.games.GameListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rydvi.clean_vrn.ui.games.GameListActivity" />
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

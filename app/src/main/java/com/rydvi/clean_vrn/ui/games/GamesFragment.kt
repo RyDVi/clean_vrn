@@ -8,11 +8,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.ui.games.dummy.DummyContent
+
 
 class GamesFragment : Fragment() {
 
     private lateinit var toolsViewModel: GamesViewModel
+    private var twoPane: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +31,12 @@ class GamesFragment : Fragment() {
         toolsViewModel.text.observe(this, Observer {
             textView.text = it
         })
+        val game_list = root.findViewById<RecyclerView>(R.id.game_list)
+        setupRecyclerView(game_list)
         return root
+    }
+
+    private fun setupRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.adapter = GameItemRecyclerViewAdapter(activity!!, DummyContent.ITEMS, twoPane)
     }
 }
