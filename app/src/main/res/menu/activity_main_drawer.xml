@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_teams"
+            android:title="@string/menu_teams" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_organizators"
+            android:title="@string/menu_orgs" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_map"
+            android:title="@string/menu_map" />
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/ic_menu_games"
+            android:title="@string/menu_games" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_exit"
+            android:title="@string/menu_exit" />
+    </group>
+
+</menu>
