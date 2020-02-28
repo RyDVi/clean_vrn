@@ -27,10 +27,10 @@ class GamesFragment : Fragment() {
         toolsViewModel =
             ViewModelProviders.of(this).get(GamesViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_tools, container, false)
-        val textView: TextView = root.findViewById(R.id.text_tools)
-        toolsViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
+//        val textView: TextView = root.findViewById(R.id.text_tools)
+//        toolsViewModel.text.observe(this, Observer {
+//            textView.text = it
+//        })
         val game_list = root.findViewById<RecyclerView>(R.id.game_list)
         setupRecyclerView(game_list)
         return root
