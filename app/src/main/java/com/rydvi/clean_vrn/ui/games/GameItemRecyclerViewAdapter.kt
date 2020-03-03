@@ -9,12 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.games.dummy.DummyContent
 import kotlinx.android.synthetic.main.game_list_content.view.*
 
 class GameItemRecyclerViewAdapter(
     private val activity: FragmentActivity,
-    private val values: List<DummyContent.DummyItem>,
+//    private val values: List<DummyContent.DummyItem>,
+    private val values: List<Game>,
     private val twoPane: Boolean
 ) :
     RecyclerView.Adapter<GameItemRecyclerViewAdapter.ViewHolder>() {
@@ -23,11 +25,14 @@ class GameItemRecyclerViewAdapter(
 
     init {
         onClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyContent.DummyItem
+//            val item = v.tag as DummyContent.DummyItem
+            val item = v.tag as Game
             if (twoPane) {
                 val fragment = GameDetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(GameDetailFragment.ARG_ITEM_ID, item.id)
+                        item.id?.let {
+                            putLong(GameDetailFragment.ARG_ITEM_ID, it)
+                        }
                     }
                 }
                 activity.supportFragmentManager
@@ -51,8 +56,9 @@ class GameItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.nameView.text = item.name.toString()
+        holder.descriptionView.text = item.description.toString()
+        holder.datetimeView.text = item.datetime.toString()
 
         with(holder.itemView) {
             tag = item
@@ -63,7 +69,8 @@ class GameItemRecyclerViewAdapter(
     override fun getItemCount() = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idView: TextView = view.id_text
-        val contentView: TextView = view.content
+        val nameView: TextView = view.name
+        val descriptionView: TextView = view.description
+        val datetimeView: TextView = view.datetime
     }
 }

@@ -51,7 +51,7 @@ class GamesListActivity : AppCompatActivity() {
         }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = GameItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+//        recyclerView.adapter = GameItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
     }
 
 
