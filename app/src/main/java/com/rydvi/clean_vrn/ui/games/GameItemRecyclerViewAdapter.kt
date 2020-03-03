@@ -1,6 +1,7 @@
 package com.rydvi.clean_vrn.ui.games
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +26,6 @@ class GameItemRecyclerViewAdapter(
 
     init {
         onClickListener = View.OnClickListener { v ->
-//            val item = v.tag as DummyContent.DummyItem
             val item = v.tag as Game
             if (twoPane) {
                 val fragment = GameDetailFragment().apply {
@@ -57,8 +57,13 @@ class GameItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.nameView.text = item.name.toString()
+        when (item.id_status!!.toInt()){
+            1 -> holder.nameView.setTextColor(Color.GREEN)
+            2 -> holder.nameView.setTextColor(Color.RED)
+        }
         holder.descriptionView.text = item.description.toString()
         holder.datetimeView.text = item.datetime.toString()
+
 
         with(holder.itemView) {
             tag = item
