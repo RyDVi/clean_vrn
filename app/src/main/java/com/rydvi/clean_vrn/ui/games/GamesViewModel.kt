@@ -1,9 +1,8 @@
 package com.rydvi.clean_vrn.ui.games
 
+import android.app.Activity
 import android.os.AsyncTask
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
@@ -40,13 +39,25 @@ class GamesViewModel : ViewModel() {
 
     fun getGames(): MutableLiveData<Array<Game>> {
         if(dataGames==null){
-            dataGames = dataRepository.getGames()
+            dataGames = MutableLiveData()
+            dataRepository.getGames {
+                dataGames?.postValue(it)
+            }
+//            dataGames = dataRepository.getGames()
         }
         return dataGames!!
     }
 
-    override fun onCleared() {
-        super.onCleared()//В этом методе вы сможете выполнить все необходимые операции по освобождению ресурсов, закрытию соединений/потоков и т.п.
+    fun refreshGames(): MutableLiveData<Array<Game>>? {
+        dataRepository.getGames{
+            dataGames?.postValue(it)
+        }
+        return dataGames
     }
+
+//В этом методе вы сможете выполнить все необходимые операции по освобождению ресурсов, закрытию соединений/потоков и т.п.
+//    override fun onCleared() {
+//        super.onCleared()
+//    }
 
 }

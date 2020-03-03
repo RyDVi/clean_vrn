@@ -1,6 +1,7 @@
 package com.rydvi.clean_vrn.api
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
 import org.springframework.web.client.RestTemplate
 
@@ -18,18 +19,26 @@ class DataRepository {
         val gamesLive: MutableLiveData<Array<Game>> = MutableLiveData()
         Thread(Runnable {
             //Необходимо использовать postValue вместо "value =", поскольку только оно работает асинхронно
-//            val games = restTemplateJsonConverter.getForObject(
-//                "$base_url/games.php",
-//                Array<Game>::class.java
-//            )
-//            for (game in games) {
-//                gamesLive.postValue(game)
-//            }
-            gamesLive.postValue(restTemplateJsonConverter.getForObject(
-                "$base_url/games.php",
-                Array<Game>::class.java))
+            gamesLive.postValue(
+                restTemplateJsonConverter.getForObject(
+                    "$base_url/games.php",
+                    Array<Game>::class.java
+                )
+            )
         }).start()
         return gamesLive
+    }
+
+    fun getGames(callback: (Array<Game>) -> Unit) {
+        Thread(Runnable {
+            //Необходимо использовать postValue вместо "value =", поскольку только оно работает асинхронно
+            callback(
+                restTemplateJsonConverter.getForObject(
+                    "$base_url/games.php",
+                    Array<Game>::class.java
+                )
+            )
+        }).start()
     }
 
     fun getGame(id: Int): MutableLiveData<Game> {
