@@ -6,6 +6,7 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import android.widget.LinearLayout
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import kotlinx.android.synthetic.main.activity_game_detail.*
@@ -45,9 +46,10 @@ class GameDetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = GameDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(
+                    putLong(
                         GameDetailFragment.ARG_ITEM_ID,
-                        intent.getStringExtra(GameDetailFragment.ARG_ITEM_ID)
+//                        intent.getStringExtra(GameDetailFragment.ARG_ITEM_ID)
+                        intent.getLongExtra(GameDetailFragment.ARG_ITEM_ID, 0)
                     )
                 }
             }
