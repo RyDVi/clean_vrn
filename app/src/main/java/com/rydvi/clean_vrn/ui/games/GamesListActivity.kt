@@ -7,7 +7,6 @@ import androidx.core.app.NavUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.rydvi.clean_vrn.R
-import com.rydvi.clean_vrn.ui.games.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_organizator_list.*
 import kotlinx.android.synthetic.main.game_list.*
 import kotlinx.android.synthetic.main.organizator_list.*
@@ -27,18 +26,12 @@ class GamesListActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
-        // Show the Up button in the action bar.
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (game_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             twoPane = true
         }
-
-        setupRecyclerView(organizator_list)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
@@ -49,10 +42,4 @@ class GamesListActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-//        recyclerView.adapter = GameItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
-    }
-
-
 }

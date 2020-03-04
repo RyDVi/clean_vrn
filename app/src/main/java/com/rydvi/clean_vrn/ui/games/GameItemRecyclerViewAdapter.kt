@@ -11,12 +11,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
-import com.rydvi.clean_vrn.ui.games.dummy.DummyContent
 import kotlinx.android.synthetic.main.game_list_content.view.*
 
 class GameItemRecyclerViewAdapter(
     private val activity: FragmentActivity,
-//    private val values: List<DummyContent.DummyItem>,
     private val values: List<Game>,
     private val twoPane: Boolean
 ) :

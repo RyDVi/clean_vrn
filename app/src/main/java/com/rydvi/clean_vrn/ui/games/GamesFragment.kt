@@ -33,7 +33,6 @@ class GamesFragment : Fragment() {
 
         gameList = root.findViewById(R.id.game_list)
         gamesViewModel.getGames()?.observe(this, Observer {
-//            Log.e("Games getted", "games success getted")
             setupRecyclerView(gameList, gamesViewModel.getGames())
         })
 

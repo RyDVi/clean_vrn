@@ -1,8 +1,5 @@
 package com.rydvi.clean_vrn.api
 
-//import org.codehaus.jackson.annotate.JsonIgnoreProperties
-
-//@JsonIgnoreProperties(ignoreUnknown = true)
 class Game {
     var id: Long? = null
         get() = field
