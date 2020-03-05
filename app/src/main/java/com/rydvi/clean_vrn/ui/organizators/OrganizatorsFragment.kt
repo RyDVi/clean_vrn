@@ -23,7 +23,7 @@ class OrganizatorsFragment : Fragment() {
     ): View? {
         organizatorsViewModel =
             ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_gallery, container, false)
+        val root = inflater.inflate(R.layout.fragment_organizators, container, false)
         organizatorsViewModel.getOrganizators().observe(this, Observer {
             val organzator_list = root.findViewById<RecyclerView>(R.id.organizator_list)
             setupRecyclerView(organzator_list, it)

@@ -8,13 +8,13 @@
         android:id="@+id/nav_home"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamsFragment"
         android:label="@string/menu_teams"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_teams" />
 
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorsFragment"
         android:label="@string/menu_orgs"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_organizators" />
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -26,7 +26,7 @@
         android:id="@+id/nav_tools"
         android:name="com.rydvi.clean_vrn.ui.games.GamesFragment"
         android:label="@string/menu_games"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_games" />
 
     <fragment
         android:id="@+id/nav_share"

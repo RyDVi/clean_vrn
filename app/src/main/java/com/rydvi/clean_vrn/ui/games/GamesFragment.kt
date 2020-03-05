@@ -29,7 +29,7 @@ class GamesFragment : Fragment() {
     ): View? {
         gamesViewModel =
             ViewModelProviders.of(this).get(GamesViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_tools, container, false)
+        val root = inflater.inflate(R.layout.fragment_games, container, false)
 
         gameList = root.findViewById(R.id.game_list)
         gamesViewModel.getGames()?.observe(this, Observer {

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
-import com.rydvi.clean_vrn.ui.games.GamesViewModel
 import kotlinx.android.synthetic.main.team_list.*
 
 class TeamsFragment : Fragment() {
@@ -31,7 +30,7 @@ class TeamsFragment : Fragment() {
     ): View? {
         teamsViewModel =
             ViewModelProviders.of(this).get(TeamsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val root = inflater.inflate(R.layout.fragment_teams, container, false)
         teamsViewModel.getTeams().observe(this, Observer {
             val teamList:RecyclerView = root.findViewById(R.id.team_list)
             setupRecyclerView(teamList, it)
