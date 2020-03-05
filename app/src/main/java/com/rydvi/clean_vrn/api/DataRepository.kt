@@ -64,4 +64,15 @@ class DataRepository {
             )
         }).start()
     }
+
+    fun getOrganizators(callback: (Array<Organizator>) -> Unit?) {
+        Thread( Runnable {
+            callback(
+                restTemplateJsonConverter.getForObject(
+                    "$base_url/organizators.php",
+                    Array<Organizator>::class.java
+                )
+            )
+        }).start()
+    }
 }

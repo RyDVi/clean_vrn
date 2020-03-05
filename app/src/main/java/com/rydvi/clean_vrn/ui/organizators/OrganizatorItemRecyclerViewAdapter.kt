@@ -9,12 +9,13 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.organizators.dummy.DummyContent
 import kotlinx.android.synthetic.main.organizator_list_content.view.*
 
 class OrganizatorItemRecyclerViewAdapter(
     private val parentActivity: FragmentActivity,
-    private val values: List<DummyContent.DummyItem>,
+    private val values: List<Organizator>,
     private val twoPane: Boolean
 ) :
     RecyclerView.Adapter<OrganizatorItemRecyclerViewAdapter.ViewHolder>() {
@@ -23,11 +24,13 @@ class OrganizatorItemRecyclerViewAdapter(
 
     init {
         onClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyContent.DummyItem
+            val item = v.tag as Organizator
             if (twoPane) {
                 val fragment = OrganizatorDetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(OrganizatorDetailFragment.ARG_ITEM_ID, item.id)
+                        item.id?.let {
+                            putLong(OrganizatorDetailFragment.ARG_ITEM_ID, it)
+                        }
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -51,8 +54,9 @@ class OrganizatorItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.lastnameView.text = item.lastname
+        holder.firstnameView.text = item.firstname
+        holder.middlenameView.text = item.middlename
 
         with(holder.itemView) {
             tag = item
@@ -63,7 +67,8 @@ class OrganizatorItemRecyclerViewAdapter(
     override fun getItemCount() = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idView: TextView = view.id_text
-        val contentView: TextView = view.content
+        val lastnameView: TextView = view.organizator_lastname
+        val firstnameView: TextView = view.organizator_firstname
+        val middlenameView: TextView = view.organizator_middlename
     }
 }

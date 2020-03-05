@@ -76,6 +76,6 @@ class OrganizatorListActivity : AppCompatActivity() {
         }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = OrganizatorItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+//        recyclerView.adapter = OrganizatorItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
     }
 }
