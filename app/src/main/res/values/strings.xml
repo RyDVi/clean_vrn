@@ -5,18 +5,31 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!--  Меню  -->
     <string name="menu_teams">Teams</string>
     <string name="menu_orgs">Organizators</string>
     <string name="menu_map">Map</string>
     <string name="menu_games">Games</string>
     <string name="menu_exit">Exit</string>
-    <string name="title_organizator_list">Organizators</string>
+
+    <!--  Команды  -->
     <string name="title_team_list">Teams</string>
-    <string name="label_address">Address</string>
+    <string name="title_team_detail">Team</string>
+
+
+    <!--  Игры  -->
     <string name="lbl_game_address">Address</string>
     <string name="lbl_game_datetime">Datetime</string>
     <string name="lbl_game_route">Route</string>
     <string name="title_game_detail">Game</string>
-    <string name="title_team_detail">Team</string>
+
+    <!--  Организации  -->
+    <string name="title_organizator_list">Organizators</string>
     <string name="title_organizator_detail">Organizator</string>
+    <string name="lbl_organizator_firstname">Firstname</string>
+    <string name="lbl_organizator_lastname">Lastname</string>
+    <string name="lbl_organizator_middlename">Middlename</string>
+    <string name="lbl_organizator_email">Email</string>
+    <string name="lbl_organizator_phone">Phone</string>
+
 </resources>
