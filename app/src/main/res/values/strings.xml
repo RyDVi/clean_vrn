@@ -13,10 +13,10 @@
     <string name="title_organizator_list">Organizators</string>
     <string name="title_organizator_detail">Organizator Detail</string>
     <string name="title_team_list">Teams</string>
-    <string name="title_team_detail">Team Detail</string>
     <string name="label_address">Address</string>
     <string name="lbl_game_address">Address</string>
     <string name="lbl_game_datetime">Datetime</string>
     <string name="lbl_game_route">Route</string>
     <string name="title_game_detail">Game</string>
+    <string name="title_team_detail">Team</string>
 </resources>

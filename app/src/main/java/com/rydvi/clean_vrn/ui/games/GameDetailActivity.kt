@@ -27,7 +27,6 @@ class GameDetailActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
@@ -35,7 +34,6 @@ class GameDetailActivity : AppCompatActivity() {
                 arguments = Bundle().apply {
                     putLong(
                         GameDetailFragment.ARG_ITEM_ID,
-//                        intent.getStringExtra(GameDetailFragment.ARG_ITEM_ID)
                         intent.getLongExtra(GameDetailFragment.ARG_ITEM_ID, 0)
                     )
                 }
