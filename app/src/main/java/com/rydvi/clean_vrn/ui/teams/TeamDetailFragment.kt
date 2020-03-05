@@ -47,7 +47,7 @@ class TeamDetailFragment : Fragment() {
                 rootView.team_sum_points.text = it.sumPoints.toString()
             }
         })
-        teamsViewModel.refreshGames()
+        teamsViewModel.refreshTeams()
 
         return rootView
     }

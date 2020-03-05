@@ -20,7 +20,7 @@ class TeamsViewModel : ViewModel() {
         return dataTeams!!
     }
 
-    fun refreshGames(): MutableLiveData<Array<Team>>? {
+    fun refreshTeams(): MutableLiveData<Array<Team>>? {
         dataRepository.getTeams{
             dataTeams?.postValue(it)
         }

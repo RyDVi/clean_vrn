@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
+import com.rydvi.clean_vrn.ui.games.GamesViewModel
 import kotlinx.android.synthetic.main.team_list.*
 
 class TeamsFragment : Fragment() {
@@ -20,6 +22,7 @@ class TeamsFragment : Fragment() {
      */
     private var twoPane: Boolean = false
     private lateinit var teamsViewModel: TeamsViewModel
+    private lateinit var swipeRefreshTeams: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +40,8 @@ class TeamsFragment : Fragment() {
             twoPane = true
         }
 
+        swipeRefreshTeams = root.findViewById(R.id.swipeRefreshTeams)
+        swipeRefreshTeams.setOnRefreshListener { onRefreshTeamsRecyclerView() }
         return root
     }
 
@@ -46,5 +51,12 @@ class TeamsFragment : Fragment() {
     ) {
         recyclerView.adapter =
             TeamItemRecyclerViewAdapter(activity!!, teams.toList(), twoPane)
+    }
+
+    private fun onRefreshTeamsRecyclerView(){
+        teamsViewModel = ViewModelProviders.of(this).get(TeamsViewModel::class.java)
+        teamsViewModel.refreshTeams()?.observe(this, Observer {
+            swipeRefreshTeams.isRefreshing = false
+        })
     }
 }
