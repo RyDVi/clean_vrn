@@ -1,22 +1,13 @@
 package com.rydvi.clean_vrn.ui.teams
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.app.NavUtils
-import androidx.appcompat.app.ActionBar
-import android.view.MenuItem
 import com.rydvi.clean_vrn.R
-
-import com.rydvi.clean_vrn.ui.teams.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_team_list.*
-import kotlinx.android.synthetic.main.team_list_content.view.*
 import kotlinx.android.synthetic.main.team_list.*
 
 /**
@@ -50,10 +41,6 @@ class TeamListActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (team_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
             twoPane = true
         }
 
@@ -63,12 +50,6 @@ class TeamListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
                 NavUtils.navigateUpFromSameTask(this)
                 true
             }
@@ -76,7 +57,7 @@ class TeamListActivity : AppCompatActivity() {
         }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = TeamItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+//        recyclerView.adapter = TeamItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
     }
 
 

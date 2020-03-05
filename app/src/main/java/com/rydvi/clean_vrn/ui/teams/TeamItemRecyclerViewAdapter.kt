@@ -9,12 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.teams.dummy.DummyContent
+import kotlinx.android.synthetic.main.game_list_content.view.*
 import kotlinx.android.synthetic.main.team_list_content.view.*
 
 class TeamItemRecyclerViewAdapter(
     private val parentActivity: FragmentActivity,
-    private val values: List<DummyContent.DummyItem>,
+    private val values: List<Team>,
     private val twoPane: Boolean
 ) :
     RecyclerView.Adapter<TeamItemRecyclerViewAdapter.ViewHolder>() {
@@ -23,11 +25,11 @@ class TeamItemRecyclerViewAdapter(
 
     init {
         onClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyContent.DummyItem
+            val item = v.tag as Team
             if (twoPane) {
                 val fragment = TeamDetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(TeamDetailFragment.ARG_ITEM_ID, item.id)
+                        putLong(TeamDetailFragment.ARG_ITEM_ID, item.id!!)
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -51,8 +53,11 @@ class TeamItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.nameView.text = item.name
+        holder.numberView.text = item.number.toString()
+        item.sumPoints?.let {
+            holder.sumPointsView.text = it.toString()
+        }
 
         with(holder.itemView) {
             tag = item
@@ -63,7 +68,8 @@ class TeamItemRecyclerViewAdapter(
     override fun getItemCount() = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val idView: TextView = view.id_text
-        val contentView: TextView = view.content
+        val nameView: TextView = view.team_name
+        val numberView: TextView = view.team_number
+        val sumPointsView: TextView = view.team_sum_points
     }
 }

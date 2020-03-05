@@ -50,7 +50,18 @@ class DataRepository {
                     Game::class.java
                 )
             )
-        })
+        }).start()
         return game
+    }
+
+    fun getTeams(callback:(Array<Team>)->Unit){
+        Thread( Runnable {
+            callback(
+                restTemplateJsonConverter.getForObject(
+                    "$base_url/teams.php",
+                    Array<Team>::class.java
+                )
+            )
+        }).start()
     }
 }
