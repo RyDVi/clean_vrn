@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.organizators.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_organizator_detail.*
 import kotlinx.android.synthetic.main.organizator_detail.view.*
@@ -21,21 +25,9 @@ class OrganizatorDetailFragment : Fragment() {
     /**
      * The dummy content this fragment is presenting.
      */
-    private var item: DummyContent.DummyItem? = null
+    private var organizator: Organizator? = null
+    private lateinit var organizatorsViewModel: OrganizatorsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
-                // Load the dummy content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
-                item = DummyContent.ITEM_MAP[it.getString(ARG_ITEM_ID)]
-                activity?.toolbar_layout?.title = item?.content
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,10 +35,20 @@ class OrganizatorDetailFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.organizator_detail, container, false)
 
-        // Show the dummy content as text in a TextView.
-        item?.let {
-            rootView.organizator_detail.text = it.details
-        }
+        organizatorsViewModel =
+            ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
+        organizatorsViewModel.getOrganizators().observe(this, Observer {
+            val organizators = it
+            arguments?.let {
+                if (it.containsKey(ARG_ITEM_ID)) {
+                    val idOrganizator = it.getLong(ARG_ITEM_ID)
+                    organizator = organizators.find { org -> org.id == idOrganizator }
+                    activity?.toolbar_layout?.title =
+                        activity!!.resources.getString(R.string.title_organizator_detail)+" ${organizator?.lastname}"
+                }
+            }
+        })
+        organizatorsViewModel.refreshOrganizators()
 
         return rootView
     }
