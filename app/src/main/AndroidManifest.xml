@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rydvi.clean_vrn">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!-- Потом убрать usesCleartextTraffic-->
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.teams.TeamListActivity"
             android:label="@string/title_team_list"
@@ -30,7 +39,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rydvi.clean_vrn.ui.teams.TeamListActivity" />
         </activity>
-        <activity android:name=".ui.games.GamesListActivity" />
         <activity
             android:name=".ui.organizators.OrganizatorListActivity"
             android:label="@string/title_organizator_list"
@@ -49,24 +57,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rydvi.clean_vrn.ui.organizators.OrganizatorListActivity" />
         </activity>
+        <activity android:name=".ui.games.GamesListActivity" />
         <activity
             android:name=".ui.games.GameDetailActivity"
             android:label="@string/menu_games"
-            android:parentActivityName=".ui.games.GameListActivity"
+            android:parentActivityName=".ui.games.GamesListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rydvi.clean_vrn.ui.games.GameListActivity" />
+                android:value="com.rydvi.clean_vrn.ui.games.GamesListActivity" />
         </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

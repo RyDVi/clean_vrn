@@ -7,7 +7,7 @@ import com.rydvi.clean_vrn.api.Team
 
 class TeamsViewModel : ViewModel() {
 
-    private val dataRepository: DataRepository = DataRepository()
+    private val dataRepository: DataRepository = DataRepository
     private var dataTeams: MutableLiveData<Array<Team>>? = null
 
     fun getTeams(): MutableLiveData<Array<Team>> {

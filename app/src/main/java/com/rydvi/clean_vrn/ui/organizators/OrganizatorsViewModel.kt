@@ -9,7 +9,7 @@ import com.rydvi.clean_vrn.api.Organizator
 
 class OrganizatorsViewModel : ViewModel() {
 
-    private val dataRepository: DataRepository = DataRepository()
+    private val dataRepository: DataRepository = DataRepository
     private var dataOrganizators:MutableLiveData<Array<Organizator>>? = null
 
     fun getOrganizators(): MutableLiveData<Array<Organizator>> {
