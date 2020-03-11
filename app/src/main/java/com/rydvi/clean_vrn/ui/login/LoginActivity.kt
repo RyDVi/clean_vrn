@@ -10,15 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
-import com.rydvi.clean_vrn.ui.games.GameDetailActivity
-import com.rydvi.clean_vrn.ui.games.GameDetailFragment
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,6 +25,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
+
+        //Сокрытие тулбара
+        supportActionBar?.hide()
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
