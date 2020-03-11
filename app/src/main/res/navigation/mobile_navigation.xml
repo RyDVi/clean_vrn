@@ -2,10 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_tools">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_teams"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamsFragment"
         android:label="@string/menu_teams"
         tools:layout="@layout/fragment_teams" />

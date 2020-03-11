@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -30,6 +31,10 @@ class GamesFragment : Fragment() {
         gamesViewModel =
             ViewModelProviders.of(this).get(GamesViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_games, container, false)
+
+        //Отключение кнопки меню
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
 
         gameList = root.findViewById(R.id.game_list)
         gamesViewModel.getGames()?.observe(this, Observer {

@@ -1,23 +1,18 @@
 package com.rydvi.clean_vrn.api
 
 import androidx.lifecycle.MutableLiveData
-import org.json.JSONObject
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 
 object DataRepository {
 
 
-    //    private const val base_url = "http://192.168.0.57"
-    private const val base_url = "http://192.168.0.103"
+        private const val base_url = "http://192.168.0.57"
+//    private const val base_url = "http://192.168.0.103"
     private var session: Session? = null
 
 
