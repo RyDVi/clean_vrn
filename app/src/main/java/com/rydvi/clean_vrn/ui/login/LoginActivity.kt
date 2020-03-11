@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
+        val loginAsPlayer = findViewById<Button>(R.id.loginAsPlayer)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
         loginViewModel = ViewModelProviders.of(this,
@@ -102,6 +103,12 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 }
+            }
+
+            loginAsPlayer.setOnClickListener {
+                loading.visibility = View.VISIBLE
+                val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent)
             }
         }
     }
