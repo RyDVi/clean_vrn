@@ -21,7 +21,7 @@ class ExitFragment : Fragment() {
     ): View? {
         shareViewModel =
             ViewModelProviders.of(this).get(ExitViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_share, container, false)
+        val root = inflater.inflate(R.layout.fragment_exit, container, false)
         val textView: TextView = root.findViewById(R.id.text_share)
         shareViewModel.text.observe(this, Observer {
             textView.text = it

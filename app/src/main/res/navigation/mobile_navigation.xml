@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/nav_tools">
+    app:startDestination="@+id/nav_games">
 
     <fragment
         android:id="@+id/nav_teams"
@@ -11,27 +11,27 @@
         tools:layout="@layout/fragment_teams" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_organizators"
         android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorsFragment"
         android:label="@string/menu_orgs"
         tools:layout="@layout/fragment_organizators" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_map"
         android:name="com.rydvi.clean_vrn.ui.map.MapFragment"
         android:label="@string/menu_map"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/nav_tools"
+        android:id="@+id/nav_games"
         android:name="com.rydvi.clean_vrn.ui.games.GamesFragment"
         android:label="@string/menu_games"
         tools:layout="@layout/fragment_games" />
 
     <fragment
-        android:id="@+id/nav_share"
+        android:id="@+id/nav_exit"
         android:name="com.rydvi.clean_vrn.ui.exit.ExitFragment"
         android:label="@string/menu_exit"
-        tools:layout="@layout/fragment_share" />
+        tools:layout="@layout/fragment_exit" />
 
 </navigation>

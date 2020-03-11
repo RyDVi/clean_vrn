@@ -51,7 +51,7 @@ class GameItemRecyclerViewAdapter(
     private val onClickListener: View.OnClickListener = View.OnClickListener { v ->
         //Устанавливаем выбранную игру
         DataRepository.selectedGame = v.tag as Game
-        activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_slideshow)
+        activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_map)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
