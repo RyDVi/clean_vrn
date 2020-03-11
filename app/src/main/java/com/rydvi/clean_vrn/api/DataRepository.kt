@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
 
 
-        private const val base_url = "http://192.168.0.57"
-//    private const val base_url = "http://192.168.0.103"
+    private const val base_url = "http://192.168.0.57"
+    //    private const val base_url = "http://192.168.0.103"
     private var session: Session? = null
-
+    var selectedGame: Game? = null
 
     private val restTemplateJsonConverter: RestTemplate = {
         val restTemplate = RestTemplate()

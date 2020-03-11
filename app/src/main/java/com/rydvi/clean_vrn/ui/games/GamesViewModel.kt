@@ -11,6 +11,7 @@ class GamesViewModel : ViewModel() {
     private val dataRepository: DataRepository = DataRepository
     private var dataGames: MutableLiveData<Array<Game>>? = null
 
+
     fun getGames(): MutableLiveData<Array<Game>> {
         if (dataGames == null) {
             dataGames = MutableLiveData()
