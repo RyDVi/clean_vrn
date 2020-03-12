@@ -80,12 +80,16 @@ object DataRepository {
 
     fun getOrganizators(callback: (Array<Organizator>) -> Unit?) {
         Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            val entity = HttpEntity<String>(headers)
             callback(
-
-                restTemplateJsonConverter.getForObject(
+                restTemplateJsonConverter.exchange(
                     "$base_url/organizators.php",
+                    HttpMethod.GET,
+                    entity,
                     Array<Organizator>::class.java
-                )
+                ).body
             )
         }).start()
     }
