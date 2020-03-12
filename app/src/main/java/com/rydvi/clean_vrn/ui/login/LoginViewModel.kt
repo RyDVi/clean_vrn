@@ -20,7 +20,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     val session: MutableLiveData<Session>? = null
 
-    fun login(username: String, password: String, callback:()->Unit) {
+    fun login(username: String, password: String, isPlayer:Boolean, callback:()->Unit) {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 
@@ -36,7 +36,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 //                LoginResult(error = R.string.login_failed)
 //        }
 
-        DataRepository.login(username, password) {
+        DataRepository.login(username, password, isPlayer) {
             callback()
         }
     }

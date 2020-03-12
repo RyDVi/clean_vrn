@@ -1,6 +1,5 @@
 package com.rydvi.clean_vrn.ui.games
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
@@ -27,6 +26,12 @@ class GamesViewModel : ViewModel() {
             dataGames?.postValue(it)
         }
         return dataGames
+    }
+
+    fun selectGame(id_game: Long, callback: (Game) -> Unit) {
+        DataRepository.selectGame(id_game) { game ->
+            callback(game)
+        }
     }
 
 }

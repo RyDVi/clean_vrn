@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
 //                loginViewModel.login(username.text.toString(), password.text.toString())
-                loginViewModel.login(username.text.toString(), password.text.toString()){
+                loginViewModel.login(username.text.toString(), password.text.toString(), false){
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -107,8 +107,10 @@ class LoginActivity : AppCompatActivity() {
 
             loginAsPlayer.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                val intent = Intent(context, MainActivity::class.java)
-                context.startActivity(intent)
+                loginViewModel.login(username.text.toString(), password.text.toString(), true) {
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
+                }
             }
         }
     }

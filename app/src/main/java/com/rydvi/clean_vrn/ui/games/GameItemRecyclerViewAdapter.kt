@@ -3,6 +3,7 @@ package com.rydvi.clean_vrn.ui.games
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
-import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
-import com.rydvi.clean_vrn.ui.map.MapFragment
 import kotlinx.android.synthetic.main.game_list_content.view.*
 
 class GameItemRecyclerViewAdapter(
@@ -50,8 +49,21 @@ class GameItemRecyclerViewAdapter(
 
     private val onClickListener: View.OnClickListener = View.OnClickListener { v ->
         //Устанавливаем выбранную игру
-        DataRepository.selectedGame = v.tag as Game
-        activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_map)
+        val item = v.tag as Game
+        val gamesViewModel =
+            ViewModelProviders.of(activity).get(GamesViewModel::class.java)
+        item.id?.let {
+            //TODO: add loading
+            gamesViewModel.selectGame(it) {
+                //Запуск главного потока, поскольку findNavController работает только в нем
+                Handler(activity.mainLooper).post {
+                    activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_map)
+                }
+
+            }
+        } ?: run {
+            //TODO: error get id of game
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
