@@ -1,5 +1,6 @@
 package com.rydvi.clean_vrn
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -13,6 +14,9 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.MenuItem
+import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,8 +45,30 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_games, R.id.nav_exit
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        //Переопределение действий кнопок меню в выдвигаемом меню
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                //Переопределяем кнопку меню exit
+                R.id.nav_exit -> {
+                    DataRepository.logout {
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                    }
+                    true
+                }
+                //остальные оставляем как есть
+                else -> {
+                    menuItem.isChecked = true
+                    navController.navigate(menuItem.itemId)
+                    drawerLayout.closeDrawers()
+                    true
+                }
+            }
+        }
     }
 
 //    Отвечает за кнопку настроек в крайнем правом углу. Если расскоментить, то меню появится
