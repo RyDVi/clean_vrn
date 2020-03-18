@@ -1,5 +1,6 @@
 package com.rydvi.clean_vrn.ui.games
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
+import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
 
 
 class GamesFragment : Fragment() {
@@ -40,6 +43,15 @@ class GamesFragment : Fragment() {
         gamesViewModel.getGames()?.observe(this, Observer {
             setupRecyclerView(gameList, gamesViewModel.getGames())
         })
+
+        val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(activity, GameCreateEditActivity::class.java).apply {
+            }
+            //Отключение сохранения навигации в истории
+            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
+            startActivity(intent)
+        }
 
         swipeRefreshGames = root.findViewById(R.id.swipeRefreshGames)
         swipeRefreshGames.setOnRefreshListener { onRefreshGamesRecyclerView() }

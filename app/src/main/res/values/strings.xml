@@ -46,8 +46,13 @@
     <string name="organizator_lastname">Lastame</string>
     <string name="organizator_firstname">Firstname</string>
     <string name="organizator_middlename">Middlename</string>
-    <string name="organizator_email" >Email</string>
-    <string name="organizator_phone" >Phone</string>
+    <string name="organizator_email">Email</string>
+    <string name="organizator_phone">Phone</string>
     <string name="organizator_save">Save</string>
+    <string name="title_activity_game_create_edit">GameCreateEditActivity</string>
+    <string name="game_name">Name of game</string>
+    <string name="game_location">Location of game</string>
+    <string name="game_route">Route</string>
+    <string name="game_save">Save</string>
 
 </resources>

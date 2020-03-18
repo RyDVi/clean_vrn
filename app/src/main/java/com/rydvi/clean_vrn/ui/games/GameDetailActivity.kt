@@ -6,7 +6,9 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import com.google.android.material.snackbar.Snackbar
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
 import kotlinx.android.synthetic.main.activity_game_detail.*
 
 /**
@@ -23,8 +25,11 @@ class GameDetailActivity : AppCompatActivity() {
         setSupportActionBar(detail_toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val intent = Intent(this, GameCreateEditActivity::class.java).apply {
+            }
+            //Отключение сохранения навигации в истории
+            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
+            startActivity(intent)
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -48,7 +53,12 @@ class GameDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
-                NavUtils.navigateUpTo(this, Intent(this, GamesListActivity::class.java))
+//                NavUtils.navigateUpTo(this, Intent(this, GamesListActivity::class.java))
+                //Передача ИД фрагмента для навигации на него в MainActivity
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    putExtra(MainActivity.ARG_FRAGMENT_ID, R.id.nav_games)
+                }
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
