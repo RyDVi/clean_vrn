@@ -1,5 +1,6 @@
 package com.rydvi.clean_vrn.ui.teams
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
+import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
 import kotlinx.android.synthetic.main.team_list.*
 
 class TeamsFragment : Fragment() {
@@ -37,6 +40,15 @@ class TeamsFragment : Fragment() {
         })
         if (team_detail_container != null) {
             twoPane = true
+        }
+
+        val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(activity, TeamCreateEditActivity::class.java).apply {
+            }
+            //Отключение сохранения навигации в истории
+            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
+            startActivity(intent)
         }
 
         swipeRefreshTeams = root.findViewById(R.id.swipeRefreshTeams)

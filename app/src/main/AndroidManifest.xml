@@ -13,9 +13,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.teams.TeamCreateEditActivity"
+            android:label="@string/title_activity_team_create_edit"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".ui.games.GameCreateEditActivity"
             android:label="@string/title_activity_game_create_edit"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.organizators.OrganizatorCreateEdit"
             android:label="@string/title_activity_organizator_create_edit"

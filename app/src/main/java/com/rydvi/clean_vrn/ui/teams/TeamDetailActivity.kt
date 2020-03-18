@@ -6,7 +6,9 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import com.google.android.material.snackbar.Snackbar
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
 import kotlinx.android.synthetic.main.activity_team_detail.*
 
 /**
@@ -23,8 +25,11 @@ class TeamDetailActivity : AppCompatActivity() {
         setSupportActionBar(detail_toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val intent = Intent(this, TeamCreateEditActivity::class.java).apply {
+            }
+            //Отключение сохранения навигации в истории
+            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
+            startActivity(intent)
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -48,14 +53,10 @@ class TeamDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
-                // This ID represents the Home or Up button. In the case of this
-                // activity, the Up button is shown. Use NavUtils to allow users
-                // to navigate up one level in the application structure. For
-                // more details, see the Navigation pattern on Android Design:
-                //
-                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-
-                NavUtils.navigateUpTo(this, Intent(this, TeamListActivity::class.java))
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    putExtra(MainActivity.ARG_FRAGMENT_ID, R.id.nav_teams)
+                }
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -54,5 +54,7 @@
     <string name="game_location">Location of game</string>
     <string name="game_route">Route</string>
     <string name="game_save">Save</string>
+    <string name="title_activity_team_create_edit">TeamCreateEditActivity</string>
+    <string name="btn_team_save">Save</string>
 
 </resources>
