@@ -42,9 +42,9 @@ class OrganizatorListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fab.setOnClickListener {
+            val intent = Intent(this, OrganizatorDetailActivity::class.java)
+            startActivity(intent)
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -17,6 +17,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.ui.login.LoginActivity
+import com.rydvi.clean_vrn.ui.organizators.OrganizatorDetailFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,11 +30,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        val fab: FloatingActionButton = findViewById(R.id.fab)
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -48,6 +49,13 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        //Если при навигации на данный активити передан ИД фрагмента из списка appBarConfiguration,
+        // то выполняется навигация на него, иначе открывается фрагмент nav_games
+        if (savedInstanceState == null) {
+            val idNavFragment = intent.getIntExtra(ARG_FRAGMENT_ID, R.id.nav_games)
+            navController.navigate(idNavFragment)
+        }
 
         //Переопределение действий кнопок меню в выдвигаемом меню
         navView.setNavigationItemSelectedListener { menuItem ->
@@ -81,5 +89,13 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    companion object {
+        /**
+         * The fragment argument representing the item ID that this fragment
+         * represents.
+         */
+        const val ARG_FRAGMENT_ID = "fragment_id"
     }
 }

@@ -6,6 +6,9 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import android.view.MenuItem
+import androidx.navigation.findNavController
+import com.google.android.material.navigation.NavigationView
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import kotlinx.android.synthetic.main.activity_organizator_detail.*
 
@@ -22,9 +25,12 @@ class OrganizatorDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_organizator_detail)
         setSupportActionBar(detail_toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fab.setOnClickListener {
+            val intent = Intent(this, OrganizatorCreateEdit::class.java).apply {
+            }
+            //Отключение сохранения навигации в истории
+            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
+            startActivity(intent)
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -48,7 +54,11 @@ class OrganizatorDetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
-                NavUtils.navigateUpTo(this, Intent(this, OrganizatorListActivity::class.java))
+                //Передача ИД фрагмента для навигации на него в MainActivity
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    putExtra(MainActivity.ARG_FRAGMENT_ID, R.id.nav_organizators)
+                }
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

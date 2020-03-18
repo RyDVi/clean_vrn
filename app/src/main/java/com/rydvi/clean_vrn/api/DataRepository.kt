@@ -11,9 +11,8 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
 
 
-    //    private const val base_url = "http://192.168.0.57"
-    //    private const val base_url = "http://192.168.0.103"
-    private const val base_url = "http://10.105.24.246"
+    private const val base_url = "http://192.168.2.87"
+
     private var session: Session? = null
 
     private val restTemplateJsonConverter: RestTemplate = {
@@ -125,11 +124,11 @@ object DataRepository {
         headers["Cookie"] = session?.idSession
         val entity = HttpEntity<String>(headers)
         restTemplateJsonConverter.exchange(
-                "$base_url/logout.php",
-                HttpMethod.GET,
-                entity,
-                Session::class.java
-            ).body
+            "$base_url/logout.php",
+            HttpMethod.GET,
+            entity,
+            Session::class.java
+        ).body
         session = null
         callbackSuccess()
     }).start()

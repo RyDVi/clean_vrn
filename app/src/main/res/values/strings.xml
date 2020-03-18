@@ -41,6 +41,13 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="title_login_app_name" >Clean.VRN</string>
+    <string name="title_login_app_name">Clean.VRN</string>
+    <string name="title_activity_organizator_create_edit">OrganizatorCreateEdit</string>
+    <string name="organizator_lastname">Lastame</string>
+    <string name="organizator_firstname">Firstname</string>
+    <string name="organizator_middlename">Middlename</string>
+    <string name="organizator_email" >Email</string>
+    <string name="organizator_phone" >Phone</string>
+    <string name="organizator_save">Save</string>
 
 </resources>
