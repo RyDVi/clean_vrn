@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
 
 
-    private const val base_url = "http://192.168.2.87"
+    private const val base_url = "http://192.168.0.35"
 
     private var session: Session? = null
 
@@ -89,6 +89,23 @@ object DataRepository {
                     HttpMethod.GET,
                     entity,
                     Array<Organizator>::class.java
+                ).body
+            )
+        }).start()
+    }
+
+    fun getCollectedGarbages(id_team:Long, callback:(Array<CollectedGarbage>)->Unit?){
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Content-Type"] = "application/json"
+            headers["Cookie"] = session?.idSession
+            val entity = HttpEntity<String>(headers)
+            callback(
+                restTemplateJsonConverter.exchange(
+                    "$base_url/team_collected_garbages.php?id_team=$id_team",
+                    HttpMethod.GET,
+                    entity,
+                    Array<CollectedGarbage>::class.java
                 ).body
             )
         }).start()

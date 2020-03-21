@@ -56,5 +56,9 @@
     <string name="game_save">Save</string>
     <string name="title_activity_team_create_edit">TeamCreateEditActivity</string>
     <string name="btn_team_save">Save</string>
+    <string name="lbl_column_header_class">Class</string>
+    <string name="lbl_column_header_coefficient">Coefficient</string>
+    <string name="lbl_column_header_count">Count</string>
+    <string name="lbl_column_header_points">Points</string>
 
 </resources>
