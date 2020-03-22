@@ -104,11 +104,11 @@ class TeamDetailFragment : Fragment() {
         val textClass = tableRow.findViewById<TextView>(R.id.text_table_class)
         textClass.text = garbageName
         val textCount = tableRow.findViewById<TextView>(R.id.text_table_count)
-        textCount.text = coefficient.toString()
+        textCount.text = count
         val textCoef = tableRow.findViewById<TextView>(R.id.text_table_coefficient)
-        textCoef.text = count.toString()
+        textCoef.text = coefficient
         val textPoints = tableRow.findViewById<TextView>(R.id.text_table_points)
-        textPoints.text = sumPoints.toString()
+        textPoints.text = sumPoints
         return tableRow as TableRow
     }
 

@@ -24,8 +24,12 @@ class TeamDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_team_detail)
         setSupportActionBar(detail_toolbar)
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             val intent = Intent(this, TeamCreateEditActivity::class.java).apply {
+                putExtra(
+                    TeamCreateEditActivity.TEAM_ID,
+                    intent.getLongExtra(TeamDetailFragment.ARG_ITEM_ID, 0)
+                )
             }
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
