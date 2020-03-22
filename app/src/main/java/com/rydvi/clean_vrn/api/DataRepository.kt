@@ -111,6 +111,23 @@ object DataRepository {
         }).start()
     }
 
+    fun getGarbages(callback:(Array<Garbage>)->Unit?){
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Content-Type"] = "application/json"
+            headers["Cookie"] = session?.idSession
+            val entity = HttpEntity<String>(headers)
+            callback(
+                restTemplateJsonConverter.exchange(
+                    "$base_url/garbages.php",
+                    HttpMethod.GET,
+                    entity,
+                    Array<Garbage>::class.java
+                ).body
+            )
+        }).start()
+    }
+
     fun login(username: String, password: String, isPlayer: Boolean, callback: (Session) -> Unit) =
         Thread(Runnable {
             val headers = HttpHeaders()

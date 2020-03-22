@@ -69,8 +69,10 @@ class TeamDetailFragment : Fragment() {
                                     inflater,
                                     collectedGarbage.garbage_name!!,
                                     collectedGarbage.coefficient.toString()!!,
-                                    collectedGarbage.count.toString()!!,
-                                    collectedGarbage.sum_points.toString()!!
+                                    if(collectedGarbage.count!=null)
+                                        collectedGarbage.count.toString()!! else "0",
+                                    if(collectedGarbage.sum_points!=null)
+                                        collectedGarbage.sum_points.toString()!! else "0"
                                 )
                             )
                         }

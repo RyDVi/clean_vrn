@@ -29,7 +29,7 @@ class CollectedGarbarageItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.countView.text = item.count.toString()
+        holder.countView.text = if(item.count!=null)item.count.toString() else "0"
         holder.classView.text = item.garbage_name.toString()
 
         with(holder.itemView) {

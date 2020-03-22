@@ -4,13 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rydvi.clean_vrn.api.CollectedGarbage
 import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.api.Garbage
 import com.rydvi.clean_vrn.api.Team
 
 class TeamsViewModel : ViewModel() {
 
+
     private val dataRepository: DataRepository = DataRepository
     private var dataTeams: MutableLiveData<Array<Team>>? = null
     private var dataCollectedGarbages:MutableLiveData<Array<CollectedGarbage>>? = null
+    private var dataGarbages: MutableLiveData<Array<Garbage>>?=null
 
     fun getTeams(): MutableLiveData<Array<Team>> {
         if(dataTeams==null){
@@ -44,5 +47,22 @@ class TeamsViewModel : ViewModel() {
             dataCollectedGarbages?.postValue(it)
         }
         return dataCollectedGarbages
+    }
+
+    fun getGarbages():MutableLiveData<Array<Garbage>>{
+        if(dataGarbages==null){
+            dataGarbages = MutableLiveData()
+            dataRepository.getGarbages{
+                dataGarbages?.postValue(it)
+            }
+        }
+        return dataGarbages!!
+    }
+
+    fun refreshGarbages():MutableLiveData<Array<Garbage>>?{
+        dataRepository.getGarbages{
+            dataGarbages?.postValue(it)
+        }
+        return dataGarbages
     }
 }
