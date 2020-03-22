@@ -58,7 +58,7 @@ class TeamCreateEditActivity : AppCompatActivity() {
                 teamsViewModel.updateCollectedGarbages(team.id!!, {
                     val intent = Intent(this, TeamDetailActivity::class.java).apply {
                         putExtra(
-                            TEAM_ID,
+                            TeamDetailFragment.ARG_ITEM_ID,
                             team!!.id
                         )
                     }
