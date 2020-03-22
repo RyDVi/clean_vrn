@@ -94,7 +94,7 @@ object DataRepository {
         }).start()
     }
 
-    fun getCollectedGarbages(id_team:Long, callback:(Array<CollectedGarbage>)->Unit?){
+    fun getCollectedGarbages(id_team: Long, callback: (Array<CollectedGarbage>) -> Unit?) {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Content-Type"] = "application/json"
@@ -111,7 +111,7 @@ object DataRepository {
         }).start()
     }
 
-    fun getGarbages(callback:(Array<Garbage>)->Unit?){
+    fun getGarbages(callback: (Array<Garbage>) -> Unit?) {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Content-Type"] = "application/json"
@@ -179,4 +179,24 @@ object DataRepository {
         )
         callback(testSession.body)
     }).start()
+
+    fun updateCollectedGarbages(id_team: Long, collectedGarbage: Array<CollectedGarbage>, callback: () -> Unit) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["collected_garbages"] = collectedGarbage
+
+            val requestEntity = HttpEntity(bodyMap, headers)
+            restTemplateJsonConverter.exchange(
+                "$base_url/team_collected_garbages.php?id_team=$id_team",
+                HttpMethod.PUT,
+                requestEntity,
+                Session::class.java
+            )
+            callback()
+        }).start()
+    }
 }

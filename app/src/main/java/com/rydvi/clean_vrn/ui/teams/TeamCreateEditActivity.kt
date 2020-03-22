@@ -2,6 +2,7 @@ package com.rydvi.clean_vrn.ui.teams
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import com.google.android.material.snackbar.Snackbar
@@ -31,22 +32,6 @@ class TeamCreateEditActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val btnSave = findViewById<Button>(R.id.btn_team_save)
-        btnSave.setOnClickListener {
-            val intent = Intent(this, TeamDetailActivity::class.java)
-            startActivity(intent)
-        }
-
-//        if (savedInstanceState == null) {
-//            val fragment = TeamDetailFragment().apply {
-//                arguments = Bundle().apply {
-//                    putLong(
-//                        TeamDetailFragment.ARG_ITEM_ID,
-//                        intent.getLongExtra(TeamDetailFragment.ARG_ITEM_ID, 0)
-//                    )
-//                }
-//            }
-//        }
         teamsViewModel =
             ViewModelProviders.of(this).get(TeamsViewModel::class.java)
         teamsViewModel.getTeams().observe(this, Observer {
@@ -55,7 +40,10 @@ class TeamCreateEditActivity : AppCompatActivity() {
 
             teamsViewModel.getCollectedGarbages(idTeam).observe(this, Observer { garbages ->
                 val adapterCollectedGarbages =
-                    CollectedGarbarageItemRecyclerViewAdapter(this, garbages.toList())
+                    CollectedGarbarageItemRecyclerViewAdapter(
+                        this,
+                        teamsViewModel.getCollectedGarbages(idTeam)
+                    )
                 val linearLayoutManagerVertical = LinearLayoutManager(this)
                 linearLayoutManagerVertical.orientation = LinearLayoutManager.VERTICAL
                 recyclerViewCollectedGarbarages =
@@ -64,6 +52,22 @@ class TeamCreateEditActivity : AppCompatActivity() {
                         adapter = adapterCollectedGarbages
                     }
             })
+
+            val btnSave = findViewById<Button>(R.id.btn_team_save)
+            btnSave.setOnClickListener {
+                teamsViewModel.updateCollectedGarbages(team.id!!, {
+                    val intent = Intent(this, TeamDetailActivity::class.java).apply {
+                        putExtra(
+                            TEAM_ID,
+                            team!!.id
+                        )
+                    }
+                    startActivity(intent)
+                }, {
+                    //TODO:Failed post collected garbages request
+                })
+            }
+
         })
 
 

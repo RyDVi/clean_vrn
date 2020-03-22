@@ -42,6 +42,16 @@ class TeamsViewModel : ViewModel() {
         return dataCollectedGarbages!!
     }
 
+    fun updateCollectedGarbages(id_team: Long, callbackSuccess:()->Unit, callbackFailed:()->Unit){
+        if(dataCollectedGarbages!=null){
+            dataRepository.updateCollectedGarbages(id_team, dataCollectedGarbages!!.value!!){
+                callbackSuccess()
+            }
+        } else {
+            callbackFailed()
+        }
+    }
+
     fun refreshCollectedGarbages(id_team:Long):MutableLiveData<Array<CollectedGarbage>>?{
         dataRepository.getCollectedGarbages(id_team){
             dataCollectedGarbages?.postValue(it)
