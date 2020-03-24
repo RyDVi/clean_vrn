@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.team_list_content.view.*
 
 class TeamItemRecyclerViewAdapter(

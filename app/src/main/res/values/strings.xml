@@ -60,5 +60,9 @@
     <string name="lbl_column_header_coefficient">Coefficient</string>
     <string name="lbl_column_header_count">Count</string>
     <string name="lbl_column_header_points">Points</string>
+    <string name="lbl_team_number" >Number</string>
+    <string name="lbl_team_name">Name</string>
+    <string name="title_team_info">Team info</string>
+    <string name="title_team_collected_garbages" >Collected garbages</string>
 
 </resources>

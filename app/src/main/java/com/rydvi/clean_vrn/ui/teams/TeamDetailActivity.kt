@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.activity_team_detail.*
 
 /**
@@ -30,6 +31,7 @@ class TeamDetailActivity : AppCompatActivity() {
                     TeamCreateEditActivity.TEAM_ID,
                     intent.getLongExtra(TeamDetailFragment.ARG_ITEM_ID, 0)
                 )
+                putExtra(TeamCreateEditActivity.TEAM_MODE, CreateEditMode.EDIT)
             }
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY

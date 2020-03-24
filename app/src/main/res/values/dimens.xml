@@ -9,4 +9,5 @@
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_list_margin_1">2dp</dimen>
+    <dimen name="title_form_size">24sp</dimen>
 </resources>

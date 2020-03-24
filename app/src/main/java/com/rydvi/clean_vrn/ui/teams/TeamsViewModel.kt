@@ -32,6 +32,14 @@ class TeamsViewModel : ViewModel() {
         return dataTeams
     }
 
+    fun updateTeam(idTeam:Long, name: String, number: Long, callback:(team: Team)->Unit) {
+        dataRepository.updateTeam(idTeam, name, number, callback)
+    }
+
+    fun createTeam(name: String, number: Long, callback:(team: Team)->Unit) {
+        dataRepository.createTeam(name, number, callback)
+    }
+
     fun getCollectedGarbages(id_team:Long):MutableLiveData<Array<CollectedGarbage>>{
         if(dataCollectedGarbages==null){
             dataCollectedGarbages = MutableLiveData()

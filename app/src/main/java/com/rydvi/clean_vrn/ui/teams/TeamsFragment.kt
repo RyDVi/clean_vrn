@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.team_list.*
 
 class TeamsFragment : Fragment() {
@@ -45,6 +46,7 @@ class TeamsFragment : Fragment() {
         val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
             val intent = Intent(activity, TeamCreateEditActivity::class.java).apply {
+                putExtra(TeamCreateEditActivity.TEAM_MODE, CreateEditMode.CREATE)
             }
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY

@@ -199,4 +199,46 @@ object DataRepository {
             callback()
         }).start()
     }
+
+    fun updateTeam(id_team:Long, name: String, number: Long, callback: (team: Team) -> Unit) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["name"] = name
+            bodyMap["number"] = number
+
+            val requestEntity = HttpEntity(bodyMap, headers)
+            callback(restTemplateJsonConverter.exchange(
+                "$base_url/teams.php?id_team=$id_team",
+                HttpMethod.PUT,
+                requestEntity,
+                Team::class.java
+            ).body)
+
+        }).start()
+    }
+
+    fun createTeam(name: String, number: Long, callback: (team: Team) -> Unit) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["name"] = name
+            bodyMap["number"] = number
+
+            val requestEntity = HttpEntity(bodyMap, headers)
+            callback(restTemplateJsonConverter.exchange(
+                "$base_url/teams.php",
+                HttpMethod.POST,
+                requestEntity,
+                Team::class.java
+            ).body)
+
+        }).start()
+    }
 }
