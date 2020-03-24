@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.activity_game_detail.*
 
 /**
@@ -26,6 +27,11 @@ class GameDetailActivity : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             val intent = Intent(this, GameCreateEditActivity::class.java).apply {
+                putExtra(
+                    GameCreateEditActivity.GAME_ID,
+                    intent.getLongExtra(GameDetailFragment.ARG_ITEM_ID, 0)
+                )
+                putExtra(GameCreateEditActivity.GAME_MODE, CreateEditMode.EDIT)
             }
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY

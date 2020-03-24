@@ -241,4 +241,22 @@ object DataRepository {
 
         }).start()
     }
+
+    fun getCoefficients(id_game: Long?, callback: (Array<Coefficient>) -> Unit?) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            val entity = HttpEntity<String>(headers)
+            val coefficients = restTemplateJsonConverter.exchange(
+                "$base_url/garbages_coefficients.php?id_game=$id_game",
+                HttpMethod.GET,
+                entity,
+                Array<Coefficient>::class.java
+            ).body
+            callback(coefficients)
+        }).start()
+    }
 }
