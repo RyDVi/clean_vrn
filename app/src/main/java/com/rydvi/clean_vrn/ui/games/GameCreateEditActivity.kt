@@ -72,22 +72,20 @@ class GameCreateEditActivity : AppCompatActivity() {
                     gamesViewModel.updateGame(game.id!!,                     inpGameName.text.toString(),
                         inpGameRoute.text.toString(),
                         inpGameDatetime.text.toString()) {
-                        navToGameDetail(game.id!!)
+                        gamesViewModel.updateCoefficients(game.id!!){
+                            navToGameDetail(game.id!!)
+                        }
                     }
                 }
-//                gamesViewModel.updateCoefficients(game.id!!){
-//
-//                }
             } else {
                 gamesViewModel.createGame(
                     inpGameName.text.toString(),
                     inpGameRoute.text.toString(),
                     inpGameDatetime.text.toString()
                 ) { createdGame ->
-//                    gamesViewModel.createCoefficients(it.id!!){
-//
-//                    }
-                    navToGameDetail(createdGame.id!!)
+                    gamesViewModel.createCoefficients(createdGame.id!!){
+                        navToGameDetail(createdGame.id!!)
+                    }
                 }
             }
 
