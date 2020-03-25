@@ -45,4 +45,39 @@ class GamesViewModel : ViewModel() {
         return dataCoefficients!!
     }
 
+    fun updateGame(
+        id: Long,
+        name: String,
+        route: String,
+        datetime: String,
+        callback: (Game) -> Unit
+    ) {
+        DataRepository.updateGame(id, name, route, datetime, callback)
+    }
+
+    fun updateCoefficients(id: Long, callback: () -> Unit) {
+        if (dataCoefficients !== null) {
+            DataRepository.updateCoefficients(id, dataCoefficients!!.value!!, callback)
+        } else {
+            callback()
+        }
+    }
+
+    fun createGame(
+        name: String,
+        route: String,
+        datetime: String,
+        callback: (Game) -> Unit
+    ) {
+        DataRepository.createGame(name, route, datetime, callback)
+    }
+
+    fun createCoefficients(id: Long, callback: (Array<Coefficient>?) -> Unit) {
+        if (dataCoefficients !== null) {
+            DataRepository.createCoefficients(id, dataCoefficients!!.value!!, callback)
+        } else {
+            callback(null)
+        }
+    }
+
 }

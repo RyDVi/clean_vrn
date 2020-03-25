@@ -66,5 +66,7 @@
     <string name="title_team_collected_garbages" >Collected garbages</string>
     <string name="title_game_info">Game info</string>
     <string name="title_game_coefficients">Coefficients</string>
+    <string name="inp_game_description">Description</string>
+    <string name="inp_game_datetime">Datetime start</string>
 
 </resources>

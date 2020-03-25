@@ -180,7 +180,11 @@ object DataRepository {
         callback(testSession.body)
     }).start()
 
-    fun updateCollectedGarbages(id_team: Long, collectedGarbage: Array<CollectedGarbage>, callback: () -> Unit) {
+    fun updateCollectedGarbages(
+        id_team: Long,
+        collectedGarbage: Array<CollectedGarbage>,
+        callback: () -> Unit
+    ) {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
@@ -200,7 +204,7 @@ object DataRepository {
         }).start()
     }
 
-    fun updateTeam(id_team:Long, name: String, number: Long, callback: (team: Team) -> Unit) {
+    fun updateTeam(id_team: Long, name: String, number: Long, callback: (team: Team) -> Unit) {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
@@ -211,12 +215,14 @@ object DataRepository {
             bodyMap["number"] = number
 
             val requestEntity = HttpEntity(bodyMap, headers)
-            callback(restTemplateJsonConverter.exchange(
-                "$base_url/teams.php?id_team=$id_team",
-                HttpMethod.PUT,
-                requestEntity,
-                Team::class.java
-            ).body)
+            callback(
+                restTemplateJsonConverter.exchange(
+                    "$base_url/teams.php?id_team=$id_team",
+                    HttpMethod.PUT,
+                    requestEntity,
+                    Team::class.java
+                ).body
+            )
 
         }).start()
     }
@@ -232,12 +238,14 @@ object DataRepository {
             bodyMap["number"] = number
 
             val requestEntity = HttpEntity(bodyMap, headers)
-            callback(restTemplateJsonConverter.exchange(
-                "$base_url/teams.php",
-                HttpMethod.POST,
-                requestEntity,
-                Team::class.java
-            ).body)
+            callback(
+                restTemplateJsonConverter.exchange(
+                    "$base_url/teams.php",
+                    HttpMethod.POST,
+                    requestEntity,
+                    Team::class.java
+                ).body
+            )
 
         }).start()
     }
@@ -248,7 +256,6 @@ object DataRepository {
             headers["Cookie"] = session?.idSession
             headers.add("Content-Type", "application/json")
 
-            val bodyMap = LinkedHashMap<String, Any>()
             val entity = HttpEntity<String>(headers)
             val coefficients = restTemplateJsonConverter.exchange(
                 "$base_url/garbages_coefficients.php?id_game=$id_game",
@@ -257,6 +264,93 @@ object DataRepository {
                 Array<Coefficient>::class.java
             ).body
             callback(coefficients)
+        }).start()
+    }
+
+    fun updateGame(id: Long, name: String, route: String, datetime:String, callback: (Game) -> Unit) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["name"] = name
+            bodyMap["route"] = route
+            bodyMap["datetime"] = datetime
+
+            val entity = HttpEntity(bodyMap, headers)
+            val game = restTemplateJsonConverter.exchange(
+                "$base_url/games.php?id_game=$id",
+                HttpMethod.PUT,
+                entity,
+                Game::class.java
+            ).body
+            callback(game)
+        }).start()
+    }
+
+    fun updateCoefficients(id: Long, coefficients: Array<Coefficient>, callback: () -> Unit) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["coefficients"] = coefficients
+
+            val entity = HttpEntity(bodyMap, headers)
+            restTemplateJsonConverter.exchange(
+                "$base_url/garbages_coefficients.php?id_game=$id",
+                HttpMethod.PUT,
+                entity,
+                Session::class.java
+            ).body
+            callback()
+        }).start()
+    }
+
+    fun createGame(name: String, route: String, datetime:String, callback: (Game) -> Unit) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["name"] = name
+            bodyMap["route"] = route
+            bodyMap["datetime"] = datetime
+
+            val entity = HttpEntity(bodyMap, headers)
+            val game = restTemplateJsonConverter.exchange(
+                "$base_url/games.php",
+                HttpMethod.POST,
+                entity,
+                Game::class.java
+            ).body
+            callback(game)
+        }).start()
+    }
+
+    fun createCoefficients(
+        id: Long, coefficients: Array<Coefficient>,
+        callback: (Array<Coefficient>?) -> Unit
+    ) {
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            headers.add("Content-Type", "application/json")
+
+            val bodyMap = LinkedHashMap<String, Any>()
+            bodyMap["coefficients"] = coefficients
+
+            val entity = HttpEntity(bodyMap, headers)
+            val createdCoefficients = restTemplateJsonConverter.exchange(
+                "$base_url/garbages_coefficients.php?id_game=$id",
+                HttpMethod.POST,
+                entity,
+                Array<Coefficient>::class.java
+            ).body
+            callback(createdCoefficients)
         }).start()
     }
 }

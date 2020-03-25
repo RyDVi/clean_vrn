@@ -26,6 +26,7 @@ class GameCreateEditActivity : AppCompatActivity() {
 
     private lateinit var inpGameName: EditText
     private lateinit var inpGameRoute: EditText
+    private lateinit var inpGameDatetime: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,7 @@ class GameCreateEditActivity : AppCompatActivity() {
         recyclerCoefficients = findViewById(R.id.recycler_garbages_coefficients)
         inpGameName = findViewById(R.id.inp_game_name)
         inpGameRoute = findViewById(R.id.inp_game_route)
+        inpGameDatetime = findViewById(R.id.inp_game_datetime)
 
         editMode = intent.extras!![GAME_MODE] as CreateEditMode
 
@@ -57,7 +59,6 @@ class GameCreateEditActivity : AppCompatActivity() {
                 })
             })
         } else {
-            //TODO: Создание игры и коэффициентов (сначала игра, затем из игры её ИД и потом коэффициенты)
             gamesViewModel.getCoefficients(null)?.observe(this, Observer {
                 setupRecyclerCoefficients(null)
             })
@@ -66,8 +67,30 @@ class GameCreateEditActivity : AppCompatActivity() {
 
         val btnSave = findViewById<Button>(R.id.btn_game_save)
         btnSave.setOnClickListener {
-            val intent = Intent(this, GameDetailActivity::class.java)
-            startActivity(intent)
+            if (editMode === CreateEditMode.EDIT) {
+                if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {
+                    gamesViewModel.updateGame(game.id!!,                     inpGameName.text.toString(),
+                        inpGameRoute.text.toString(),
+                        inpGameDatetime.text.toString()) {
+                        navToGameDetail(game.id!!)
+                    }
+                }
+//                gamesViewModel.updateCoefficients(game.id!!){
+//
+//                }
+            } else {
+                gamesViewModel.createGame(
+                    inpGameName.text.toString(),
+                    inpGameRoute.text.toString(),
+                    inpGameDatetime.text.toString()
+                ) { createdGame ->
+//                    gamesViewModel.createCoefficients(it.id!!){
+//
+//                    }
+                    navToGameDetail(createdGame.id!!)
+                }
+            }
+
         }
     }
 
@@ -81,7 +104,7 @@ class GameCreateEditActivity : AppCompatActivity() {
         }
 
 
-    fun setupRecyclerCoefficients(idGame:Long?){
+    fun setupRecyclerCoefficients(idGame: Long?) {
         val adapterGarbagesCoefficients =
             GarbageCoefficientItemRecyclerViewAdapter(
                 this,
@@ -94,6 +117,13 @@ class GameCreateEditActivity : AppCompatActivity() {
             layoutManager = linearLayoutManagerVertical
             adapter = adapterGarbagesCoefficients
         }
+    }
+
+    fun navToGameDetail(idGame: Long) {
+        val intent = Intent(this, GameDetailActivity::class.java).apply {
+            putExtra(GameDetailFragment.ARG_ITEM_ID, idGame)
+        }
+        startActivity(intent)
     }
 
     companion object {

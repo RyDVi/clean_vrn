@@ -42,6 +42,14 @@
         android:hint="@string/game_route"
         android:inputType="textMultiLine" />
 
+    <EditText
+        android:id="@+id/inp_game_datetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/inp_game_datetime"
+        android:inputType="datetime" />
+
     <TextView
         android:id="@+id/textView5"
         android:layout_width="match_parent"
