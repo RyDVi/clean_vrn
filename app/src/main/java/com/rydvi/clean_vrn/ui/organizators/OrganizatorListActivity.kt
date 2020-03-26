@@ -14,7 +14,6 @@ import androidx.appcompat.app.ActionBar
 import android.view.MenuItem
 import com.rydvi.clean_vrn.R
 
-import com.rydvi.clean_vrn.ui.organizators.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_organizator_list.*
 import kotlinx.android.synthetic.main.organizator_list_content.view.*
 import kotlinx.android.synthetic.main.organizator_list.*
@@ -66,6 +65,6 @@ class OrganizatorListActivity : AppCompatActivity() {
         }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-//        recyclerView.adapter = OrganizatorItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+
     }
 }

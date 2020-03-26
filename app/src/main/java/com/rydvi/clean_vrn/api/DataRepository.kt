@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
 
 
-    private const val base_url = "http://192.168.0.35"
+    private const val base_url = "http://26.210.234.23"
 
     private var session: Session? = null
 
@@ -267,7 +267,13 @@ object DataRepository {
         }).start()
     }
 
-    fun updateGame(id: Long, name: String, route: String, datetime:String, callback: (Game) -> Unit) {
+    fun updateGame(
+        id: Long,
+        name: String,
+        route: String,
+        datetime: String,
+        callback: (Game) -> Unit
+    ) {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
@@ -309,7 +315,7 @@ object DataRepository {
         }).start()
     }
 
-    fun createGame(name: String, route: String, datetime:String, callback: (Game) -> Unit) {
+    fun createGame(name: String, route: String, datetime: String, callback: (Game) -> Unit) {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
@@ -396,5 +402,26 @@ object DataRepository {
             Organizator::class.java
         ).body
         callback(createdCoefficients)
+    }).start()
+
+    fun generatePassword(id: Long, callback: (String) -> Unit) = Thread(Runnable {
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        val bodyMap = LinkedHashMap<String, Any>()
+        val entity = HttpEntity(bodyMap, headers)
+        val tempPasswordObject = object {
+            var password: String? = null
+                get() = field
+                set(value) {
+                    field = value
+                }
+        }
+        val generatedPassword = restTemplateJsonConverter.exchange(
+            "$base_url/generate_org_password.php?id=$id",
+            HttpMethod.GET,
+            entity,
+            tempPasswordObject::class.java
+        ).body
+        callback(generatedPassword.password!!)
     }).start()
 }

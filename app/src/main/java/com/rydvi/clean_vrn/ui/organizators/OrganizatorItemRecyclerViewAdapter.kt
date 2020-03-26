@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
-import com.rydvi.clean_vrn.ui.organizators.dummy.DummyContent
 import kotlinx.android.synthetic.main.organizator_list_content.view.*
 
 class OrganizatorItemRecyclerViewAdapter(

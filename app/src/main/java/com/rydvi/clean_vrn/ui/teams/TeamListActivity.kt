@@ -57,7 +57,7 @@ class TeamListActivity : AppCompatActivity() {
         }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-//        recyclerView.adapter = TeamItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+
     }
 
 

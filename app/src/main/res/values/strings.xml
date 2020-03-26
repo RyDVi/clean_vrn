@@ -68,5 +68,10 @@
     <string name="title_game_coefficients">Coefficients</string>
     <string name="inp_game_description">Description</string>
     <string name="inp_game_datetime">Datetime start</string>
-
+    <string name="btn_generate_password">Generate password</string>
+    <string name="dlg_save_generated_password">Save or remember new password</string>
+    <string name="dlg_save_generated_password_btn_ok">OK</string>
+    <string name="dlg_accept_generate_password">You really want generate new password? Old password will be deleted.</string>
+    <string name="dlg_accept_generate_password_btn_ok">Yes, generate</string>
+    <string name="dlg_accept_generate_password_btn_not">Cancel</string>
 </resources>

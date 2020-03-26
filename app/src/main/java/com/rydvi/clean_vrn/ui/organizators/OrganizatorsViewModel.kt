@@ -35,4 +35,8 @@ class OrganizatorsViewModel : ViewModel() {
     fun createOrganizator(org: Organizator, callback: (Organizator) -> Unit) {
         DataRepository.createOrganizator(org,callback)
     }
+
+    fun generatePassword(id: Long, callback: (String) -> Unit) {
+        DataRepository.generatePassword(id, callback)
+    }
 }
