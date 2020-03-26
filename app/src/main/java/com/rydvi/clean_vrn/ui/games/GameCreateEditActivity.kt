@@ -106,7 +106,8 @@ class GameCreateEditActivity : AppCompatActivity() {
         val adapterGarbagesCoefficients =
             GarbageCoefficientItemRecyclerViewAdapter(
                 this,
-                gamesViewModel.getCoefficients(idGame)
+                gamesViewModel.getCoefficients(idGame),
+                CreateEditMode.EDIT
             )
         val linearLayoutManagerVertical = LinearLayoutManager(this)
         linearLayoutManagerVertical.orientation = LinearLayoutManager.VERTICAL

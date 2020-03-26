@@ -1,5 +1,6 @@
 package com.rydvi.clean_vrn.ui.games
 
+import android.os.Build
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,13 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Coefficient
 import com.rydvi.clean_vrn.api.CollectedGarbage
 import com.rydvi.clean_vrn.ui.login.afterTextChanged
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.collected_garbarage_edit_listitem.view.*
 
 class GarbageCoefficientItemRecyclerViewAdapter(
     private val parentActivity: FragmentActivity,
-    private val values: MutableLiveData<Array<Coefficient>>
+    private val values: MutableLiveData<Array<Coefficient>>,
+    private val mode: CreateEditMode
 ) :
     RecyclerView.Adapter<GarbageCoefficientItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -47,6 +50,17 @@ class GarbageCoefficientItemRecyclerViewAdapter(
             }
         }
 
+        if(mode===CreateEditMode.EDIT){
+            holder.countView.isClickable = true
+            holder.countView.isFocusable = true
+        } else {
+            holder.countView.isClickable = false
+            holder.countView.isFocusable = false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                holder.countView.background = null
+            }
+        }
+
         with(holder.itemView) {
             tag = item
         }
@@ -61,4 +75,5 @@ class GarbageCoefficientItemRecyclerViewAdapter(
 //        val numberView: TextView = view.team_number
 //        val sumPointsView: TextView = view.team_sum_points
     }
+
 }

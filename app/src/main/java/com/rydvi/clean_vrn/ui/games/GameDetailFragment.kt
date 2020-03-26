@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.activity_game_detail.*
 import kotlinx.android.synthetic.main.game_detail.view.*
 
@@ -44,15 +47,34 @@ class GameDetailFragment : Fragment() {
                     }
                 }
             }
-            item?.let {
-                rootView.txt_game_address.text = it.route
-                rootView.txt_game_datetime.text = it.datetime
-                rootView.txt_game_route.text = it.route
+            item?.let {game->
+                rootView.txt_game_address.text = game.route
+                rootView.txt_game_datetime.text = game.datetime
+                rootView.txt_game_route.text = game.route
+                gamesViewModel.getCoefficients(game.id)?.observe(activity!!, Observer{
+                    setupRecyclerCoefficients(rootView.recycler_game_detail_coefficients, game.id)
+                })
             }
         })
         gamesViewModel.refreshGames()
 
         return rootView
+    }
+
+    fun setupRecyclerCoefficients(recycler:RecyclerView, idGame: Long?) {
+        val adapterGarbagesCoefficients =
+            GarbageCoefficientItemRecyclerViewAdapter(
+                activity!!,
+                gamesViewModel.getCoefficients(idGame),
+                CreateEditMode.READ
+            )
+        val linearLayoutManagerVertical = LinearLayoutManager(activity!!)
+        linearLayoutManagerVertical.orientation = LinearLayoutManager.VERTICAL
+
+        recycler.apply {
+            layoutManager = linearLayoutManagerVertical
+            adapter = adapterGarbagesCoefficients
+        }
     }
 
     companion object {
