@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.activity_organizator_detail.*
 
 /**
@@ -27,6 +28,11 @@ class OrganizatorDetailActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             val intent = Intent(this, OrganizatorCreateEdit::class.java).apply {
+                putExtra(
+                    OrganizatorCreateEdit.ORG_ID,
+                    intent.getLongExtra(OrganizatorDetailFragment.ARG_ITEM_ID, 0)
+                )
+                putExtra(OrganizatorCreateEdit.ORG_MODE,CreateEditMode.EDIT)
             }
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY

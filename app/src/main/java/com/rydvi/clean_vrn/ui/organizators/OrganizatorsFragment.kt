@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 
 
 class OrganizatorsFragment : Fragment() {
@@ -37,6 +38,7 @@ class OrganizatorsFragment : Fragment() {
         val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
             val intent = Intent(activity, OrganizatorCreateEdit::class.java).apply {
+                putExtra(OrganizatorCreateEdit.ORG_MODE, CreateEditMode.CREATE)
             }
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY

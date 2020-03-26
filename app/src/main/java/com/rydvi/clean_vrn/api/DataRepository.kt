@@ -353,4 +353,48 @@ object DataRepository {
             callback(createdCoefficients)
         }).start()
     }
+
+    fun updateOrganizator(org: Organizator, callback: () -> Unit) = Thread(Runnable {
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        headers.add("Content-Type", "application/json")
+
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["lastname"] = org.lastname!!
+        bodyMap["firstname"] = org.firstname!!
+        bodyMap["middlename"] = org.middlename!!
+        bodyMap["email"] = org.email!!
+        bodyMap["phone"] = org.phone!!
+
+        val entity = HttpEntity(bodyMap, headers)
+        restTemplateJsonConverter.exchange(
+            "$base_url/organizators.php?id=${org.id}",
+            HttpMethod.PUT,
+            entity,
+            Session::class.java
+        ).body
+        callback()
+    }).start()
+
+    fun createOrganizator(org: Organizator, callback: (Organizator) -> Unit) = Thread(Runnable {
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        headers.add("Content-Type", "application/json")
+
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["lastname"] = org.lastname!!
+        bodyMap["firstname"] = org.firstname!!
+        bodyMap["middlename"] = org.middlename!!
+        bodyMap["email"] = org.email!!
+        bodyMap["phone"] = org.phone!!
+
+        val entity = HttpEntity(bodyMap, headers)
+        val createdCoefficients = restTemplateJsonConverter.exchange(
+            "$base_url/organizators.php",
+            HttpMethod.POST,
+            entity,
+            Organizator::class.java
+        ).body
+        callback(createdCoefficients)
+    }).start()
 }

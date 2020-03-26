@@ -9,13 +9,12 @@ import com.rydvi.clean_vrn.api.Organizator
 
 class OrganizatorsViewModel : ViewModel() {
 
-    private val dataRepository: DataRepository = DataRepository
-    private var dataOrganizators:MutableLiveData<Array<Organizator>>? = null
+    private var dataOrganizators: MutableLiveData<Array<Organizator>>? = null
 
     fun getOrganizators(): MutableLiveData<Array<Organizator>> {
-        if(dataOrganizators==null){
+        if (dataOrganizators == null) {
             dataOrganizators = MutableLiveData()
-            dataRepository.getOrganizators {
+            DataRepository.getOrganizators {
                 dataOrganizators?.postValue(it)
             }
         }
@@ -23,9 +22,17 @@ class OrganizatorsViewModel : ViewModel() {
     }
 
     fun refreshOrganizators(): MutableLiveData<Array<Organizator>>? {
-        dataRepository.getOrganizators{
+        DataRepository.getOrganizators {
             dataOrganizators?.postValue(it)
         }
         return dataOrganizators
+    }
+
+    fun updateOrganizator(org: Organizator, callback: () -> Unit) {
+        DataRepository.updateOrganizator(org,callback)
+    }
+
+    fun createOrganizator(org: Organizator, callback: (Organizator) -> Unit) {
+        DataRepository.createOrganizator(org,callback)
     }
 }
