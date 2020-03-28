@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
 
 
-    private const val base_url = "http://26.210.234.23"
+    private const val base_url = "http://192.168.0.104"
 
     private var session: Session? = null
 
@@ -407,21 +407,14 @@ object DataRepository {
     fun generatePassword(id: Long, callback: (String) -> Unit) = Thread(Runnable {
         val headers = HttpHeaders()
         headers["Cookie"] = session?.idSession
-        val bodyMap = LinkedHashMap<String, Any>()
-        val entity = HttpEntity(bodyMap, headers)
-        val tempPasswordObject = object {
-            var password: String? = null
-                get() = field
-                set(value) {
-                    field = value
-                }
-        }
+        val entity = HttpEntity<String>(headers)
         val generatedPassword = restTemplateJsonConverter.exchange(
             "$base_url/generate_org_password.php?id=$id",
             HttpMethod.GET,
             entity,
-            tempPasswordObject::class.java
+            Password::class.java
         ).body
         callback(generatedPassword.password!!)
+
     }).start()
 }
