@@ -15,9 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.api.Session
 import com.rydvi.clean_vrn.ui.login.LoginActivity
 import com.rydvi.clean_vrn.ui.organizators.OrganizatorDetailFragment
+import com.rydvi.clean_vrn.ui.utils.UserType
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,6 +77,29 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(menuItem.itemId)
                     drawerLayout.closeDrawers()
                     true
+                }
+            }
+        }
+
+        //Установка данных о пользователе
+        val headerNavView = navView.getHeaderView(0)
+        val textUserType = headerNavView.findViewById<TextView>(R.id.text_user_type)
+        val textUserFullname = headerNavView.findViewById<TextView>(R.id.text_user_fullname)
+        val textUserEmail = headerNavView.findViewById<TextView>(R.id.text_user_email)
+        val textUserPhone = headerNavView.findViewById<TextView>(R.id.text_user_phone)
+        DataRepository.getSession()?.let { curSession->
+            var translateUserType: Int? = null
+            when (curSession.idUserType) {
+                UserType.administrator.getUserTypeId() -> translateUserType = UserType.administrator.getUserTypeString()
+                UserType.organizator.getUserTypeId() -> translateUserType = UserType.organizator.getUserTypeString()
+                UserType.player.getUserTypeId() -> translateUserType = UserType.player.getUserTypeString()
+            }
+            translateUserType?.let {
+                textUserType.text = resources.getString(it)
+                if(UserType.player.getUserTypeId()!==curSession.idUserType){
+                    textUserFullname.text = "${curSession.lastname} ${curSession.firstname} ${curSession.middlename}"
+                    textUserEmail.text = curSession.email
+                    textUserPhone.text = curSession.phone
                 }
             }
         }

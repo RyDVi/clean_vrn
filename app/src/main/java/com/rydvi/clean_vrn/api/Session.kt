@@ -1,7 +1,6 @@
 package com.rydvi.clean_vrn.api
 
 import org.codehaus.jackson.annotate.JsonProperty
-import com.rydvi.clean_vrn.api.UserType as UserType1
 
 class Session {
     @JsonProperty("session_id")
@@ -24,18 +23,40 @@ class Session {
         set(value) {
             field = value
         }
-}
 
-enum class UserType {
-    administrator {
-        override fun getUserType() = administrator
-        override fun getUserTypeId() = 1
-    },
-    organizator{
-        override fun getUserType() = organizator
-        override fun getUserTypeId() = 2
-    };
-    abstract fun getUserType(): UserType1
-    abstract fun getUserTypeId(): Int
+    @JsonProperty("firstname")
+    var firstname:String? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    @JsonProperty("lastname")
+    var lastname:String? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    @JsonProperty("middlename")
+    var middlename:String? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    @JsonProperty("email")
+    var email:String? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    @JsonProperty("phone")
+    var phone:String? = null
+        get() = field
+        set(value) {
+            field = value
+        }
 }
 

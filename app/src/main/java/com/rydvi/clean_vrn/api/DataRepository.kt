@@ -11,9 +11,10 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
 
 
-    private const val base_url = "http://192.168.0.104"
+    private const val base_url = "http://192.168.0.1"
 
     private var session: Session? = null
+    public fun getSession() = session
 
     private val restTemplateJsonConverter: RestTemplate = {
         val restTemplate = RestTemplate()

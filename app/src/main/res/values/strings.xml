@@ -74,4 +74,7 @@
     <string name="dlg_accept_generate_password">You really want generate new password? Old password will be deleted.</string>
     <string name="dlg_accept_generate_password_btn_ok">Yes, generate</string>
     <string name="dlg_accept_generate_password_btn_not">Cancel</string>
+    <string name="user_type_administrator">Administrator</string>
+    <string name="user_type_organizator">Organizator</string>
+    <string name="user_type_player">Player</string>
 </resources>
