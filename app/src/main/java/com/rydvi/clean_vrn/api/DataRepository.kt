@@ -441,4 +441,50 @@ object DataRepository {
             }
         }
     }).start()
+
+    fun deleteOrganizator(id: Long, callback: () -> Unit) = Thread(Runnable {
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        val entity = HttpEntity<String>(headers)
+        val deleteStatus = restTemplateJsonConverter.exchange(
+            "$base_url/organizators.php?id=$id",
+            HttpMethod.DELETE,
+            entity,
+            Void::class.java
+        ).statusCode
+        when (deleteStatus) {
+            HttpStatus.OK -> {
+                callback()
+            }
+            HttpStatus.NOT_FOUND -> {
+                callback()
+            }
+            else -> {
+                callback()
+            }
+        }
+    }).start()
+
+    fun deleteTeam(id: Long, callback: () -> Unit) = Thread(Runnable {
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        val entity = HttpEntity<String>(headers)
+        val deleteStatus = restTemplateJsonConverter.exchange(
+            "$base_url/teams.php?id=$id",
+            HttpMethod.DELETE,
+            entity,
+            Void::class.java
+        ).statusCode
+        when (deleteStatus) {
+            HttpStatus.OK -> {
+                callback()
+            }
+            HttpStatus.NOT_FOUND -> {
+                callback()
+            }
+            else -> {
+                callback()
+            }
+        }
+    }).start()
 }

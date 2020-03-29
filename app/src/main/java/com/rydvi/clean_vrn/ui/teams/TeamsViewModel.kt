@@ -83,4 +83,8 @@ class TeamsViewModel : ViewModel() {
         }
         return dataGarbages
     }
+
+    fun deleteTeam(id: Long, callback: () -> Unit) {
+        DataRepository.deleteTeam(id, callback)
+    }
 }

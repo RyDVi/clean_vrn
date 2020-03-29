@@ -39,4 +39,8 @@ class OrganizatorsViewModel : ViewModel() {
     fun generatePassword(id: Long, callback: (String) -> Unit) {
         DataRepository.generatePassword(id, callback)
     }
+
+    fun deleteOrganizator(id: Long, callback: () -> Unit) {
+        DataRepository.deleteOrganizator(id, callback)
+    }
 }

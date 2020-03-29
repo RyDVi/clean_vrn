@@ -86,7 +86,7 @@ class GameDetailActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
 
-    fun _navToGames(){
+    private fun _navToGames(){
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra(MainActivity.ARG_FRAGMENT_ID, R.id.nav_games)
         }
