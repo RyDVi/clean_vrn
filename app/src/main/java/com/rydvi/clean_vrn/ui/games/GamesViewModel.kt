@@ -80,4 +80,8 @@ class GamesViewModel : ViewModel() {
         }
     }
 
+    fun deleteGame(id: Long, callback: () -> Unit) {
+        DataRepository.deleteGame(id, callback)
+    }
+
 }

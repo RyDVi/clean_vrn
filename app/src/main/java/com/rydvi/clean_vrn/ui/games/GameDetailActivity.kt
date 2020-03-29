@@ -3,8 +3,10 @@ package com.rydvi.clean_vrn.ui.games
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
@@ -19,13 +21,17 @@ import kotlinx.android.synthetic.main.activity_game_detail.*
  * in a [GameListActivity].
  */
 class GameDetailActivity : AppCompatActivity() {
+    private lateinit var gamesViewModel: GamesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_detail)
         setSupportActionBar(detail_toolbar)
 
-        fab.setOnClickListener { view ->
+        gamesViewModel =
+            ViewModelProviders.of(this).get(GamesViewModel::class.java)
+
+        fab.setOnClickListener {
             val intent = Intent(this, GameCreateEditActivity::class.java).apply {
                 putExtra(
                     GameCreateEditActivity.GAME_ID,
@@ -36,6 +42,19 @@ class GameDetailActivity : AppCompatActivity() {
             //Отключение сохранения навигации в истории
             intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
             startActivity(intent)
+        }
+
+        btn_remove_game.setOnClickListener {
+            gamesViewModel.deleteGame(intent.getLongExtra(GameDetailFragment.ARG_ITEM_ID, 0)) {
+                runOnUiThread{
+                    Toast.makeText(
+                        applicationContext,
+                        resources.getString(R.string.msg_game_deleted),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                _navToGames()
+            }
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -61,12 +80,16 @@ class GameDetailActivity : AppCompatActivity() {
             android.R.id.home -> {
 //                NavUtils.navigateUpTo(this, Intent(this, GamesListActivity::class.java))
                 //Передача ИД фрагмента для навигации на него в MainActivity
-                val intent = Intent(this, MainActivity::class.java).apply {
-                    putExtra(MainActivity.ARG_FRAGMENT_ID, R.id.nav_games)
-                }
-                startActivity(intent)
+                _navToGames()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+
+    fun _navToGames(){
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra(MainActivity.ARG_FRAGMENT_ID, R.id.nav_games)
+        }
+        startActivity(intent)
+    }
 }

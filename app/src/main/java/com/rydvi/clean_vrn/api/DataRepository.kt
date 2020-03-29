@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
 import org.springframework.web.client.RestTemplate
 
@@ -416,6 +417,28 @@ object DataRepository {
             Password::class.java
         ).body
         callback(generatedPassword.password!!)
+    }).start()
 
+    fun deleteGame(id: Long, callback: () -> Unit) = Thread(Runnable {
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        val entity = HttpEntity<String>(headers)
+        val deleteStatus = restTemplateJsonConverter.exchange(
+            "$base_url/games.php?id=$id",
+            HttpMethod.DELETE,
+            entity,
+            Void::class.java
+        ).statusCode
+        when (deleteStatus) {
+            HttpStatus.OK -> {
+                callback()
+            }
+            HttpStatus.NOT_FOUND -> {
+                callback()
+            }
+            else -> {
+                callback()
+            }
+        }
     }).start()
 }

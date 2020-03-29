@@ -77,4 +77,5 @@
     <string name="user_type_administrator">Administrator</string>
     <string name="user_type_organizator">Organizator</string>
     <string name="user_type_player">Player</string>
+    <string name="msg_game_deleted">Game deleted successfully</string>
 </resources>
