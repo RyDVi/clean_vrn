@@ -36,7 +36,7 @@ class GameDetailFragment : Fragment() {
         gamesViewModel =
             ViewModelProviders.of(activity!!).get(GamesViewModel::class.java)
 
-        gamesViewModel.getGames().observe(activity!!, Observer {
+        gamesViewModel.getGames().observe(this, Observer {
             arguments?.let {
                 if (it.containsKey(ARG_ITEM_ID)) {
                     val idGame = it.getLong(ARG_ITEM_ID)
@@ -44,16 +44,20 @@ class GameDetailFragment : Fragment() {
                         game.id == idGame
                     }
                     item?.let {
-                        activity?.toolbar_layout?.title = activity!!.resources.getString(R.string.title_game_detail)+" ${item?.name}"
+                        activity?.toolbar_layout?.title =
+                            activity!!.resources.getString(R.string.title_game_detail) + " ${item?.name}"
                     }
                 }
             }
-            item?.let {game->
+            item?.let { game ->
                 rootView.txt_game_address.text = game.route
                 rootView.txt_game_datetime.text = game.datetime
                 rootView.txt_game_route.text = game.route
-                gamesViewModel.getCoefficients(game.id)?.observe(activity!!, Observer{
-                    setupRecyclerCoefficients(rootView.recycler_game_detail_coefficients, game.id)
+                gamesViewModel.getCoefficients(game.id)?.observe(this, Observer {
+                    setupRecyclerCoefficients(
+                        rootView.recycler_game_detail_coefficients,
+                        game.id
+                    )
                 })
             }
         })
@@ -61,7 +65,7 @@ class GameDetailFragment : Fragment() {
         return rootView
     }
 
-    fun setupRecyclerCoefficients(recycler:RecyclerView, idGame: Long?) {
+    private fun setupRecyclerCoefficients(recycler: RecyclerView, idGame: Long?) {
         val adapterGarbagesCoefficients =
             GarbageCoefficientItemRecyclerViewAdapter(
                 activity!!,

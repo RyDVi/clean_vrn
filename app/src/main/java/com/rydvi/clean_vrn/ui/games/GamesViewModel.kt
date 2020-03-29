@@ -36,7 +36,7 @@ class GamesViewModel : ViewModel() {
     }
 
     fun getCoefficients(idGame: Long?): MutableLiveData<Array<Coefficient>> {
-        if (dataCoefficients == null) {
+        if (dataCoefficients === null) {
             dataCoefficients = MutableLiveData()
             DataRepository.getCoefficients(idGame) {
                 dataCoefficients?.postValue(it)

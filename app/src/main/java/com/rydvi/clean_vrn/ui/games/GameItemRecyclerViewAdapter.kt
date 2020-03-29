@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.game_list_content.view.*
 
 class GameItemRecyclerViewAdapter(
@@ -25,26 +26,39 @@ class GameItemRecyclerViewAdapter(
 
     private val onLongClickListener = View.OnLongClickListener { v ->
         val item = v.tag as Game
-        if (twoPane) {
-            val fragment = GameDetailFragment().apply {
-                arguments = Bundle().apply {
-                    item.id?.let {
-                        putLong(GameDetailFragment.ARG_ITEM_ID, it)
-                    }
-                }
-            }
-            activity.supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.game_detail_container, fragment)
-                .commit()
-            true
-        } else {
-            val intent = Intent(v.context, GameDetailActivity::class.java).apply {
-                putExtra(GameDetailFragment.ARG_ITEM_ID, item.id)
-            }
-            v.context.startActivity(intent)
-            true
-        }
+//        if (twoPane) {
+//            val fragment = GameDetailFragment().apply {
+//                arguments = Bundle().apply {
+//                    item.id?.let {
+//                        putLong(GameDetailFragment.ARG_ITEM_ID, it)
+//                    }
+//                }
+//            }
+//            activity.supportFragmentManager
+//                .beginTransaction()
+//                .replace(R.id.game_detail_container, fragment)
+//                .commit()
+//            true
+//        } else {
+//            val intent = Intent(v.context, GameDetailActivity::class.java).apply {
+//                putExtra(GameDetailFragment.ARG_ITEM_ID, item.id)
+//            }
+//            v.context.startActivity(intent)
+//            true
+//        }
+
+//        val gameDetailFragment = GameDetailFragment().apply {
+//            arguments = Bundle().apply {
+//                putLong(GameDetailFragment.ARG_ITEM_ID, item.id!!)
+//            }
+//        }
+//        activity.supportFragmentManager.beginTransaction()
+//            .replace(R.id.game_detail_container, gameDetailFragment).commit()
+        activity.findNavController(activity.nav_host_fragment.id)
+            .navigate(R.id.gameDetailFragment, Bundle().apply {
+                putLong(GameDetailFragment.ARG_ITEM_ID, item.id!!)
+            })
+        true
     }
 
     private val onClickListener: View.OnClickListener = View.OnClickListener { v ->
