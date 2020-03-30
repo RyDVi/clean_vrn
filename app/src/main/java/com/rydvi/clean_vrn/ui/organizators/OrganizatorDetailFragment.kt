@@ -1,61 +1,57 @@
 package com.rydvi.clean_vrn.ui.organizators
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
-import kotlinx.android.synthetic.main.activity_organizator_detail.*
-import kotlinx.android.synthetic.main.organizator_detail.view.*
+import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import kotlinx.android.synthetic.main.content_main.*
 
 
-/**
- * A fragment representing a single Organizator detail screen.
- * This fragment is either contained in a [OrganizatorListActivity]
- * in two-pane mode (on tablets) or a [OrganizatorDetailActivity]
- * on handsets.
- */
 class OrganizatorDetailFragment : Fragment() {
 
 
     private var organizator: Organizator? = null
-    private lateinit var organizatorsViewModel: OrganizatorsViewModel
+    private lateinit var orgsViewModel: OrganizatorsViewModel
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.organizator_detail, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_organizator_detail, container, false)
 
-        organizatorsViewModel =
+        orgsViewModel =
             ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
-        organizatorsViewModel.getOrganizators().observe(this, Observer {
+        orgsViewModel.getOrganizators().observe(this, Observer {
             val organizators = it
             arguments?.let {
                 if (it.containsKey(ARG_ITEM_ID)) {
                     val idOrganizator = it.getLong(ARG_ITEM_ID)
                     organizator = organizators.find { org -> org.id == idOrganizator }
-                    activity?.toolbar_layout?.title =
-                        activity!!.resources.getString(R.string.title_organizator_detail) + " ${organizator?.lastname}"
+//                    activity?.toolbar_layout?.title =
+//                        activity!!.resources.getString(R.string.title_organizator_detail) + " ${organizator?.lastname}"
 
-                    rootView.txt_organizator_lastname.text = organizator?.firstname
-                    rootView.txt_organizator_firstname.text = organizator?.lastname
-                    rootView.txt_organizator_middlename.text = organizator?.middlename
-                    rootView.txt_organizator_email.text = organizator?.email
-                    rootView.txt_organizator_phone.text = organizator?.phone
+                    rootView.findViewById<TextView>(R.id.txt_organizator_lastname).text = organizator?.firstname
+                    rootView.findViewById<TextView>(R.id.txt_organizator_firstname).text = organizator?.lastname
+                    rootView.findViewById<TextView>(R.id.txt_organizator_middlename).text = organizator?.middlename
+                    rootView.findViewById<TextView>(R.id.txt_organizator_email).text = organizator?.email
+                    rootView.findViewById<TextView>(R.id.txt_organizator_phone).text = organizator?.phone
 
-                    rootView.btn_generate_password.setOnClickListener {
+                    rootView.findViewById<Button>(R.id.btn_generate_password).setOnClickListener {
                         acceptDialog {
-                            organizatorsViewModel.generatePassword(organizator!!.id!!) { generatedPassword ->
+                            orgsViewModel.generatePassword(organizator!!.id!!) { generatedPassword ->
                                 showDialogGeneratedPassword(generatedPassword)
                             }
                         }
@@ -63,7 +59,30 @@ class OrganizatorDetailFragment : Fragment() {
                 }
             }
         })
-        organizatorsViewModel.refreshOrganizators()
+        orgsViewModel.refreshOrganizators()
+
+        val btnOrgEdit = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_edit)
+        btnOrgEdit.setOnClickListener {
+            activity!!.findNavController(activity!!.nav_host_fragment.id)
+                .navigate(R.id.nav_organizator_create_edit, Bundle().apply {
+                    putLong(OragnizatorCreateEditFragment.ORG_ID, organizator!!.id!!)
+                    putString(OragnizatorCreateEditFragment.ORG_MODE, CreateEditMode.EDIT.getMode())
+                })
+        }
+
+        val btnOrgDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_delete)
+        btnOrgDelete.setOnClickListener {
+            orgsViewModel.deleteOrganizator(organizator!!.id!!){
+                activity!!.runOnUiThread{
+                    Toast.makeText(
+                        activity,
+                        resources.getString(R.string.msg_org_deleted),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                _navToOrgs()
+            }
+        }
 
         return rootView
     }
@@ -94,6 +113,13 @@ class OrganizatorDetailFragment : Fragment() {
             }
         activity!!.runOnUiThread {
             builder.create().show()
+        }
+    }
+
+    private fun _navToOrgs(){
+        activity!!.runOnUiThread {
+            activity!!.findNavController(activity!!.nav_host_fragment.id)
+                .navigate(R.id.nav_organizators)
         }
     }
 

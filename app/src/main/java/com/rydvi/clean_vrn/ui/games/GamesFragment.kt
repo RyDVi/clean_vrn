@@ -16,7 +16,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
-import com.rydvi.clean_vrn.ui.organizators.OrganizatorCreateEdit
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.content_main.*
 

@@ -21,7 +21,14 @@
         android:id="@+id/nav_organizators"
         android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorsFragment"
         android:label="@string/menu_orgs"
-        tools:layout="@layout/fragment_organizators" />
+        tools:layout="@layout/fragment_organizators" >
+        <action
+            android:id="@+id/action_nav_organizators_to_nav_organizator_detail"
+            app:destination="@id/nav_organizator_detail" />
+        <action
+            android:id="@+id/action_nav_organizators_to_nav_organizator_create_edit"
+            app:destination="@id/nav_organizator_create_edit" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_map"
@@ -68,5 +75,17 @@
         android:name="com.rydvi.clean_vrn.ui.teams.TeamCreateEditFragment"
         android:label="fragment_team_create_edit"
         tools:layout="@layout/fragment_team_create_edit" />
+    <fragment
+        android:id="@+id/nav_organizator_create_edit"
+        android:name="com.rydvi.clean_vrn.ui.organizators.OragnizatorCreateEditFragment"
+        android:label="OragnizatorCreateEditFragment" />
+    <fragment
+        android:id="@+id/nav_organizator_detail"
+        android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorDetailFragment"
+        android:label="OrganizatorDetailFragment" >
+        <action
+            android:id="@+id/action_nav_organizator_detail_to_nav_organizator_create_edit"
+            app:destination="@id/nav_organizator_create_edit" />
+    </fragment>
 
 </navigation>

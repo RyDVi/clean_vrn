@@ -13,10 +13,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.organizators.OrganizatorCreateEdit"
-            android:label="@string/title_activity_organizator_create_edit"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".MainActivity">
@@ -25,24 +21,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.organizators.OrganizatorListActivity"
-            android:label="@string/title_organizator_list"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rydvi.clean_vrn.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ui.organizators.OrganizatorDetailActivity"
-            android:label="@string/title_organizator_detail"
-            android:parentActivityName=".ui.organizators.OrganizatorListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rydvi.clean_vrn.ui.organizators.OrganizatorListActivity" />
         </activity>
         <activity
             android:name=".MainActivity"

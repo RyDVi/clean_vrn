@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
+import com.rydvi.clean_vrn.ui.games.GameCreateEditFragment
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import kotlinx.android.synthetic.main.content_main.*
 
 
 class OrganizatorsFragment : Fragment() {
@@ -35,14 +38,12 @@ class OrganizatorsFragment : Fragment() {
             setupRecyclerView(organzator_list, it)
         })
 
-        val fab = activity!!.findViewById<FloatingActionButton>(R.id.btn_team_edit)
-        fab.setOnClickListener {
-            val intent = Intent(activity, OrganizatorCreateEdit::class.java).apply {
-                putExtra(OrganizatorCreateEdit.ORG_MODE, CreateEditMode.CREATE)
-            }
-            //Отключение сохранения навигации в истории
-            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
-            startActivity(intent)
+        val btnOrgAdd = root.findViewById<FloatingActionButton>(R.id.btn_organizator_add)
+        btnOrgAdd.setOnClickListener {
+            activity!!.findNavController(activity!!.nav_host_fragment.id)
+                .navigate(R.id.nav_organizator_create_edit, Bundle().apply {
+                    putString(OragnizatorCreateEditFragment.ORG_MODE, CreateEditMode.CREATE.getMode())
+                })
         }
 
         swipeRefreshOrganizators = root.findViewById(R.id.swipeRefreshOrganizators)
