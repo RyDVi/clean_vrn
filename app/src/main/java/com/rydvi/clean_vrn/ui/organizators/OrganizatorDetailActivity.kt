@@ -2,14 +2,10 @@ package com.rydvi.clean_vrn.ui.organizators
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.findNavController
-import com.google.android.material.navigation.NavigationView
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
@@ -33,7 +29,7 @@ class OrganizatorDetailActivity : AppCompatActivity() {
         orgsViewModel =
             ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
 
-        fab.setOnClickListener {
+        btn_team_edit.setOnClickListener {
             val intent = Intent(this, OrganizatorCreateEdit::class.java).apply {
                 putExtra(
                     OrganizatorCreateEdit.ORG_ID,

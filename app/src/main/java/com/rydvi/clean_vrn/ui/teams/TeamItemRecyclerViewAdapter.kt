@@ -7,14 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
+import com.rydvi.clean_vrn.ui.games.GameDetailFragment
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.team_list_content.view.*
 
 class TeamItemRecyclerViewAdapter(
-    private val parentActivity: FragmentActivity,
+    private val activity: FragmentActivity,
     private val values: List<Team>,
     private val twoPane: Boolean
 ) :
@@ -25,22 +28,10 @@ class TeamItemRecyclerViewAdapter(
     init {
         onClickListener = View.OnClickListener { v ->
             val item = v.tag as Team
-            if (twoPane) {
-                val fragment = TeamDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(TeamDetailFragment.ARG_ITEM_ID, item.id!!)
-                    }
-                }
-                parentActivity.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.team_detail_container, fragment)
-                    .commit()
-            } else {
-                val intent = Intent(v.context, TeamDetailActivity::class.java).apply {
-                    putExtra(TeamDetailFragment.ARG_ITEM_ID, item.id)
-                }
-                v.context.startActivity(intent)
-            }
+            activity.findNavController(activity.nav_host_fragment.id)
+                .navigate(R.id.nav_team_detail, Bundle().apply {
+                    putLong(TeamDetailFragment.ARG_ITEM_ID, item.id!!)
+                })
         }
     }
 

@@ -4,18 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.app.NavUtils
-import androidx.appcompat.app.ActionBar
 import android.view.MenuItem
 import com.rydvi.clean_vrn.R
 
 import kotlinx.android.synthetic.main.activity_organizator_list.*
-import kotlinx.android.synthetic.main.organizator_list_content.view.*
 import kotlinx.android.synthetic.main.organizator_list.*
 
 /**
@@ -41,7 +34,7 @@ class OrganizatorListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        fab.setOnClickListener {
+        btn_team_edit.setOnClickListener {
             val intent = Intent(this, OrganizatorDetailActivity::class.java)
             startActivity(intent)
         }

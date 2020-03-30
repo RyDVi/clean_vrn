@@ -8,7 +8,14 @@
         android:id="@+id/nav_teams"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamsFragment"
         android:label="@string/menu_teams"
-        tools:layout="@layout/fragment_teams" />
+        tools:layout="@layout/fragment_teams" >
+        <action
+            android:id="@+id/action_nav_teams_to_nav_team_detail"
+            app:destination="@id/nav_team_detail" />
+        <action
+            android:id="@+id/action_nav_teams_to_nav_team_create_edit"
+            app:destination="@id/nav_team_create_edit" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_organizators"
@@ -47,5 +54,19 @@
         android:name="com.rydvi.clean_vrn.ui.games.GameCreateEditFragment"
         android:label="fragment_game_create_edit"
         tools:layout="@layout/fragment_game_create_edit" />
+    <fragment
+        android:id="@+id/nav_team_detail"
+        android:name="com.rydvi.clean_vrn.ui.teams.TeamDetailFragment"
+        android:label="fragment_team_detail"
+        tools:layout="@layout/fragment_team_detail" >
+        <action
+            android:id="@+id/action_teamDetailFragment_to_teamCreateEditFragment"
+            app:destination="@id/nav_team_create_edit" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_team_create_edit"
+        android:name="com.rydvi.clean_vrn.ui.teams.TeamCreateEditFragment"
+        android:label="fragment_team_create_edit"
+        tools:layout="@layout/fragment_team_create_edit" />
 
 </navigation>

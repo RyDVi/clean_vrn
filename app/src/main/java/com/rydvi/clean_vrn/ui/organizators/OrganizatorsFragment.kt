@@ -35,7 +35,7 @@ class OrganizatorsFragment : Fragment() {
             setupRecyclerView(organzator_list, it)
         })
 
-        val fab = activity!!.findViewById<FloatingActionButton>(R.id.fab)
+        val fab = activity!!.findViewById<FloatingActionButton>(R.id.btn_team_edit)
         fab.setOnClickListener {
             val intent = Intent(activity, OrganizatorCreateEdit::class.java).apply {
                 putExtra(OrganizatorCreateEdit.ORG_MODE, CreateEditMode.CREATE)
