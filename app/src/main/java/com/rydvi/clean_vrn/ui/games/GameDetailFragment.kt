@@ -17,7 +17,7 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.game_detail.view.*
+import kotlinx.android.synthetic.main.fragment_game_detail.view.*
 
 /**
  * A fragment representing a single Game detail screen.
@@ -34,7 +34,7 @@ class GameDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.game_detail, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_game_detail, container, false)
 
         gamesViewModel =
             ViewModelProviders.of(activity!!).get(GamesViewModel::class.java)

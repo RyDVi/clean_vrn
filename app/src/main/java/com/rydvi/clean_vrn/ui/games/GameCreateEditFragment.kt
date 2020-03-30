@@ -35,7 +35,7 @@ class GameCreateEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.content_game_create_edit, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_game_create_edit, container, false)
 
         recyclerCoefficients = rootView.findViewById(R.id.recycler_garbages_coefficients)
         inpGameName = rootView.findViewById(R.id.inp_game_name)
