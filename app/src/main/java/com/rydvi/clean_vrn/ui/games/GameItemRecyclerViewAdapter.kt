@@ -27,7 +27,7 @@ class GameItemRecyclerViewAdapter(
     private val onLongClickListener = View.OnLongClickListener { v ->
         val item = v.tag as Game
         activity.findNavController(activity.nav_host_fragment.id)
-            .navigate(R.id.gameDetailFragment, Bundle().apply {
+            .navigate(R.id.nav_game_detail, Bundle().apply {
                 putLong(GameDetailFragment.ARG_ITEM_ID, item.id!!)
             })
         true

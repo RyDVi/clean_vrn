@@ -118,7 +118,7 @@ class GameCreateEditFragment : Fragment() {
         activity!!.runOnUiThread {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(
-                    R.id.gameDetailFragment, Bundle().apply {
+                    R.id.nav_game_detail, Bundle().apply {
                         putLong(GameDetailFragment.ARG_ITEM_ID, idGame)
                     }, NavOptions.Builder()
                         .setPopUpTo(

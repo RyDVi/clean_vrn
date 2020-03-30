@@ -68,7 +68,7 @@ class GameDetailFragment : Fragment() {
         val btnEditGame = rootView.findViewById<FloatingActionButton>(R.id.btn_edit_game)
         btnEditGame.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
-                .navigate(R.id.gameCreateEditFragment, Bundle().apply {
+                .navigate(R.id.nav_game_create_edit, Bundle().apply {
                     putLong(GameCreateEditFragment.GAME_ID, item!!.id!!)
                     putString(GameCreateEditFragment.GAME_MODE, CreateEditMode.EDIT.getMode())
                 })

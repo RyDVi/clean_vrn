@@ -29,21 +29,21 @@
         tools:layout="@layout/fragment_games" >
         <action
             android:id="@+id/action_nav_games_to_gameDetailFragment"
-            app:destination="@+id/gameDetailFragment" />
+            app:destination="@+id/nav_game_detail" />
         <action
             android:id="@+id/action_nav_games_to_gameCreateEditFragment"
-            app:destination="@id/gameCreateEditFragment" />
+            app:destination="@id/nav_game_create_edit" />
     </fragment>
     <fragment
-        android:id="@+id/gameDetailFragment"
+        android:id="@+id/nav_game_detail"
         android:name="com.rydvi.clean_vrn.ui.games.GameDetailFragment"
         android:label="GameDetailFragment" >
         <action
             android:id="@+id/action_gameDetailFragment_to_gameCreateEditFragment"
-            app:destination="@id/gameCreateEditFragment" />
+            app:destination="@id/nav_game_create_edit" />
     </fragment>
     <fragment
-        android:id="@+id/gameCreateEditFragment"
+        android:id="@+id/nav_game_create_edit"
         android:name="com.rydvi.clean_vrn.ui.games.GameCreateEditFragment"
         android:label="fragment_game_create_edit"
         tools:layout="@layout/content_game_create_edit" />
