@@ -70,16 +70,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rydvi.clean_vrn.ui.organizators.OrganizatorListActivity" />
         </activity>
-        <activity android:name=".ui.games.GamesListActivity" />
-        <activity
-            android:name=".ui.games.GameDetailActivity"
-            android:label="@string/menu_games"
-            android:parentActivityName=".ui.games.GamesListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.rydvi.clean_vrn.ui.games.GamesListActivity" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
