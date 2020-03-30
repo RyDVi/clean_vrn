@@ -26,34 +26,6 @@ class GameItemRecyclerViewAdapter(
 
     private val onLongClickListener = View.OnLongClickListener { v ->
         val item = v.tag as Game
-//        if (twoPane) {
-//            val fragment = GameDetailFragment().apply {
-//                arguments = Bundle().apply {
-//                    item.id?.let {
-//                        putLong(GameDetailFragment.ARG_ITEM_ID, it)
-//                    }
-//                }
-//            }
-//            activity.supportFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.game_detail_container, fragment)
-//                .commit()
-//            true
-//        } else {
-//            val intent = Intent(v.context, GameDetailActivity::class.java).apply {
-//                putExtra(GameDetailFragment.ARG_ITEM_ID, item.id)
-//            }
-//            v.context.startActivity(intent)
-//            true
-//        }
-
-//        val gameDetailFragment = GameDetailFragment().apply {
-//            arguments = Bundle().apply {
-//                putLong(GameDetailFragment.ARG_ITEM_ID, item.id!!)
-//            }
-//        }
-//        activity.supportFragmentManager.beginTransaction()
-//            .replace(R.id.game_detail_container, gameDetailFragment).commit()
         activity.findNavController(activity.nav_host_fragment.id)
             .navigate(R.id.gameDetailFragment, Bundle().apply {
                 putLong(GameDetailFragment.ARG_ITEM_ID, item.id!!)

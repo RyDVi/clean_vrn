@@ -60,10 +60,10 @@
     <string name="lbl_column_header_coefficient">Coefficient</string>
     <string name="lbl_column_header_count">Count</string>
     <string name="lbl_column_header_points">Points</string>
-    <string name="lbl_team_number" >Number</string>
+    <string name="lbl_team_number">Number</string>
     <string name="lbl_team_name">Name</string>
     <string name="title_team_info">Team info</string>
-    <string name="title_team_collected_garbages" >Collected garbages</string>
+    <string name="title_team_collected_garbages">Collected garbages</string>
     <string name="title_game_info">Game info</string>
     <string name="title_game_coefficients">Coefficients</string>
     <string name="inp_game_description">Description</string>
@@ -80,4 +80,7 @@
     <string name="msg_game_deleted">Game deleted successfully</string>
     <string name="msg_org_deleted">Organizator was deleted successfully</string>
     <string name="msg_team_deleted">Team was deleted successfully</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

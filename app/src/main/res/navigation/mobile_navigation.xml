@@ -30,10 +30,22 @@
         <action
             android:id="@+id/action_nav_games_to_gameDetailFragment"
             app:destination="@+id/gameDetailFragment" />
+        <action
+            android:id="@+id/action_nav_games_to_gameCreateEditFragment"
+            app:destination="@id/gameCreateEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameDetailFragment"
         android:name="com.rydvi.clean_vrn.ui.games.GameDetailFragment"
-        android:label="GameDetailFragment" />
+        android:label="GameDetailFragment" >
+        <action
+            android:id="@+id/action_gameDetailFragment_to_gameCreateEditFragment"
+            app:destination="@id/gameCreateEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameCreateEditFragment"
+        android:name="com.rydvi.clean_vrn.ui.games.GameCreateEditFragment"
+        android:label="fragment_game_create_edit"
+        tools:layout="@layout/content_game_create_edit" />
 
 </navigation>

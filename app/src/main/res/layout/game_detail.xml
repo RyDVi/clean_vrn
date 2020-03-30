@@ -7,8 +7,35 @@
 <!--    android:padding="16dp"-->
 <!--    android:textIsSelectable="true"-->
 <!--    tools:context=".ui.games.GameDetailFragment" />-->
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--<layout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto">-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_delete_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_edit_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            app:backgroundTint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_btn_edit" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,11 +73,12 @@
                 android:textStyle="bold" />
 
             <TextView
-                style="?android:attr/textAppearanceLarge"
                 android:id="@+id/txt_game_address"
+                style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,11 +93,12 @@
                 android:textStyle="bold" />
 
             <TextView
-                style="?android:attr/textAppearanceLarge"
                 android:id="@+id/txt_game_datetime"
+                style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,8 +113,8 @@
                 android:textStyle="bold" />
 
             <TextView
-                style="?android:attr/textAppearanceLarge"
                 android:id="@+id/txt_game_route"
+                style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -112,4 +141,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
-</layout>
+    <!--</layout>-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

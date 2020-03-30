@@ -1,5 +1,6 @@
 package com.rydvi.clean_vrn.ui.games
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +9,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.activity_game_detail.*
+import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.game_detail.*
 import kotlinx.android.synthetic.main.game_detail.view.*
 
 /**
@@ -62,6 +69,29 @@ class GameDetailFragment : Fragment() {
             }
         })
         gamesViewModel.refreshGames()
+        val btnEditGame = rootView.findViewById<FloatingActionButton>(R.id.btn_edit_game)
+        btnEditGame.setOnClickListener {
+            activity!!.findNavController(activity!!.nav_host_fragment.id)
+                .navigate(R.id.gameCreateEditFragment, Bundle().apply {
+                    putLong(GameCreateEditFragment.GAME_ID, item!!.id!!)
+                    putString(GameCreateEditFragment.GAME_MODE, CreateEditMode.EDIT.getMode())
+                })
+        }
+
+        val btnDeleteGame = rootView.findViewById<FloatingActionButton>(R.id.btn_delete_game)
+        btnDeleteGame.setOnClickListener {
+            gamesViewModel.deleteGame(item!!.id!!) {
+                activity!!.runOnUiThread {
+                    Toast.makeText(
+                        activity,
+                        resources.getString(R.string.msg_game_deleted),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                _navToGames()
+            }
+        }
+
         return rootView
     }
 
@@ -78,6 +108,13 @@ class GameDetailFragment : Fragment() {
         recycler.apply {
             layoutManager = linearLayoutManagerVertical
             adapter = adapterGarbagesCoefficients
+        }
+    }
+
+    private fun _navToGames() {
+        activity!!.runOnUiThread {
+            activity!!.findNavController(activity!!.nav_host_fragment.id)
+                .navigate(R.id.nav_games)
         }
     }
 
