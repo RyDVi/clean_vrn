@@ -1,6 +1,6 @@
 package com.rydvi.clean_vrn.ui.games
 
-import android.content.Intent
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +9,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
-import kotlinx.android.synthetic.main.activity_game_detail.*
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.game_detail.*
 import kotlinx.android.synthetic.main.game_detail.view.*
 
 /**
@@ -51,8 +47,8 @@ class GameDetailFragment : Fragment() {
                         game.id == idGame
                     }
                     item?.let {
-                        activity?.toolbar_layout?.title =
-                            activity!!.resources.getString(R.string.title_game_detail) + " ${item?.name}"
+//                        activity?.toolbar_layout?.title =
+//                            activity!!.resources.getString(R.string.title_game_detail) + " ${item?.name}"
                     }
                 }
             }

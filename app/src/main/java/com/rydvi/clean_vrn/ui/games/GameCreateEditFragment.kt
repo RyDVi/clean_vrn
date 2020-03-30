@@ -1,20 +1,15 @@
 package com.rydvi.clean_vrn.ui.games
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import androidx.core.app.NavUtils
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -54,7 +49,7 @@ class GameCreateEditFragment : Fragment() {
 
         if (editMode === CreateEditMode.EDIT) {
             gamesViewModel.getGames()?.observe(this, Observer { games ->
-                val idGame: Long = arguments!!.getLong(GameCreateEditActivity.GAME_ID, 0)
+                val idGame: Long = arguments!!.getLong(GAME_ID, 0)
                 game = games.find { currentGame -> currentGame.id == idGame }!!
 
                 inpGameName.setText(game.name)
