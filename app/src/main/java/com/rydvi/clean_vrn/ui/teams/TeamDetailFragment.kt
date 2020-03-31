@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
@@ -30,6 +31,7 @@ class TeamDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_team_detail, container, false)
+        (activity as MainActivity).showLoading(true)
         teamsViewModel =
             ViewModelProviders.of(this).get(TeamsViewModel::class.java)
 
@@ -82,6 +84,7 @@ class TeamDetailFragment : Fragment() {
                                 team!!.sumPoints.toString()
                             )
                         )
+                        (activity as MainActivity).showLoading(false)
                     })
 
             }
@@ -99,6 +102,7 @@ class TeamDetailFragment : Fragment() {
 
         val btnTeamDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_team_delete)
         btnTeamDelete.setOnClickListener {
+            (activity as MainActivity).showLoading(true)
             teamsViewModel.deleteTeam(team!!.id!!) {
                 activity!!.runOnUiThread {
                     Toast.makeText(

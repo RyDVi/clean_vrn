@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
@@ -31,6 +32,7 @@ class OrganizatorDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_organizator_detail, container, false)
+        (activity as MainActivity).showLoading(true)
 
         orgsViewModel =
             ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
@@ -43,20 +45,18 @@ class OrganizatorDetailFragment : Fragment() {
 //                    activity?.toolbar_layout?.title =
 //                        activity!!.resources.getString(R.string.title_organizator_detail) + " ${organizator?.lastname}"
 
-                    rootView.findViewById<TextView>(R.id.txt_organizator_lastname).text = organizator?.firstname
-                    rootView.findViewById<TextView>(R.id.txt_organizator_firstname).text = organizator?.lastname
-                    rootView.findViewById<TextView>(R.id.txt_organizator_middlename).text = organizator?.middlename
-                    rootView.findViewById<TextView>(R.id.txt_organizator_email).text = organizator?.email
-                    rootView.findViewById<TextView>(R.id.txt_organizator_phone).text = organizator?.phone
-
-                    rootView.findViewById<Button>(R.id.btn_generate_password).setOnClickListener {
-                        acceptDialog {
-                            orgsViewModel.generatePassword(organizator!!.id!!) { generatedPassword ->
-                                showDialogGeneratedPassword(generatedPassword)
-                            }
-                        }
-                    }
+                    rootView.findViewById<TextView>(R.id.txt_organizator_lastname).text =
+                        organizator?.firstname
+                    rootView.findViewById<TextView>(R.id.txt_organizator_firstname).text =
+                        organizator?.lastname
+                    rootView.findViewById<TextView>(R.id.txt_organizator_middlename).text =
+                        organizator?.middlename
+                    rootView.findViewById<TextView>(R.id.txt_organizator_email).text =
+                        organizator?.email
+                    rootView.findViewById<TextView>(R.id.txt_organizator_phone).text =
+                        organizator?.phone
                 }
+                (activity as MainActivity).showLoading(false)
             }
         })
         orgsViewModel.refreshOrganizators()
@@ -72,8 +72,9 @@ class OrganizatorDetailFragment : Fragment() {
 
         val btnOrgDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_delete)
         btnOrgDelete.setOnClickListener {
-            orgsViewModel.deleteOrganizator(organizator!!.id!!){
-                activity!!.runOnUiThread{
+            (activity as MainActivity).showLoading(true)
+            orgsViewModel.deleteOrganizator(organizator!!.id!!) {
+                activity!!.runOnUiThread {
                     Toast.makeText(
                         activity,
                         resources.getString(R.string.msg_org_deleted),
@@ -84,6 +85,18 @@ class OrganizatorDetailFragment : Fragment() {
             }
         }
 
+        val btnOrgGenPassword = rootView.findViewById<Button>(R.id.btn_generate_password)
+        btnOrgGenPassword.setOnClickListener {
+            acceptDialog {
+                (activity as MainActivity).showLoading(true)
+                orgsViewModel.generatePassword(organizator!!.id!!) { generatedPassword ->
+                    showDialogGeneratedPassword(generatedPassword)
+                    activity!!.runOnUiThread {
+                        (activity as MainActivity).showLoading(false)
+                    }
+                }
+            }
+        }
         return rootView
     }
 
@@ -109,14 +122,13 @@ class OrganizatorDetailFragment : Fragment() {
             AlertDialog.Builder(activity!!)
         builder.setMessage(activity!!.resources.getString(R.string.dlg_save_generated_password) + ": $generatedPassword")
             .setPositiveButton(activity!!.resources.getString(R.string.dlg_save_generated_password_btn_ok)) { _, _ ->
-
             }
         activity!!.runOnUiThread {
             builder.create().show()
         }
     }
 
-    private fun _navToOrgs(){
+    private fun _navToOrgs() {
         activity!!.runOnUiThread {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_organizators)

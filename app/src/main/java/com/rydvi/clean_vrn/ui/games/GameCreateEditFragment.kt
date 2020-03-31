@@ -67,6 +67,7 @@ class GameCreateEditFragment : Fragment() {
         } else {
             gamesViewModel.getCoefficients(null)?.observe(this, Observer {
                 setupRecyclerCoefficients(null)
+                (activity as MainActivity).showLoading(false)
             })
         }
 

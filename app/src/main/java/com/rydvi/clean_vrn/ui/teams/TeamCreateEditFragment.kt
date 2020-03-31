@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
@@ -41,7 +42,7 @@ class TeamCreateEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_team_create_edit, container, false)
-
+        (activity as MainActivity).showLoading(true)
 
         editMode = getCreateEditModeByString(arguments!!.getString(TEAM_MODE)!!)
 
@@ -76,15 +77,18 @@ class TeamCreateEditFragment : Fragment() {
                         layoutManager = linearLayoutManagerVertical
                         adapter = adapterCollectedGarbages
                     }
+                    (activity as MainActivity).showLoading(false)
                 })
             })
         } else {
             rootView.findViewById<LinearLayout>(R.id.vertical_layout_collected_garbages).visibility =
                 View.INVISIBLE
+            (activity as MainActivity).showLoading(false)
         }
 
         val btnTeamSave = rootView.findViewById<FloatingActionButton>(R.id.btn_team_save)
         btnTeamSave.setOnClickListener {
+            (activity as MainActivity).showLoading(true)
             if (editMode.getMode() === CreateEditMode.EDIT.getMode()) {
                 if (inpTeamName.text.toString() !== team.name ||
                     inpTeamNumber.text.toString() !== team.number.toString()

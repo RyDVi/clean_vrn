@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
@@ -41,6 +42,8 @@ class OragnizatorCreateEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_organizator_create_edit, container, false)
+        (activity as MainActivity).showLoading(true)
+
         inpOrgLastname = rootView.findViewById(R.id.inp_organizator_lastname)
         inpOrgFirstname = rootView.findViewById(R.id.inp_organizator_firstname)
         inpOrgMiddlename = rootView.findViewById(R.id.inp_organizator_middlename)
@@ -60,11 +63,15 @@ class OragnizatorCreateEditFragment : Fragment() {
                 inpOrgEmail.setText(org.email)
                 inpOrgPhone.setText(org.phone)
 
+                (activity as MainActivity).showLoading(false)
             })
+        } else {
+            (activity as MainActivity).showLoading(false)
         }
 
         val btnOrgSave = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_save)
         btnOrgSave.setOnClickListener {
+            (activity as MainActivity).showLoading(true)
             if (editMode === CreateEditMode.CREATE) {
                 org = Organizator()
             }
