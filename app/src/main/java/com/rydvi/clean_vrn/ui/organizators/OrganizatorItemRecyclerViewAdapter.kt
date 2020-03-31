@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment

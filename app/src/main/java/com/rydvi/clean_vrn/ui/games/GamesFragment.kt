@@ -16,16 +16,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.UserType
+import com.rydvi.clean_vrn.ui.utils.getUserTypeByTypeId
+import com.rydvi.clean_vrn.ui.utils.isAdmin
 import kotlinx.android.synthetic.main.content_main.*
 
 
 class GamesFragment : Fragment() {
 
     private lateinit var gamesViewModel: GamesViewModel
-    private lateinit var swipeRefreshGames:SwipeRefreshLayout
-    private lateinit var gameList:RecyclerView
+    private lateinit var swipeRefreshGames: SwipeRefreshLayout
+    private lateinit var gameList: RecyclerView
     private var twoPane: Boolean = false
 
 
@@ -41,8 +45,7 @@ class GamesFragment : Fragment() {
         gamesViewModel =
             ViewModelProviders.of(this).get(GamesViewModel::class.java)
 
-        //Отключение кнопки меню
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
         gameList = root.findViewById(R.id.game_list)
@@ -52,6 +55,7 @@ class GamesFragment : Fragment() {
         })
 
         val btnAddGame = root.findViewById<FloatingActionButton>(R.id.btn_add_game)
+        if (!isAdmin()) btnAddGame.hide() else btnAddGame.show()
         btnAddGame.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_game_create_edit, Bundle().apply {
@@ -72,7 +76,7 @@ class GamesFragment : Fragment() {
         }
     }
 
-    private fun onRefreshGamesRecyclerView(){
+    private fun onRefreshGamesRecyclerView() {
         gamesViewModel = ViewModelProviders.of(this).get(GamesViewModel::class.java)
         gamesViewModel.refreshGames()?.observe(this, Observer {
             swipeRefreshGames.isRefreshing = false

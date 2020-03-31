@@ -17,6 +17,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.isAdmin
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -62,6 +63,7 @@ class OrganizatorDetailFragment : Fragment() {
         orgsViewModel.refreshOrganizators()
 
         val btnOrgEdit = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_edit)
+        if (!isAdmin()) btnOrgEdit.hide() else btnOrgEdit.show()
         btnOrgEdit.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_organizator_create_edit, Bundle().apply {
@@ -71,6 +73,7 @@ class OrganizatorDetailFragment : Fragment() {
         }
 
         val btnOrgDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_delete)
+        if (!isAdmin()) btnOrgDelete.hide() else btnOrgDelete.show()
         btnOrgDelete.setOnClickListener {
             (activity as MainActivity).showLoading(true)
             orgsViewModel.deleteOrganizator(organizator!!.id!!) {
@@ -86,6 +89,7 @@ class OrganizatorDetailFragment : Fragment() {
         }
 
         val btnOrgGenPassword = rootView.findViewById<Button>(R.id.btn_generate_password)
+        if (!isAdmin()) btnOrgGenPassword.visibility = View.GONE else btnOrgGenPassword.visibility = View.VISIBLE
         btnOrgGenPassword.setOnClickListener {
             acceptDialog {
                 (activity as MainActivity).showLoading(true)

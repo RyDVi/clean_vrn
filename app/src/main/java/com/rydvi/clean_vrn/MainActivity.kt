@@ -2,25 +2,33 @@ package com.rydvi.clean_vrn
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.ui.games.GamesFragment
 import com.rydvi.clean_vrn.ui.login.LoginActivity
 import com.rydvi.clean_vrn.ui.utils.UserType
+import com.rydvi.clean_vrn.ui.utils.isAdmin
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var loading: ProgressBar
+    private lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         loading = findViewById(R.id.loading_main)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -72,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        //Событие срабатывает при навигации (использовании navigate)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            updateNavMenuItems((destination as FragmentNavigator.Destination).className)
+        }
+
         //Установка данных о пользователе
         val headerNavView = navView.getHeaderView(0)
         val textUserType = headerNavView.findViewById<TextView>(R.id.text_user_type)
@@ -107,6 +120,9 @@ class MainActivity : AppCompatActivity() {
 //        return true
 //    }
 
+    /**
+     * Отображение меню навигации
+     */
     fun showLoading(isShow: Boolean) {
         loading.visibility = if (isShow) ProgressBar.VISIBLE else ProgressBar.GONE
     }
@@ -114,6 +130,21 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    /**
+     * Скрытие и открытие элементов меню навигации
+     */
+    fun updateNavMenuItems(fragmentName: String) {
+        if (fragmentName == GamesFragment::class.java.name) {
+            navView.menu.getItem(0).isVisible = false
+            navView.menu.getItem(1).isVisible = false
+            navView.menu.getItem(2).isVisible = false
+        } else {
+            navView.menu.getItem(0).isVisible = true
+            navView.menu.getItem(1).isVisible = isAdmin()
+            navView.menu.getItem(2).isVisible = true
+        }
     }
 
     companion object {

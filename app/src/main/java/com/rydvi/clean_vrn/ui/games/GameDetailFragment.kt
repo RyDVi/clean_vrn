@@ -17,6 +17,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.isAdmin
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_game_detail.view.*
 
@@ -70,6 +71,7 @@ class GameDetailFragment : Fragment() {
         })
         gamesViewModel.refreshGames()
         val btnEditGame = rootView.findViewById<FloatingActionButton>(R.id.btn_edit_game)
+        if (!isAdmin()) btnEditGame.hide() else btnEditGame.show()
         btnEditGame.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_game_create_edit, Bundle().apply {
@@ -79,6 +81,7 @@ class GameDetailFragment : Fragment() {
         }
 
         val btnDeleteGame = rootView.findViewById<FloatingActionButton>(R.id.btn_delete_game)
+        if (!isAdmin()) btnDeleteGame.hide() else btnDeleteGame.show()
         btnDeleteGame.setOnClickListener {
             (activity as MainActivity).showLoading(true)
             gamesViewModel.deleteGame(item!!.id!!) {

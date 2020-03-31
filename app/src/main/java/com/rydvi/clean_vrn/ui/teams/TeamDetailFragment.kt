@@ -18,6 +18,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.isPlayer
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -92,6 +93,7 @@ class TeamDetailFragment : Fragment() {
         teamsViewModel.refreshTeams()
 
         val btnTeamEdit = rootView.findViewById<FloatingActionButton>(R.id.btn_team_edit)
+        if (isPlayer()) btnTeamEdit.hide() else btnTeamEdit.show()
         btnTeamEdit.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_team_create_edit, Bundle().apply {
@@ -101,6 +103,7 @@ class TeamDetailFragment : Fragment() {
         }
 
         val btnTeamDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_team_delete)
+        if (isPlayer()) btnTeamDelete.hide() else btnTeamDelete.show()
         btnTeamDelete.setOnClickListener {
             (activity as MainActivity).showLoading(true)
             teamsViewModel.deleteTeam(team!!.id!!) {

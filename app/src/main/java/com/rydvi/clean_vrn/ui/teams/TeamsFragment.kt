@@ -15,6 +15,8 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.isAdmin
+import com.rydvi.clean_vrn.ui.utils.isPlayer
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.team_list.*
 
@@ -43,6 +45,7 @@ class TeamsFragment : Fragment() {
         }
 
         val btnTeamAdd = root.findViewById<FloatingActionButton>(R.id.btn_team_add)
+        if (isPlayer()) btnTeamAdd.hide() else btnTeamAdd.show()
         btnTeamAdd.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_team_create_edit, Bundle().apply {

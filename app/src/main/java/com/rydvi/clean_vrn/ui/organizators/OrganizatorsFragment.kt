@@ -15,6 +15,8 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.isAdmin
+import com.rydvi.clean_vrn.ui.utils.isPlayer
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -41,6 +43,7 @@ class OrganizatorsFragment : Fragment() {
         })
 
         val btnOrgAdd = root.findViewById<FloatingActionButton>(R.id.btn_organizator_add)
+        if (!isAdmin()) btnOrgAdd.hide() else btnOrgAdd.show()
         btnOrgAdd.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_organizator_create_edit, Bundle().apply {

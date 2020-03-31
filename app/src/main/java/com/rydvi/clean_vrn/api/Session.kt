@@ -11,7 +11,7 @@ class Session {
         }
 
     @JsonProperty("id_user_type")
-    var idUserType: Int? = null
+    var idUserType: Long? = null
         get() = field
         set(value) {
             field = value
