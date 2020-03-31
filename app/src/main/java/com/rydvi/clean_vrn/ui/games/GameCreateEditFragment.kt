@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
@@ -37,6 +38,8 @@ class GameCreateEditFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_game_create_edit, container, false)
 
+        (activity as MainActivity).showLoading(true)
+
         recyclerCoefficients = rootView.findViewById(R.id.recycler_garbages_coefficients)
         inpGameName = rootView.findViewById(R.id.inp_game_name)
         inpGameRoute = rootView.findViewById(R.id.inp_game_route)
@@ -58,6 +61,7 @@ class GameCreateEditFragment : Fragment() {
 
                 gamesViewModel.getCoefficients(idGame)?.observe(this, Observer { coefficients ->
                     setupRecyclerCoefficients(idGame)
+                    (activity as MainActivity).showLoading(false)
                 })
             })
         } else {
@@ -69,6 +73,7 @@ class GameCreateEditFragment : Fragment() {
 
         val btnSave = rootView.findViewById<FloatingActionButton>(R.id.btn_game_save)
         btnSave.setOnClickListener {
+            (activity as MainActivity).showLoading(true)
             if (editMode === CreateEditMode.EDIT) {
                 if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {
                     gamesViewModel.updateGame(

@@ -2,6 +2,7 @@ package com.rydvi.clean_vrn
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -19,6 +20,7 @@ import com.rydvi.clean_vrn.ui.utils.UserType
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        loading = findViewById(R.id.loading_main)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -75,17 +78,21 @@ class MainActivity : AppCompatActivity() {
         val textUserFullname = headerNavView.findViewById<TextView>(R.id.text_user_fullname)
         val textUserEmail = headerNavView.findViewById<TextView>(R.id.text_user_email)
         val textUserPhone = headerNavView.findViewById<TextView>(R.id.text_user_phone)
-        DataRepository.getSession()?.let { curSession->
+        DataRepository.getSession()?.let { curSession ->
             var translateUserType: Int? = null
             when (curSession.idUserType) {
-                UserType.administrator.getUserTypeId() -> translateUserType = UserType.administrator.getUserTypeString()
-                UserType.organizator.getUserTypeId() -> translateUserType = UserType.organizator.getUserTypeString()
-                UserType.player.getUserTypeId() -> translateUserType = UserType.player.getUserTypeString()
+                UserType.administrator.getUserTypeId() -> translateUserType =
+                    UserType.administrator.getUserTypeString()
+                UserType.organizator.getUserTypeId() -> translateUserType =
+                    UserType.organizator.getUserTypeString()
+                UserType.player.getUserTypeId() -> translateUserType =
+                    UserType.player.getUserTypeString()
             }
             translateUserType?.let {
                 textUserType.text = resources.getString(it)
-                if(UserType.player.getUserTypeId()!==curSession.idUserType){
-                    textUserFullname.text = "${curSession.lastname} ${curSession.firstname} ${curSession.middlename}"
+                if (UserType.player.getUserTypeId() !== curSession.idUserType) {
+                    textUserFullname.text =
+                        "${curSession.lastname} ${curSession.firstname} ${curSession.middlename}"
                     textUserEmail.text = curSession.email
                     textUserPhone.text = curSession.phone
                 }
@@ -99,6 +106,10 @@ class MainActivity : AppCompatActivity() {
 //        menuInflater.inflate(R.menu.main, menu)
 //        return true
 //    }
+
+    fun showLoading(isShow: Boolean) {
+        loading.visibility = if (isShow) ProgressBar.VISIBLE else ProgressBar.GONE
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)

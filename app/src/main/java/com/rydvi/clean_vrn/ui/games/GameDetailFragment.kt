@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
@@ -35,6 +36,8 @@ class GameDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_game_detail, container, false)
+
+        (activity as MainActivity).showLoading(true)
 
         gamesViewModel =
             ViewModelProviders.of(activity!!).get(GamesViewModel::class.java)
@@ -61,6 +64,7 @@ class GameDetailFragment : Fragment() {
                         rootView.recycler_game_detail_coefficients,
                         game.id
                     )
+                    (activity as MainActivity).showLoading(false)
                 })
             }
         })
@@ -76,6 +80,7 @@ class GameDetailFragment : Fragment() {
 
         val btnDeleteGame = rootView.findViewById<FloatingActionButton>(R.id.btn_delete_game)
         btnDeleteGame.setOnClickListener {
+            (activity as MainActivity).showLoading(true)
             gamesViewModel.deleteGame(item!!.id!!) {
                 activity!!.runOnUiThread {
                     Toast.makeText(

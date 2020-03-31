@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
@@ -35,6 +36,8 @@ class GamesFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_games, container, false)
 
+        (activity as MainActivity).showLoading(true)
+
         gamesViewModel =
             ViewModelProviders.of(this).get(GamesViewModel::class.java)
 
@@ -45,6 +48,7 @@ class GamesFragment : Fragment() {
         gameList = root.findViewById(R.id.game_list)
         gamesViewModel.getGames()?.observe(this, Observer {
             setupRecyclerView(gameList, gamesViewModel.getGames())
+            (activity as MainActivity).showLoading(false)
         })
 
         val btnAddGame = root.findViewById<FloatingActionButton>(R.id.btn_add_game)
