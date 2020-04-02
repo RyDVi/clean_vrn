@@ -1,7 +1,9 @@
 package com.rydvi.clean_vrn.api
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties
 import org.codehaus.jackson.annotate.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class Session {
     @JsonProperty("session_id")
     var idSession: String? = null

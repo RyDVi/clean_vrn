@@ -8,6 +8,7 @@ import com.rydvi.clean_vrn.ui.data.LoginRepository
 import com.rydvi.clean_vrn.ui.data.Result
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.api.Error
 import com.rydvi.clean_vrn.api.Session
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -20,7 +21,13 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     val session: MutableLiveData<Session>? = null
 
-    fun login(username: String, password: String, isPlayer:Boolean, callback:()->Unit) {
+    fun login(
+        username: String,
+        password: String,
+        isPlayer: Boolean,
+        callbackSuccess: (Session) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
         // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 
@@ -36,9 +43,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 //                LoginResult(error = R.string.login_failed)
 //        }
 
-        DataRepository.login(username, password, isPlayer) {
-            callback()
-        }
+        DataRepository.login(username, password, isPlayer, callbackSuccess, callbackFailed)
     }
 
     fun loginDataChanged(username: String, password: String) {

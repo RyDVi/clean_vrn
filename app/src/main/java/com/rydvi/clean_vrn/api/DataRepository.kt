@@ -1,21 +1,17 @@
 package com.rydvi.clean_vrn.api
 
-import androidx.lifecycle.MutableLiveData
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
+import org.codehaus.jackson.map.ObjectMapper
+import org.springframework.http.*
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 
 
 object DataRepository {
-
-
     private const val base_url = "http://192.168.0.1"
 
     private var session: Session? = null
-    public fun getSession() = session
+    fun getSession() = session
 
     private val restTemplateJsonConverter: RestTemplate = {
         val restTemplate = RestTemplate()
@@ -35,23 +31,10 @@ object DataRepository {
         }).start()
     }
 
-    fun getGame(id: Int): MutableLiveData<Game> {
-        val game: MutableLiveData<Game> = MutableLiveData()
-        Thread(Runnable {
-            game.postValue(
-                restTemplateJsonConverter.getForObject(
-                    "$base_url/games.php?id=$id",
-                    Game::class.java
-                )
-            )
-        }).start()
-        return game
-    }
-
     fun selectGame(id_game: Long, callback: (Game) -> Unit) {
         Thread(Runnable {
             val headers = HttpHeaders()
-            headers["Content-Type"] = "application/json"
+            headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
             headers["Cookie"] = session?.idSession
             val bodyMap = LinkedHashMap<String, Long>()
             bodyMap["id_game"] = id_game
@@ -99,7 +82,7 @@ object DataRepository {
     fun getCollectedGarbages(id_team: Long, callback: (Array<CollectedGarbage>) -> Unit?) {
         Thread(Runnable {
             val headers = HttpHeaders()
-            headers["Content-Type"] = "application/json"
+            headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
             headers["Cookie"] = session?.idSession
             val entity = HttpEntity<String>(headers)
             callback(
@@ -116,7 +99,7 @@ object DataRepository {
     fun getGarbages(callback: (Array<Garbage>) -> Unit?) {
         Thread(Runnable {
             val headers = HttpHeaders()
-            headers["Content-Type"] = "application/json"
+            headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
             headers["Cookie"] = session?.idSession
             val entity = HttpEntity<String>(headers)
             callback(
@@ -130,15 +113,12 @@ object DataRepository {
         }).start()
     }
 
-    fun login(username: String, password: String, isPlayer: Boolean, callback: (Session) -> Unit) =
+    fun login(
+        username: String, password: String, isPlayer: Boolean, callbackSuccess: (Session) -> Unit
+        , callbackFailed: (Error) -> Unit
+    ) =
         Thread(Runnable {
             val headers = HttpHeaders()
-//        headers.add("Content-Type", "application/json")
-
-            //Для массивов. Например, в username может быть несколько
-//        val bodyMap: MultiValueMap<String, String> = LinkedMultiValueMap()
-//        bodyMap.add("username", username)
-//        bodyMap.add("password", password)
             val bodyMap = LinkedHashMap<String, Any>()
             if (isPlayer) {
                 bodyMap["is_player"] = true
@@ -147,12 +127,28 @@ object DataRepository {
                 bodyMap["password"] = password
             }
             val requestEntity = HttpEntity(bodyMap, headers)
-            session = restTemplateJsonConverter.postForObject(
-                "$base_url/login.php",
-                requestEntity,
-                Session::class.java
-            )
-            callback(session!!)
+
+            var error: Error? = null
+            var statusCode: HttpStatus
+            try {
+                val response = restTemplateJsonConverter.exchange(
+                    "$base_url/login.php",
+                    HttpMethod.POST,
+                    requestEntity,
+                    Session::class.java
+                )
+                statusCode = response.statusCode
+                session = response.body
+            } catch (ex: HttpClientErrorException) {
+                statusCode = ex.statusCode
+                error = if (ex.statusCode === HttpStatus.UNAUTHORIZED)
+                    getError(ex)!! else getUnknownError(ex!!)
+            }
+            if (statusCode === HttpStatus.OK) {
+                callbackSuccess(session!!)
+            } else {
+                callbackFailed(error!!)
+            }
         }).start()
 
     fun logout(callbackSuccess: () -> Unit) = Thread(Runnable {
@@ -169,19 +165,6 @@ object DataRepository {
         callbackSuccess()
     }).start()
 
-    fun testSession(callback: (Session) -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        val testSession = restTemplateJsonConverter.exchange(
-            "$base_url/test_session.php",
-            HttpMethod.GET,
-            entity,
-            Session::class.java
-        )
-        callback(testSession.body)
-    }).start()
-
     fun updateCollectedGarbages(
         id_team: Long,
         collectedGarbage: Array<CollectedGarbage>,
@@ -190,7 +173,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["collected_garbages"] = collectedGarbage
@@ -210,7 +193,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["name"] = name
@@ -233,7 +216,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["name"] = name
@@ -256,7 +239,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val entity = HttpEntity<String>(headers)
             val coefficients = restTemplateJsonConverter.exchange(
@@ -279,7 +262,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["name"] = name
@@ -301,7 +284,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["coefficients"] = coefficients
@@ -321,7 +304,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["name"] = name
@@ -346,7 +329,7 @@ object DataRepository {
         Thread(Runnable {
             val headers = HttpHeaders()
             headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", "application/json")
+            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
             val bodyMap = LinkedHashMap<String, Any>()
             bodyMap["coefficients"] = coefficients
@@ -365,7 +348,7 @@ object DataRepository {
     fun updateOrganizator(org: Organizator, callback: () -> Unit) = Thread(Runnable {
         val headers = HttpHeaders()
         headers["Cookie"] = session?.idSession
-        headers.add("Content-Type", "application/json")
+        headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["lastname"] = org.lastname!!
@@ -387,7 +370,7 @@ object DataRepository {
     fun createOrganizator(org: Organizator, callback: (Organizator) -> Unit) = Thread(Runnable {
         val headers = HttpHeaders()
         headers["Cookie"] = session?.idSession
-        headers.add("Content-Type", "application/json")
+        headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
 
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["lastname"] = org.lastname!!
@@ -487,4 +470,13 @@ object DataRepository {
             }
         }
     }).start()
+
+    private fun getError(httpErrorEx: HttpClientErrorException): Error? =
+        ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
+
+    private fun getUnknownError(httpErrorEx: HttpClientErrorException): Error = Error().apply {
+        msg = httpErrorEx.message
+        code = httpErrorEx.statusCode.value()
+    }
+
 }

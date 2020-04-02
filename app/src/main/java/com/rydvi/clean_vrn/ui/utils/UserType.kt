@@ -30,7 +30,18 @@ fun getUserTypeByTypeId(idType: Long): UserType? {
     }
 }
 
-fun getUserType(): UserType? = getUserTypeByTypeId(DataRepository.getSession()!!.idUserType!!)
+fun getUserType(): UserType? {
+    DataRepository.getSession()?.let {session ->
+        session.idUserType?.let { idUserType->
+            return getUserTypeByTypeId(idUserType)
+        }.also {
+            return null
+        }
+    }.also {
+        return null
+    }
+
+}
 
 fun isAdmin(): Boolean = getUserType() === UserType.administrator
 

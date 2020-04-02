@@ -16,10 +16,13 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.ui.error.ErrorHandler
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+    private var errorHandler: ErrorHandler = ErrorHandler(this)
+    private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +36,10 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val loginAsPlayer = findViewById<Button>(R.id.loginAsPlayer)
-        val loading = findViewById<ProgressBar>(R.id.loading)
+        loading = findViewById(R.id.loading)
 
-        loginViewModel = ViewModelProviders.of(this,
+        loginViewModel = ViewModelProviders.of(
+            this,
             LoginViewModelFactory()
         )
             .get(LoginViewModel::class.java)
@@ -98,19 +102,24 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
-//                loginViewModel.login(username.text.toString(), password.text.toString())
-                loginViewModel.login(username.text.toString(), password.text.toString(), false){
+                loginViewModel.login(username.text.toString(), password.text.toString(), false, {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
-                }
+                }, { error ->
+                    errorHandler.showError(error)
+                    showLoading(false)
+                })
             }
 
             loginAsPlayer.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString(), true) {
+                loginViewModel.login(username.text.toString(), password.text.toString(), true, {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
-                }
+                }, { error ->
+                    errorHandler.showError(error)
+                    showLoading(false)
+                })
             }
         }
     }
@@ -128,6 +137,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isShow: Boolean) {
+        runOnUiThread {
+            loading.visibility = if (isShow) View.VISIBLE else View.GONE
+        }
     }
 }
 
