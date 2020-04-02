@@ -407,7 +407,7 @@ object DataRepository {
         headers["Cookie"] = session?.idSession
         val entity = HttpEntity<String>(headers)
         val deleteStatus = restTemplateJsonConverter.exchange(
-            "$base_url/games.php?id=$id",
+            "$base_url/games.php?id_game=$id",
             HttpMethod.DELETE,
             entity,
             Void::class.java

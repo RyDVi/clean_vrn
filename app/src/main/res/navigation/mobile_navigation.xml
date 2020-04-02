@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/nav_teams"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamsFragment"
-        android:label="@string/menu_teams"
+        android:label="@string/title_team_list"
         tools:layout="@layout/fragment_teams" >
         <action
             android:id="@+id/action_nav_teams_to_nav_team_detail"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/nav_organizators"
         android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorsFragment"
-        android:label="@string/menu_orgs"
+        android:label="@string/title_organizator_list"
         tools:layout="@layout/fragment_organizators" >
         <action
             android:id="@+id/action_nav_organizators_to_nav_organizator_detail"
@@ -33,13 +33,13 @@
     <fragment
         android:id="@+id/nav_map"
         android:name="com.rydvi.clean_vrn.ui.map.MapFragment"
-        android:label="@string/menu_map"
+        android:label="@string/title_activity_map"
         tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/nav_games"
         android:name="com.rydvi.clean_vrn.ui.games.GamesFragment"
-        android:label="@string/menu_games"
+        android:label="@string/title_activity_games"
         tools:layout="@layout/fragment_games" >
         <action
             android:id="@+id/action_nav_games_to_gameDetailFragment"
@@ -51,7 +51,7 @@
     <fragment
         android:id="@+id/nav_game_detail"
         android:name="com.rydvi.clean_vrn.ui.games.GameDetailFragment"
-        android:label="GameDetailFragment" >
+        android:label="@string/title_activity_game_detail" >
         <action
             android:id="@+id/action_gameDetailFragment_to_gameCreateEditFragment"
             app:destination="@id/nav_game_create_edit" />
@@ -59,12 +59,12 @@
     <fragment
         android:id="@+id/nav_game_create_edit"
         android:name="com.rydvi.clean_vrn.ui.games.GameCreateEditFragment"
-        android:label="fragment_game_create_edit"
+        android:label="@string/title_activity_game_edit"
         tools:layout="@layout/fragment_game_create_edit" />
     <fragment
         android:id="@+id/nav_team_detail"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamDetailFragment"
-        android:label="fragment_team_detail"
+        android:label="@string/title_team_detail"
         tools:layout="@layout/fragment_team_detail" >
         <action
             android:id="@+id/action_teamDetailFragment_to_teamCreateEditFragment"
@@ -73,16 +73,16 @@
     <fragment
         android:id="@+id/nav_team_create_edit"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamCreateEditFragment"
-        android:label="fragment_team_create_edit"
+        android:label="@string/title_activity_team_edit"
         tools:layout="@layout/fragment_team_create_edit" />
     <fragment
         android:id="@+id/nav_organizator_create_edit"
         android:name="com.rydvi.clean_vrn.ui.organizators.OragnizatorCreateEditFragment"
-        android:label="OragnizatorCreateEditFragment" />
+        android:label="@string/title_activity_organizator_edit" />
     <fragment
         android:id="@+id/nav_organizator_detail"
         android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorDetailFragment"
-        android:label="OrganizatorDetailFragment" >
+        android:label="@string/title_activity_organizator_detail" >
         <action
             android:id="@+id/action_nav_organizator_detail_to_nav_organizator_create_edit"
             app:destination="@id/nav_organizator_create_edit" />

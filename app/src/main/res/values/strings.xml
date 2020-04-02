@@ -5,32 +5,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <!--  Меню  -->
-    <string name="menu_teams">Teams</string>
-    <string name="menu_orgs">Organizators</string>
-    <string name="menu_map">Map</string>
-    <string name="menu_games">Games</string>
-    <string name="menu_exit">Exit</string>
-
-    <!--  Команды  -->
-    <string name="title_team_list">Teams</string>
-    <string name="title_team_detail">Team</string>
-
-
-    <!--  Игры  -->
-    <string name="lbl_game_address">Address</string>
-    <string name="lbl_game_datetime">Datetime</string>
-    <string name="lbl_game_route">Route</string>
-    <string name="title_game_detail">Game</string>
-
-    <!--  Организации  -->
-    <string name="title_organizator_list">Organizators</string>
-    <string name="title_organizator_detail">Organizator</string>
-    <string name="lbl_organizator_firstname">Firstname</string>
-    <string name="lbl_organizator_lastname">Lastname</string>
-    <string name="lbl_organizator_middlename">Middlename</string>
-    <string name="lbl_organizator_email">Email</string>
-    <string name="lbl_organizator_phone">Phone</string>
+    <!-- Окно входа -->
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -42,19 +17,24 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_login_app_name">Clean.VRN</string>
-    <string name="title_activity_organizator_create_edit">OrganizatorCreateEdit</string>
-    <string name="organizator_lastname">Lastame</string>
-    <string name="organizator_firstname">Firstname</string>
-    <string name="organizator_middlename">Middlename</string>
-    <string name="organizator_email">Email</string>
-    <string name="organizator_phone">Phone</string>
-    <string name="organizator_save">Save</string>
-    <string name="title_activity_game_create_edit">GameCreateEditActivity</string>
-    <string name="game_name">Name of game</string>
-    <string name="game_location">Location of game</string>
-    <string name="game_route">Route</string>
-    <string name="game_save">Save</string>
-    <string name="title_activity_team_create_edit">TeamCreateEditActivity</string>
+
+    <!--  Меню  -->
+    <string name="menu_teams">Teams</string>
+    <string name="menu_orgs">Organizators</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_games">Games</string>
+    <string name="menu_exit">Exit</string>
+
+    <!--  Информация о пользователе  -->
+    <string name="user_type_administrator">Administrator</string>
+    <string name="user_type_organizator">Organizator</string>
+    <string name="user_type_player">Player</string>
+
+    <!--  Команды  -->
+    <string name="title_team_list">Teams</string>
+
+    <!-- Команды детальная информация   -->
+    <string name="title_team_detail">Team</string>
     <string name="btn_team_save">Save</string>
     <string name="lbl_column_header_class">Class</string>
     <string name="lbl_column_header_coefficient">Coefficient</string>
@@ -64,26 +44,70 @@
     <string name="lbl_team_name">Name</string>
     <string name="title_team_info">Team info</string>
     <string name="title_team_collected_garbages">Collected garbages</string>
+    <string name="msg_team_deleted">Team was deleted successfully</string>
+
+    <!--  Команды редактировани/создание  -->
+    <string name="title_activity_team_edit">Edit team</string>
+    <string name="title_activity_team_create">Create team</string>
+
+    <!--  Игры  -->
+    <string name="title_activity_games">Games</string>
+    <string name="lbl_game_address">Address</string>
+    <string name="lbl_game_datetime">Datetime</string>
+    <string name="lbl_game_route">Route</string>
+    <string name="title_game_detail">Game</string>
+
+    <!-- Игры детальная информация -->
+    <string name="title_activity_game_detail">Game</string>
+    <string name="game_name">Name of game</string>
+    <string name="game_location">Location of game</string>
+    <string name="game_route">Route</string>
+    <string name="game_save">Save</string>
     <string name="title_game_info">Game info</string>
     <string name="title_game_coefficients">Coefficients</string>
     <string name="inp_game_description">Description</string>
     <string name="inp_game_datetime">Datetime start</string>
+    <string name="msg_game_deleted">Game deleted successfully</string>
+
+    <!--  Игры редактировани/создание  -->
+    <string name="title_activity_game_edit">Edit game</string>
+    <string name="title_activity_game_create">Create game</string>
+
+    <!--  Организаторы  -->
+    <string name="title_organizator_list">Organizators</string>
+    <string name="title_organizator_detail">Organizator</string>
+    <string name="lbl_organizator_firstname">Firstname</string>
+    <string name="lbl_organizator_lastname">Lastname</string>
+    <string name="lbl_organizator_middlename">Middlename</string>
+    <string name="lbl_organizator_email">Email</string>
+    <string name="lbl_organizator_phone">Phone</string>
+
+    <!--  Организаторы детальная информация  -->
+    <string name="title_activity_organizator_detail">Organizator</string>
+    <string name="organizator_lastname">Lastame</string>
+    <string name="organizator_firstname">Firstname</string>
+    <string name="organizator_middlename">Middlename</string>
+    <string name="organizator_email">Email</string>
+    <string name="organizator_phone">Phone</string>
+    <string name="organizator_save">Save</string>
     <string name="btn_generate_password">Generate password</string>
     <string name="dlg_save_generated_password">Save or remember new password</string>
     <string name="dlg_save_generated_password_btn_ok">OK</string>
     <string name="dlg_accept_generate_password">You really want generate new password? Old password will be deleted.</string>
     <string name="dlg_accept_generate_password_btn_ok">Yes, generate</string>
     <string name="dlg_accept_generate_password_btn_not">Cancel</string>
-    <string name="user_type_administrator">Administrator</string>
-    <string name="user_type_organizator">Organizator</string>
-    <string name="user_type_player">Player</string>
-    <string name="msg_game_deleted">Game deleted successfully</string>
     <string name="msg_org_deleted">Organizator was deleted successfully</string>
-    <string name="msg_team_deleted">Team was deleted successfully</string>
+
+    <!--  Организаторы редактировани/создание  -->
+    <string name="title_activity_organizator_edit">Edit organizator</string>
+    <string name="title_activity_organizator_create">Create organizator</string>
+
+    <!--  Map  -->
+    <string name="title_activity_map">Map</string>
+
+    <!--  Обработчик ошибок  -->
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
