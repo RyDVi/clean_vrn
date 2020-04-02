@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">clean_vrn</string>
+    <string name="app_name">Clean.VRN</string>
     <string name="action_settings">Settings</string>
 
     <!-- Окно входа -->
