@@ -18,6 +18,7 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.isAdmin
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -43,8 +44,8 @@ class OrganizatorDetailFragment : Fragment() {
                 if (it.containsKey(ARG_ITEM_ID)) {
                     val idOrganizator = it.getLong(ARG_ITEM_ID)
                     organizator = organizators.find { org -> org.id == idOrganizator }
-//                    activity?.toolbar_layout?.title =
-//                        activity!!.resources.getString(R.string.title_organizator_detail) + " ${organizator?.lastname}"
+                    activity?.toolbar?.title =
+                        activity!!.resources.getString(R.string.title_organizator_detail) + " ${organizator?.lastname}"
 
                     rootView.findViewById<TextView>(R.id.txt_organizator_lastname).text =
                         organizator?.firstname

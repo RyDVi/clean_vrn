@@ -23,6 +23,7 @@ import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
@@ -76,6 +77,15 @@ class TeamCreateEditFragment : Fragment() {
                     recyclerViewCollectedGarbarages.apply {
                         layoutManager = linearLayoutManagerVertical
                         adapter = adapterCollectedGarbages
+                    }
+
+                    team?.let {
+                        if(editMode===CreateEditMode.EDIT){
+                            activity?.toolbar?.title = activity!!.resources.getString(R.string.title_activity_team_edit)+
+                                    " №${team?.number}  ${team?.name}"
+                        } else {
+                            activity?.toolbar?.title = activity!!.resources.getString(R.string.title_activity_team_create)
+                        }
                     }
                     (activity as MainActivity).showLoading(false)
                 })

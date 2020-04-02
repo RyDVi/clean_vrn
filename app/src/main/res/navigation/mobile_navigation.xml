@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/nav_game_create_edit"
         android:name="com.rydvi.clean_vrn.ui.games.GameCreateEditFragment"
-        android:label="@string/title_activity_game_edit"
+        android:label="@string/title_activity_game_create"
         tools:layout="@layout/fragment_game_create_edit" />
     <fragment
         android:id="@+id/nav_team_detail"
@@ -73,12 +73,12 @@
     <fragment
         android:id="@+id/nav_team_create_edit"
         android:name="com.rydvi.clean_vrn.ui.teams.TeamCreateEditFragment"
-        android:label="@string/title_activity_team_edit"
+        android:label="@string/title_activity_team_create"
         tools:layout="@layout/fragment_team_create_edit" />
     <fragment
         android:id="@+id/nav_organizator_create_edit"
         android:name="com.rydvi.clean_vrn.ui.organizators.OragnizatorCreateEditFragment"
-        android:label="@string/title_activity_organizator_edit" />
+        android:label="@string/title_activity_organizator_create" />
     <fragment
         android:id="@+id/nav_organizator_detail"
         android:name="com.rydvi.clean_vrn.ui.organizators.OrganizatorDetailFragment"

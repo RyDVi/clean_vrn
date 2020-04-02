@@ -18,6 +18,7 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.isAdmin
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_game_detail.view.*
 
@@ -51,8 +52,8 @@ class GameDetailFragment : Fragment() {
                         game.id == idGame
                     }
                     item?.let {
-//                        activity?.toolbar_layout?.title =
-//                            activity!!.resources.getString(R.string.title_game_detail) + " ${item?.name}"
+                        activity?.toolbar?.title =
+                            activity!!.resources.getString(R.string.title_game_detail) + " ${item?.name}"
                     }
                 }
             }

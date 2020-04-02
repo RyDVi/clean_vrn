@@ -19,6 +19,7 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.isPlayer
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -43,8 +44,8 @@ class TeamDetailFragment : Fragment() {
                     val idTeam: Long = it.getLong(ARG_ITEM_ID)
                     team = teams.find { team -> team.id == idTeam }
                     team?.let {
-//                        activity?.toolbar_layout?.title =
-//                            "№${team?.number} " + activity!!.resources.getString(R.string.title_team_detail) + " ${team?.name}"
+                        activity?.toolbar?.title = activity!!.resources.getString(R.string.title_team_detail)+
+                            " №${team?.number}  ${team?.name}"
                     }
                 }
             }

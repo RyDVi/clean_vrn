@@ -21,6 +21,7 @@ import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 /**
@@ -62,6 +63,9 @@ class OragnizatorCreateEditFragment : Fragment() {
                 inpOrgMiddlename.setText(org.middlename)
                 inpOrgEmail.setText(org.email)
                 inpOrgPhone.setText(org.phone)
+
+                activity?.toolbar?.title =
+                    activity!!.resources.getString(R.string.title_activity_organizator_edit) + " ${org?.lastname}"
 
                 (activity as MainActivity).showLoading(false)
             })

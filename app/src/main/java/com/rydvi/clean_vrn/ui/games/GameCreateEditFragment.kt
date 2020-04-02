@@ -18,6 +18,7 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 
@@ -63,6 +64,10 @@ class GameCreateEditFragment : Fragment() {
                     setupRecyclerCoefficients(idGame)
                     (activity as MainActivity).showLoading(false)
                 })
+                game?.let {
+                    activity?.toolbar?.title =
+                        activity!!.resources.getString(R.string.title_activity_game_edit) + " ${game?.name}"
+                }
             })
         } else {
             gamesViewModel.getCoefficients(null)?.observe(this, Observer {
