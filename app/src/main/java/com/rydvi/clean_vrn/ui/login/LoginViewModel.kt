@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import com.rydvi.clean_vrn.ui.data.LoginRepository
-import com.rydvi.clean_vrn.ui.data.Result
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Error

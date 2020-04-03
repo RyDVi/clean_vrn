@@ -16,17 +16,17 @@ class GamesViewModel : ViewModel() {
     fun getGames(): MutableLiveData<Array<Game>> {
         if (dataGames == null) {
             dataGames = MutableLiveData()
-            DataRepository.getGames {
+            DataRepository.getGames({
                 dataGames?.postValue(it)
-            }
+            }, {})
         }
         return dataGames!!
     }
 
     fun refreshGames(): MutableLiveData<Array<Game>>? {
-        DataRepository.getGames {
+        DataRepository.getGames({
             dataGames?.postValue(it)
-        }
+        }, {})
         return dataGames
     }
 
@@ -85,7 +85,7 @@ class GamesViewModel : ViewModel() {
         DataRepository.deleteGame(id, callback)
     }
 
-    fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed:(Error)->Unit) {
+    fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) {
         DataRepository.completeTheGame(id, callbackSuccess, callbackFailed)
     }
 

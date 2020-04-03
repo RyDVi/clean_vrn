@@ -16,21 +16,23 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.ui.error.ErrorHandler
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
-    private var errorHandler: ErrorHandler = ErrorHandler(this)
+    var errorHandler: ErrorHandler = ErrorHandler(this)
     private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
 
         //Сокрытие тулбара
         supportActionBar?.hide()
+
+        DataRepository.activity = this
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -105,10 +107,13 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString(), false, {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
-                }, { error ->
-                    errorHandler.showError(error)
-                    showLoading(false)
-                })
+                },
+                    {
+                        //                        error ->
+//                    errorHandler.showError(error)
+//                    showLoading(false)
+                    }
+                )
             }
 
             loginAsPlayer.setOnClickListener {
@@ -116,9 +121,10 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString(), true, {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
-                }, { error ->
-                    errorHandler.showError(error)
-                    showLoading(false)
+                }, {
+//                        error ->
+//                    errorHandler.showError(error)
+//                    showLoading(false)
                 })
             }
         }
@@ -139,7 +145,7 @@ class LoginActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showLoading(isShow: Boolean) {
+    fun showLoading(isShow: Boolean) {
         runOnUiThread {
             loading.visibility = if (isShow) View.VISIBLE else View.GONE
         }

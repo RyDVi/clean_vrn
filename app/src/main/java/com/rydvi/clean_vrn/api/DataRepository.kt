@@ -1,5 +1,10 @@
 package com.rydvi.clean_vrn.api
 
+import android.app.Activity
+import android.widget.ProgressBar
+import com.rydvi.clean_vrn.MainActivity
+import com.rydvi.clean_vrn.ui.login.LoginActivity
+import kotlinx.android.synthetic.main.activity_login.*
 import org.codehaus.jackson.map.ObjectMapper
 import org.springframework.http.*
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
@@ -13,23 +18,23 @@ object DataRepository {
     private var session: Session? = null
     fun getSession() = session
 
+    var activity: Activity? = null
+
+
     private val restTemplateJsonConverter: RestTemplate = {
         val restTemplate = RestTemplate()
         restTemplate.messageConverters.add(MappingJacksonHttpMessageConverter())
         restTemplate
     }()
 
-    fun getGames(callback: (Array<Game>) -> Unit) {
-        Thread(Runnable {
-            //Необходимо использовать postValue вместо "value =", поскольку только оно работает асинхронно
-            callback(
-                restTemplateJsonConverter.getForObject(
-                    "$base_url/games.php",
-                    Array<Game>::class.java
-                )
-            )
-        }).start()
-    }
+    fun getGames(callback: (Array<Game>) -> Unit, callbackFailed: (Error) -> Unit) = sendRequest(
+        "games.php",
+        HttpMethod.GET,
+        null,
+        Array<Game>::class.java,
+        callback,
+        callbackFailed
+    )
 
     fun selectGame(id_game: Long, callback: (Game) -> Unit) {
         Thread(Runnable {
@@ -116,39 +121,27 @@ object DataRepository {
     fun login(
         username: String, password: String, isPlayer: Boolean, callbackSuccess: (Session) -> Unit
         , callbackFailed: (Error) -> Unit
-    ) =
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            val bodyMap = LinkedHashMap<String, Any>()
-            if (isPlayer) {
-                bodyMap["is_player"] = true
-            } else {
-                bodyMap["username"] = username
-                bodyMap["password"] = password
-            }
-            val requestEntity = HttpEntity(bodyMap, headers)
+    ) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        if (isPlayer) {
+            bodyMap["is_player"] = true
+        } else {
+            bodyMap["username"] = username
+            bodyMap["password"] = password
+        }
+        sendRequest(
+            "login.php",
+            HttpMethod.POST,
+            bodyMap,
+            Session::class.java,
+            { createdSession ->
+                session = createdSession
+                callbackSuccess(createdSession)
+            },
+            callbackFailed
+        )
+    }
 
-            var error: Error? = null
-            var statusCode: HttpStatus
-            try {
-                val response = restTemplateJsonConverter.exchange(
-                    "$base_url/login.php",
-                    HttpMethod.POST,
-                    requestEntity,
-                    Session::class.java
-                )
-                statusCode = response.statusCode
-                session = response.body
-            } catch (ex: HttpClientErrorException) {
-                statusCode = ex.statusCode
-                error = getErrorByEx(ex)
-            }
-            if (statusCode === HttpStatus.OK) {
-                callbackSuccess(session!!)
-            } else {
-                callbackFailed(error!!)
-            }
-        }).start()
 
     fun logout(callbackSuccess: () -> Unit) = Thread(Runnable {
         val headers = HttpHeaders()
@@ -470,24 +463,6 @@ object DataRepository {
         }
     }).start()
 
-    private fun getError(httpErrorEx: HttpClientErrorException): Error? =
-        ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
-
-    private fun getUnknownError(httpErrorEx: HttpClientErrorException): Error = Error().apply {
-        msg = httpErrorEx.message
-        code = httpErrorEx.statusCode.value()
-    }
-
-    private fun getErrorByEx(httpErrorEx: HttpClientErrorException): Error? =
-        httpErrorEx.responseBodyAsByteArray?.let {
-            ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
-        }?.also {
-            Error().apply {
-                msg = httpErrorEx.message
-                code = httpErrorEx.statusCode.value()
-            }
-        }
-
     fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
         Thread(Runnable {
             val headers = HttpHeaders()
@@ -507,10 +482,81 @@ object DataRepository {
                 statusCode = ex.statusCode
                 error = getErrorByEx(ex)
             }
-            if(statusCode===HttpStatus.OK){
+            if (statusCode === HttpStatus.OK) {
                 callbackSuccess()
             } else {
                 callbackFailed(error!!)
             }
         }).start()
+
+    fun <T> sendRequest(
+        scriptNameWithParams: String,
+        method: HttpMethod,
+        bodyMap: LinkedHashMap<String, Any>?,
+        className: Class<T>,
+        callbackSuccess: (T) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) = Thread(Runnable {
+        activity?.let {
+            if (it is MainActivity) {
+                it.showLoading(true)
+            } else if (it is LoginActivity) {
+                it.showLoading(true)
+            }
+        }
+        val headers = HttpHeaders()
+        headers["Cookie"] = session?.idSession
+        headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
+        var error: Error? = null
+        var statusCode: HttpStatus
+        var responseBody: T? = null
+        try {
+            val response = restTemplateJsonConverter.exchange(
+                "$base_url/$scriptNameWithParams",
+                method,
+                if (method === HttpMethod.GET) HttpEntity<String>(headers) else HttpEntity(
+                    bodyMap,
+                    headers
+                ),
+                className
+            )
+            statusCode = response.statusCode
+            responseBody = response.body
+        } catch (ex: HttpClientErrorException) {
+            statusCode = ex.statusCode
+            error = getErrorByEx(ex)
+            activity?.let {
+                if (it is MainActivity) {
+                    it.errorHandler.showError(error!!)
+                    it.showLoading(false)
+                } else if (it is LoginActivity) {
+                    it.errorHandler.showError(error!!)
+                    it.showLoading(false)
+                }
+            }
+        }
+        if (statusCode === HttpStatus.OK) {
+            callbackSuccess(responseBody!!)
+        } else {
+            callbackFailed(error!!)
+        }
+    }).start()
+
+    private fun getError(httpErrorEx: HttpClientErrorException): Error? =
+        ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
+
+    private fun getUnknownError(httpErrorEx: HttpClientErrorException): Error = Error().apply {
+        msg = httpErrorEx.message
+        code = httpErrorEx.statusCode.value()
+    }
+
+    private fun getErrorByEx(httpErrorEx: HttpClientErrorException): Error? =
+        httpErrorEx.responseBodyAsByteArray?.let {
+            ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
+        }?.also {
+            Error().apply {
+                msg = httpErrorEx.message
+                code = httpErrorEx.statusCode.value()
+            }
+        }
 }
