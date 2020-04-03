@@ -141,8 +141,7 @@ object DataRepository {
                 session = response.body
             } catch (ex: HttpClientErrorException) {
                 statusCode = ex.statusCode
-                error = if (ex.statusCode === HttpStatus.UNAUTHORIZED)
-                    getError(ex)!! else getUnknownError(ex!!)
+                error = getErrorByEx(ex)
             }
             if (statusCode === HttpStatus.OK) {
                 callbackSuccess(session!!)
@@ -479,4 +478,13 @@ object DataRepository {
         code = httpErrorEx.statusCode.value()
     }
 
+    private fun getErrorByEx(httpErrorEx: HttpClientErrorException): Error? =
+        httpErrorEx.responseBodyAsByteArray?.let {
+            ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
+        }?.also {
+            Error().apply {
+                msg = httpErrorEx.message
+                code = httpErrorEx.statusCode.value()
+            }
+        }
 }
