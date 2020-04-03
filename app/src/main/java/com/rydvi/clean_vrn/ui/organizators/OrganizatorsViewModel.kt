@@ -14,33 +14,33 @@ class OrganizatorsViewModel : ViewModel() {
     fun getOrganizators(): MutableLiveData<Array<Organizator>> {
         if (dataOrganizators == null) {
             dataOrganizators = MutableLiveData()
-            DataRepository.getOrganizators {
+            DataRepository.getOrganizators({
                 dataOrganizators?.postValue(it)
-            }
+            }, {})
         }
         return dataOrganizators!!
     }
 
     fun refreshOrganizators(): MutableLiveData<Array<Organizator>>? {
-        DataRepository.getOrganizators {
+        DataRepository.getOrganizators({
             dataOrganizators?.postValue(it)
-        }
+        }, {})
         return dataOrganizators
     }
 
     fun updateOrganizator(org: Organizator, callback: () -> Unit) {
-        DataRepository.updateOrganizator(org,callback)
+        DataRepository.updateOrganizator(org, callback, {})
     }
 
     fun createOrganizator(org: Organizator, callback: (Organizator) -> Unit) {
-        DataRepository.createOrganizator(org,callback)
+        DataRepository.createOrganizator(org, callback, {})
     }
 
     fun generatePassword(id: Long, callback: (String) -> Unit) {
-        DataRepository.generatePassword(id, callback)
+        DataRepository.generatePassword(id, callback, {})
     }
 
     fun deleteOrganizator(id: Long, callback: () -> Unit) {
-        DataRepository.deleteOrganizator(id, callback)
+        DataRepository.deleteOrganizator(id, callback, {})
     }
 }

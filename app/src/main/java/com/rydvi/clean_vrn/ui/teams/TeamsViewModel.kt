@@ -12,79 +12,83 @@ class TeamsViewModel : ViewModel() {
 
     private val dataRepository: DataRepository = DataRepository
     private var dataTeams: MutableLiveData<Array<Team>>? = null
-    private var dataCollectedGarbages:MutableLiveData<Array<CollectedGarbage>>? = null
-    private var dataGarbages: MutableLiveData<Array<Garbage>>?=null
+    private var dataCollectedGarbages: MutableLiveData<Array<CollectedGarbage>>? = null
+    private var dataGarbages: MutableLiveData<Array<Garbage>>? = null
 
     fun getTeams(): MutableLiveData<Array<Team>> {
-        if(dataTeams==null){
+        if (dataTeams == null) {
             dataTeams = MutableLiveData()
-            dataRepository.getTeams {
+            dataRepository.getTeams({
                 dataTeams?.postValue(it)
-            }
+            }, {})
         }
         return dataTeams!!
     }
 
     fun refreshTeams(): MutableLiveData<Array<Team>>? {
-        dataRepository.getTeams{
+        dataRepository.getTeams({
             dataTeams?.postValue(it)
-        }
+        }, {})
         return dataTeams
     }
 
-    fun updateTeam(idTeam:Long, name: String, number: Long, callback:(team: Team)->Unit) {
-        dataRepository.updateTeam(idTeam, name, number, callback)
+    fun updateTeam(idTeam: Long, name: String, number: Long, callback: (team: Team) -> Unit) {
+        dataRepository.updateTeam(idTeam, name, number, callback, {})
     }
 
-    fun createTeam(name: String, number: Long, callback:(team: Team)->Unit) {
-        dataRepository.createTeam(name, number, callback)
+    fun createTeam(name: String, number: Long, callback: (team: Team) -> Unit) {
+        dataRepository.createTeam(name, number, callback, {})
     }
 
-    fun getCollectedGarbages(id_team:Long):MutableLiveData<Array<CollectedGarbage>>{
-        if(dataCollectedGarbages==null){
+    fun getCollectedGarbages(id_team: Long): MutableLiveData<Array<CollectedGarbage>> {
+        if (dataCollectedGarbages == null) {
             dataCollectedGarbages = MutableLiveData()
-            dataRepository.getCollectedGarbages(id_team){
+            dataRepository.getCollectedGarbages(id_team, {
                 dataCollectedGarbages?.postValue(it)
-            }
+            }, {})
         }
         return dataCollectedGarbages!!
     }
 
-    fun updateCollectedGarbages(id_team: Long, callbackSuccess:()->Unit, callbackFailed:()->Unit){
-        if(dataCollectedGarbages!=null){
-            dataRepository.updateCollectedGarbages(id_team, dataCollectedGarbages!!.value!!){
+    fun updateCollectedGarbages(
+        id_team: Long,
+        callbackSuccess: () -> Unit,
+        callbackFailed: () -> Unit
+    ) {
+        if (dataCollectedGarbages != null) {
+            dataRepository.updateCollectedGarbages(id_team, dataCollectedGarbages!!.value!!, {
                 callbackSuccess()
-            }
+            }, {})
         } else {
             callbackFailed()
         }
     }
 
-    fun refreshCollectedGarbages(id_team:Long):MutableLiveData<Array<CollectedGarbage>>?{
-        dataRepository.getCollectedGarbages(id_team){
+    fun refreshCollectedGarbages(id_team: Long): MutableLiveData<Array<CollectedGarbage>>? {
+        dataRepository.getCollectedGarbages(id_team, {
             dataCollectedGarbages?.postValue(it)
-        }
+        }, {})
         return dataCollectedGarbages
     }
 
-    fun getGarbages():MutableLiveData<Array<Garbage>>{
-        if(dataGarbages==null){
+    fun getGarbages(): MutableLiveData<Array<Garbage>> {
+        if (dataGarbages == null) {
             dataGarbages = MutableLiveData()
-            dataRepository.getGarbages{
+            dataRepository.getGarbages({
                 dataGarbages?.postValue(it)
-            }
+            }, {})
         }
         return dataGarbages!!
     }
 
-    fun refreshGarbages():MutableLiveData<Array<Garbage>>?{
-        dataRepository.getGarbages{
+    fun refreshGarbages(): MutableLiveData<Array<Garbage>>? {
+        dataRepository.getGarbages({
             dataGarbages?.postValue(it)
-        }
+        }, {})
         return dataGarbages
     }
 
     fun deleteTeam(id: Long, callback: () -> Unit) {
-        DataRepository.deleteTeam(id, callback)
+        DataRepository.deleteTeam(id, callback, {})
     }
 }

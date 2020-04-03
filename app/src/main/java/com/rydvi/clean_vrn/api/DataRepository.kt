@@ -59,69 +59,52 @@ object DataRepository {
         )
     }
 
-    fun getTeams(callback: (Array<Team>) -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        callback(
-            restTemplateJsonConverter.exchange(
-                "$base_url/teams.php",
-                HttpMethod.GET,
-                entity,
-                Array<Team>::class.java
-            ).body
+    fun getTeams(callbackSuccess: (Array<Team>) -> Unit, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "teams.php",
+            HttpMethod.GET,
+            null,
+            Array<Team>::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
         )
-    }).start()
 
-    fun getOrganizators(callback: (Array<Organizator>) -> Unit?) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            val entity = HttpEntity<String>(headers)
-            callback(
-                restTemplateJsonConverter.exchange(
-                    "$base_url/organizators.php",
-                    HttpMethod.GET,
-                    entity,
-                    Array<Organizator>::class.java
-                ).body
-            )
-        }).start()
-    }
+    fun getOrganizators(
+        callbackSuccess: (Array<Organizator>) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) =
+        sendRequest(
+            "organizators.php",
+            HttpMethod.GET,
+            null,
+            Array<Organizator>::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
 
-    fun getCollectedGarbages(id_team: Long, callback: (Array<CollectedGarbage>) -> Unit?) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
-            headers["Cookie"] = session?.idSession
-            val entity = HttpEntity<String>(headers)
-            callback(
-                restTemplateJsonConverter.exchange(
-                    "$base_url/team_collected_garbages.php?id_team=$id_team",
-                    HttpMethod.GET,
-                    entity,
-                    Array<CollectedGarbage>::class.java
-                ).body
-            )
-        }).start()
-    }
+    fun getCollectedGarbages(
+        id_team: Long,
+        callbackSuccess: (Array<CollectedGarbage>) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) =
+        sendRequest(
+            "team_collected_garbages.php?id_team=$id_team",
+            HttpMethod.GET,
+            null,
+            Array<CollectedGarbage>::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
 
-    fun getGarbages(callback: (Array<Garbage>) -> Unit?) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
-            headers["Cookie"] = session?.idSession
-            val entity = HttpEntity<String>(headers)
-            callback(
-                restTemplateJsonConverter.exchange(
-                    "$base_url/garbages.php",
-                    HttpMethod.GET,
-                    entity,
-                    Array<Garbage>::class.java
-                ).body
-            )
-        }).start()
-    }
+    fun getGarbages(callbackSuccess: (Array<Garbage>) -> Unit?, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "garbages.php",
+            HttpMethod.GET,
+            null,
+            Array<Garbage>::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
 
     fun login(
         username: String, password: String, isPlayer: Boolean, callbackSuccess: (Session) -> Unit
@@ -147,352 +130,260 @@ object DataRepository {
         )
     }
 
-
-    fun logout(callbackSuccess: () -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        restTemplateJsonConverter.exchange(
-            "$base_url/logout.php",
+    fun logout(callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "logout.php",
             HttpMethod.GET,
-            entity,
-            Session::class.java
-        ).body
-        session = null
-        callbackSuccess()
-    }).start()
+            null,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
 
     fun updateCollectedGarbages(
         id_team: Long,
         collectedGarbage: Array<CollectedGarbage>,
-        callback: () -> Unit
+        callbackSuccess: () -> Unit,
+        callbackFailed: (Error) -> Unit
     ) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["collected_garbages"] = collectedGarbage
-
-            val requestEntity = HttpEntity(bodyMap, headers)
-            restTemplateJsonConverter.exchange(
-                "$base_url/team_collected_garbages.php?id_team=$id_team",
-                HttpMethod.PUT,
-                requestEntity,
-                Session::class.java
-            )
-            callback()
-        }).start()
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["collected_garbages"] = collectedGarbage
+        sendRequest(
+            "team_collected_garbages.php?id_team=$id_team",
+            HttpMethod.PUT,
+            bodyMap,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
     }
 
-    fun updateTeam(id_team: Long, name: String, number: Long, callback: (team: Team) -> Unit) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["name"] = name
-            bodyMap["number"] = number
-
-            val requestEntity = HttpEntity(bodyMap, headers)
-            callback(
-                restTemplateJsonConverter.exchange(
-                    "$base_url/teams.php?id_team=$id_team",
-                    HttpMethod.PUT,
-                    requestEntity,
-                    Team::class.java
-                ).body
-            )
-
-        }).start()
+    fun updateTeam(
+        id_team: Long,
+        name: String,
+        number: Long,
+        callbackSuccess: (team: Team) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["name"] = name
+        bodyMap["number"] = number
+        sendRequest(
+            "teams.php?id_team=$id_team",
+            HttpMethod.PUT,
+            bodyMap,
+            Team::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
     }
 
-    fun createTeam(name: String, number: Long, callback: (team: Team) -> Unit) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["name"] = name
-            bodyMap["number"] = number
-
-            val requestEntity = HttpEntity(bodyMap, headers)
-            callback(
-                restTemplateJsonConverter.exchange(
-                    "$base_url/teams.php",
-                    HttpMethod.POST,
-                    requestEntity,
-                    Team::class.java
-                ).body
-            )
-
-        }).start()
+    fun createTeam(
+        name: String,
+        number: Long,
+        callbackSuccess: (team: Team) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["name"] = name
+        bodyMap["number"] = number
+        sendRequest(
+            "teams.php",
+            HttpMethod.POST,
+            bodyMap,
+            Team::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
     }
 
-    fun getCoefficients(id_game: Long?, callback: (Array<Coefficient>) -> Unit?) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val entity = HttpEntity<String>(headers)
-            val coefficients = restTemplateJsonConverter.exchange(
-                "$base_url/garbages_coefficients.php?id_game=$id_game",
-                HttpMethod.GET,
-                entity,
-                Array<Coefficient>::class.java
-            ).body
-            callback(coefficients)
-        }).start()
-    }
+    fun getCoefficients(
+        id_game: Long?,
+        callbackSuccess: (Array<Coefficient>) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) =
+        sendRequest(
+            "garbages_coefficients.php?id_game=$id_game",
+            HttpMethod.GET,
+            null,
+            Array<Coefficient>::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
 
     fun updateGame(
         id: Long,
         name: String,
         route: String,
         datetime: String,
-        callback: (Game) -> Unit
+        callbackSuccess: (Game) -> Unit,
+        callbackFailed: (Error) -> Unit
     ) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["name"] = name
-            bodyMap["route"] = route
-            bodyMap["datetime"] = datetime
-
-            val entity = HttpEntity(bodyMap, headers)
-            val game = restTemplateJsonConverter.exchange(
-                "$base_url/games.php?id_game=$id",
-                HttpMethod.PUT,
-                entity,
-                Game::class.java
-            ).body
-            callback(game)
-        }).start()
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["name"] = name
+        bodyMap["route"] = route
+        bodyMap["datetime"] = datetime
+        sendRequest(
+            "games.php?id_game=$id",
+            HttpMethod.PUT,
+            bodyMap,
+            Game::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
     }
 
-    fun updateCoefficients(id: Long, coefficients: Array<Coefficient>, callback: () -> Unit) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["coefficients"] = coefficients
-
-            val entity = HttpEntity(bodyMap, headers)
-            restTemplateJsonConverter.exchange(
-                "$base_url/garbages_coefficients.php?id_game=$id",
-                HttpMethod.PUT,
-                entity,
-                Session::class.java
-            ).body
-            callback()
-        }).start()
+    fun updateCoefficients(
+        id: Long,
+        coefficients: Array<Coefficient>,
+        callbackSuccess: () -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["coefficients"] = coefficients
+        sendRequest(
+            "garbages_coefficients.php?id_game=$id",
+            HttpMethod.PUT,
+            bodyMap,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
     }
 
-    fun createGame(name: String, route: String, datetime: String, callback: (Game) -> Unit) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["name"] = name
-            bodyMap["route"] = route
-            bodyMap["datetime"] = datetime
-
-            val entity = HttpEntity(bodyMap, headers)
-            val game = restTemplateJsonConverter.exchange(
-                "$base_url/games.php",
-                HttpMethod.POST,
-                entity,
-                Game::class.java
-            ).body
-            callback(game)
-        }).start()
+    fun createGame(
+        name: String,
+        route: String,
+        datetime: String,
+        callbackSuccess: (Game) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["name"] = name
+        bodyMap["route"] = route
+        bodyMap["datetime"] = datetime
+        sendRequest(
+            "games.php",
+            HttpMethod.POST,
+            bodyMap,
+            Game::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
     }
 
     fun createCoefficients(
         id: Long, coefficients: Array<Coefficient>,
-        callback: (Array<Coefficient>?) -> Unit
+        callbackSuccess: (Array<Coefficient>?) -> Unit,
+        callbackFailed: (Error) -> Unit
     ) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
-            val bodyMap = LinkedHashMap<String, Any>()
-            bodyMap["coefficients"] = coefficients
-
-            val entity = HttpEntity(bodyMap, headers)
-            val createdCoefficients = restTemplateJsonConverter.exchange(
-                "$base_url/garbages_coefficients.php?id_game=$id",
-                HttpMethod.POST,
-                entity,
-                Array<Coefficient>::class.java
-            ).body
-            callback(createdCoefficients)
-        }).start()
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["coefficients"] = coefficients
+        sendRequest(
+            "garbages_coefficients.php?id_game=$id",
+            HttpMethod.POST,
+            bodyMap,
+            Array<Coefficient>::class.java,
+            { callbackSuccess(it) },
+            callbackFailed
+        )
     }
 
-    fun updateOrganizator(org: Organizator, callback: () -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
+    fun updateOrganizator(
+        org: Organizator,
+        callbackSuccess: () -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["lastname"] = org.lastname!!
         bodyMap["firstname"] = org.firstname!!
         bodyMap["middlename"] = org.middlename!!
         bodyMap["email"] = org.email!!
         bodyMap["phone"] = org.phone!!
-
-        val entity = HttpEntity(bodyMap, headers)
-        restTemplateJsonConverter.exchange(
-            "$base_url/organizators.php?id=${org.id}",
+        sendRequest(
+            "organizators.php?id=${org.id}",
             HttpMethod.PUT,
-            entity,
-            Session::class.java
-        ).body
-        callback()
-    }).start()
+            bodyMap,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
+    }
 
-    fun createOrganizator(org: Organizator, callback: (Organizator) -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        headers.add("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-
+    fun createOrganizator(
+        org: Organizator,
+        callbackSuccess: (Organizator) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["lastname"] = org.lastname!!
         bodyMap["firstname"] = org.firstname!!
         bodyMap["middlename"] = org.middlename!!
         bodyMap["email"] = org.email!!
         bodyMap["phone"] = org.phone!!
-
-        val entity = HttpEntity(bodyMap, headers)
-        val createdCoefficients = restTemplateJsonConverter.exchange(
-            "$base_url/organizators.php",
+        sendRequest(
+            "organizators.php",
             HttpMethod.POST,
-            entity,
-            Organizator::class.java
-        ).body
-        callback(createdCoefficients)
-    }).start()
+            bodyMap,
+            Organizator::class.java,
+            { callbackSuccess(it!!) },
+            callbackFailed
+        )
+    }
 
-    fun generatePassword(id: Long, callback: (String) -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        val generatedPassword = restTemplateJsonConverter.exchange(
-            "$base_url/generate_org_password.php?id=$id",
+    fun generatePassword(
+        id: Long,
+        callbackSuccess: (String) -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) =
+        sendRequest(
+            "generate_org_password.php?id=$id",
             HttpMethod.GET,
-            entity,
-            Password::class.java
-        ).body
-        callback(generatedPassword.password!!)
-    }).start()
+            null,
+            Password::class.java,
+            { callbackSuccess(it!!.password!!) },
+            callbackFailed
+        )
 
-    fun deleteGame(id: Long, callback: () -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        val deleteStatus = restTemplateJsonConverter.exchange(
-            "$base_url/games.php?id_game=$id",
+    fun deleteGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "games.php?id_game=$id",
             HttpMethod.DELETE,
-            entity,
-            Void::class.java
-        ).statusCode
-        when (deleteStatus) {
-            HttpStatus.OK -> {
-                callback()
-            }
-            HttpStatus.NOT_FOUND -> {
-                callback()
-            }
-            else -> {
-                callback()
-            }
-        }
-    }).start()
+            null,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
 
-    fun deleteOrganizator(id: Long, callback: () -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        val deleteStatus = restTemplateJsonConverter.exchange(
-            "$base_url/organizators.php?id=$id",
+    fun deleteOrganizator(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "organizators.php?id=$id",
             HttpMethod.DELETE,
-            entity,
-            Void::class.java
-        ).statusCode
-        when (deleteStatus) {
-            HttpStatus.OK -> {
-                callback()
-            }
-            HttpStatus.NOT_FOUND -> {
-                callback()
-            }
-            else -> {
-                callback()
-            }
-        }
-    }).start()
+            null,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
 
-    fun deleteTeam(id: Long, callback: () -> Unit) = Thread(Runnable {
-        val headers = HttpHeaders()
-        headers["Cookie"] = session?.idSession
-        val entity = HttpEntity<String>(headers)
-        val deleteStatus = restTemplateJsonConverter.exchange(
-            "$base_url/teams.php?id=$id",
+    fun deleteTeam(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "teams.php?id=$id",
             HttpMethod.DELETE,
-            entity,
-            Void::class.java
-        ).statusCode
-        when (deleteStatus) {
-            HttpStatus.OK -> {
-                callback()
-            }
-            HttpStatus.NOT_FOUND -> {
-                callback()
-            }
-            else -> {
-                callback()
-            }
-        }
-    }).start()
+            null,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
 
     fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Cookie"] = session?.idSession
-            val entity = HttpEntity<String>(headers)
-            var error: Error? = null
-            var statusCode: HttpStatus
-            try {
-                val response = restTemplateJsonConverter.exchange(
-                    "$base_url/games_control.php?id=$id",
-                    HttpMethod.GET,
-                    entity,
-                    Void::class.java
-                )
-                statusCode = response.statusCode
-            } catch (ex: HttpClientErrorException) {
-                statusCode = ex.statusCode
-                error = getErrorByEx(ex)
-            }
-            if (statusCode === HttpStatus.OK) {
-                callbackSuccess()
-            } else {
-                callbackFailed(error!!)
-            }
-        }).start()
+        sendRequest(
+            "games_control.php?id=$id",
+            HttpMethod.GET,
+            null,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
 
     fun <T> sendRequest(
         scriptNameWithParams: String,
@@ -531,7 +422,7 @@ object DataRepository {
             statusCode = ex.statusCode
             error = getErrorByEx(ex)
         }
-        if (statusCode === HttpStatus.OK) {
+        if (statusCode === HttpStatus.OK || statusCode === HttpStatus.CREATED) {
             callbackSuccess(responseBody)
             activity?.let {
                 if (it is MainActivity) {
@@ -544,10 +435,10 @@ object DataRepository {
             callbackFailed(error!!)
             activity?.let {
                 if (it is MainActivity) {
-                    it.errorHandler.showError(error!!)
+                    it.errorHandler.showError(error)
                     it.showLoading(false)
                 } else if (it is LoginActivity) {
-                    it.errorHandler.showError(error!!)
+                    it.errorHandler.showError(error)
                     it.showLoading(false)
                 }
             }

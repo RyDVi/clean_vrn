@@ -68,10 +68,10 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 //Переопределяем кнопку меню exit
                 R.id.nav_exit -> {
-                    DataRepository.logout {
+                    DataRepository.logout( {
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
-                    }
+                    },{})
                     true
                 }
                 //остальные оставляем как есть

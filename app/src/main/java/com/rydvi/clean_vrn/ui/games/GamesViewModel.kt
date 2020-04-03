@@ -37,9 +37,9 @@ class GamesViewModel : ViewModel() {
     fun getCoefficients(idGame: Long?): MutableLiveData<Array<Coefficient>> {
         if (dataCoefficients === null) {
             dataCoefficients = MutableLiveData()
-            DataRepository.getCoefficients(idGame) {
+            DataRepository.getCoefficients(idGame, {
                 dataCoefficients?.postValue(it)
-            }
+            },{})
         }
         return dataCoefficients!!
     }
@@ -51,12 +51,12 @@ class GamesViewModel : ViewModel() {
         datetime: String,
         callback: (Game) -> Unit
     ) {
-        DataRepository.updateGame(id, name, route, datetime, callback)
+        DataRepository.updateGame(id, name, route, datetime, callback, {})
     }
 
     fun updateCoefficients(id: Long, callback: () -> Unit) {
         if (dataCoefficients !== null) {
-            DataRepository.updateCoefficients(id, dataCoefficients!!.value!!, callback)
+            DataRepository.updateCoefficients(id, dataCoefficients!!.value!!, callback, {})
         } else {
             callback()
         }
@@ -68,19 +68,19 @@ class GamesViewModel : ViewModel() {
         datetime: String,
         callback: (Game) -> Unit
     ) {
-        DataRepository.createGame(name, route, datetime, callback)
+        DataRepository.createGame(name, route, datetime, callback, {})
     }
 
     fun createCoefficients(id: Long, callback: (Array<Coefficient>?) -> Unit) {
         if (dataCoefficients !== null) {
-            DataRepository.createCoefficients(id, dataCoefficients!!.value!!, callback)
+            DataRepository.createCoefficients(id, dataCoefficients!!.value!!, callback, {})
         } else {
             callback(null)
         }
     }
 
     fun deleteGame(id: Long, callback: () -> Unit) {
-        DataRepository.deleteGame(id, callback)
+        DataRepository.deleteGame(id, callback, {})
     }
 
     fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) {
