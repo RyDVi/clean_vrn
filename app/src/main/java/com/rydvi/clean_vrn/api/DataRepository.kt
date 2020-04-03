@@ -27,31 +27,36 @@ object DataRepository {
         restTemplate
     }()
 
-    fun getGames(callback: (Array<Game>) -> Unit, callbackFailed: (Error) -> Unit) = sendRequest(
-        "games.php",
-        HttpMethod.GET,
-        null,
-        Array<Game>::class.java,
-        callback,
-        callbackFailed
-    )
+    fun getGames(callbackSuccess: (Array<Game>) -> Unit, callbackFailed: (Error) -> Unit) =
+        sendRequest(
+            "games.php",
+            HttpMethod.GET,
+            null,
+            Array<Game>::class.java,
+            {
+                callbackSuccess(it!!)
+            },
+            callbackFailed
+        )
 
-    fun selectGame(id_game: Long, callback: (Game) -> Unit) {
-        Thread(Runnable {
-            val headers = HttpHeaders()
-            headers["Content-Type"] = MediaType.APPLICATION_JSON_VALUE
-            headers["Cookie"] = session?.idSession
-            val bodyMap = LinkedHashMap<String, Long>()
-            bodyMap["id_game"] = id_game
-            val requestEntity = HttpEntity(bodyMap, headers)
-            callback(
-                restTemplateJsonConverter.postForObject(
-                    "$base_url/select_game.php",
-                    requestEntity,
-                    Game::class.java
-                )
-            )
-        }).start()
+    /**
+     * Выбор игры. Выбранная игра записывается на сервере в сессию
+     */
+    fun selectGame(
+        id_game: Long,
+        callbackSuccess: () -> Unit,
+        callbackFailed: (Error) -> Unit
+    ) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["id_game"] = id_game
+        sendRequest(
+            "select_game.php",
+            HttpMethod.POST,
+            bodyMap,
+            Void::class.java,
+            { callbackSuccess() },
+            callbackFailed
+        )
     }
 
     fun getTeams(callback: (Array<Team>) -> Unit) = Thread(Runnable {
@@ -136,7 +141,7 @@ object DataRepository {
             Session::class.java,
             { createdSession ->
                 session = createdSession
-                callbackSuccess(createdSession)
+                callbackSuccess(createdSession!!)
             },
             callbackFailed
         )
@@ -494,7 +499,7 @@ object DataRepository {
         method: HttpMethod,
         bodyMap: LinkedHashMap<String, Any>?,
         className: Class<T>,
-        callbackSuccess: (T) -> Unit,
+        callbackSuccess: (T?) -> Unit,
         callbackFailed: (Error) -> Unit
     ) = Thread(Runnable {
         activity?.let {
@@ -525,6 +530,18 @@ object DataRepository {
         } catch (ex: HttpClientErrorException) {
             statusCode = ex.statusCode
             error = getErrorByEx(ex)
+        }
+        if (statusCode === HttpStatus.OK) {
+            callbackSuccess(responseBody)
+            activity?.let {
+                if (it is MainActivity) {
+                    it.showLoading(false)
+                } else if (it is LoginActivity) {
+                    it.showLoading(false)
+                }
+            }
+        } else {
+            callbackFailed(error!!)
             activity?.let {
                 if (it is MainActivity) {
                     it.errorHandler.showError(error!!)
@@ -534,11 +551,6 @@ object DataRepository {
                     it.showLoading(false)
                 }
             }
-        }
-        if (statusCode === HttpStatus.OK) {
-            callbackSuccess(responseBody!!)
-        } else {
-            callbackFailed(error!!)
         }
     }).start()
 

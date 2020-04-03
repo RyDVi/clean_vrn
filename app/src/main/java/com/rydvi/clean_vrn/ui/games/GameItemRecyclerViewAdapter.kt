@@ -39,14 +39,12 @@ class GameItemRecyclerViewAdapter(
         val gamesViewModel =
             ViewModelProviders.of(activity).get(GamesViewModel::class.java)
         item.id?.let {
-            //TODO: add loading
-            gamesViewModel.selectGame(it) {
+            gamesViewModel.selectGame(it, {
                 //Запуск главного потока, поскольку findNavController работает только в нем
                 Handler(activity.mainLooper).post {
                     activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_map)
                 }
-
-            }
+            },{})
         } ?: run {
             //TODO: error get id of game
         }

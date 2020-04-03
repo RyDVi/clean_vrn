@@ -128,7 +128,9 @@ class MainActivity : AppCompatActivity() {
      * Отображение меню навигации
      */
     fun showLoading(isShow: Boolean) {
-        loading.visibility = if (isShow) ProgressBar.VISIBLE else ProgressBar.GONE
+        runOnUiThread {
+            loading.visibility = if (isShow) ProgressBar.VISIBLE else ProgressBar.GONE
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

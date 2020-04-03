@@ -30,10 +30,8 @@ class GamesViewModel : ViewModel() {
         return dataGames
     }
 
-    fun selectGame(id_game: Long, callback: (Game) -> Unit) {
-        DataRepository.selectGame(id_game) { game ->
-            callback(game)
-        }
+    fun selectGame(id_game: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) {
+        DataRepository.selectGame(id_game, callbackSuccess, callbackFailed)
     }
 
     fun getCoefficients(idGame: Long?): MutableLiveData<Array<Coefficient>> {
