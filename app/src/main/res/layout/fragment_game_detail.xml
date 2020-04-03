@@ -97,6 +97,7 @@
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -119,6 +120,12 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_complete_the_game"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/game_complete" />
 
         <TextView
             android:id="@+id/textView11"

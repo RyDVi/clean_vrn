@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
+import com.rydvi.clean_vrn.ui.dialog.Dialog
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.isAdmin
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -32,6 +34,7 @@ class GameDetailFragment : Fragment() {
 
     private var item: Game? = null
     private lateinit var gamesViewModel: GamesViewModel
+    private lateinit var dialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +44,7 @@ class GameDetailFragment : Fragment() {
 
         (activity as MainActivity).showLoading(true)
 
+        dialog = Dialog(activity!!)
         gamesViewModel =
             ViewModelProviders.of(activity!!).get(GamesViewModel::class.java)
 
@@ -95,6 +99,34 @@ class GameDetailFragment : Fragment() {
                 }
                 _navToGames()
             }
+        }
+
+        val btnCompleteTheGame = rootView.findViewById<Button>(R.id.btn_complete_the_game)
+        if (!isAdmin()) btnCompleteTheGame.visibility =
+            Button.GONE else btnCompleteTheGame.visibility = Button.VISIBLE
+        btnCompleteTheGame.setOnClickListener {
+            val resources = activity!!.resources
+            dialog.showDialogAcceptCancel(
+                {
+                    (activity as MainActivity).showLoading(true)
+                    gamesViewModel.completeTheGame(item!!.id!!, {
+                        activity!!.runOnUiThread {
+                            Toast.makeText(
+                                activity,
+                                resources.getString(R.string.game_complete_the_game_completed_msg),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            (activity as MainActivity).showLoading(false)
+                        }
+                    }, { error ->
+                        (activity as MainActivity).errorHandler.showError(error)
+                        (activity as MainActivity).showLoading(false)
+                    })
+                }, null,
+                resources.getString(R.string.game_complete_the_game_msg),
+                resources.getString(R.string.game_complete_the_game_btn_ok),
+                resources.getString(R.string.game_complete_the_game_btn_ok)
+            )
         }
 
         return rootView

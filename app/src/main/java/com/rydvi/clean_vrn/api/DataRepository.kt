@@ -487,4 +487,30 @@ object DataRepository {
                 code = httpErrorEx.statusCode.value()
             }
         }
+
+    fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
+        Thread(Runnable {
+            val headers = HttpHeaders()
+            headers["Cookie"] = session?.idSession
+            val entity = HttpEntity<String>(headers)
+            var error: Error? = null
+            var statusCode: HttpStatus
+            try {
+                val response = restTemplateJsonConverter.exchange(
+                    "$base_url/games_control.php?id=$id",
+                    HttpMethod.GET,
+                    entity,
+                    Void::class.java
+                )
+                statusCode = response.statusCode
+            } catch (ex: HttpClientErrorException) {
+                statusCode = ex.statusCode
+                error = getErrorByEx(ex)
+            }
+            if(statusCode===HttpStatus.OK){
+                callbackSuccess()
+            } else {
+                callbackFailed(error!!)
+            }
+        }).start()
 }

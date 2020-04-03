@@ -65,6 +65,11 @@
     <string name="inp_game_description">Description</string>
     <string name="inp_game_datetime">Datetime start</string>
     <string name="msg_game_deleted">Game deleted successfully</string>
+    <string name="game_complete">Сomplete the game</string>
+    <string name="game_complete_the_game_msg">You really want complete the game?</string>
+    <string name="game_complete_the_game_btn_ok">Complete</string>
+    <string name="game_complete_the_game_btn_cancel">Cancel</string>
+    <string name="game_complete_the_game_completed_msg">Game completed successfully</string>
 
     <!--  Игры редактировани/создание  -->
     <string name="title_activity_game_edit">Edit game</string>
@@ -106,5 +111,6 @@
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
+
 
 </resources>

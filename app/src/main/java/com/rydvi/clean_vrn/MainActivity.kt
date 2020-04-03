@@ -19,6 +19,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.ui.error.ErrorHandler
 import com.rydvi.clean_vrn.ui.games.GamesFragment
 import com.rydvi.clean_vrn.ui.login.LoginActivity
 import com.rydvi.clean_vrn.ui.utils.UserType
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var loading: ProgressBar
     private lateinit var navView: NavigationView
+    val errorHandler: ErrorHandler = ErrorHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -3,6 +3,7 @@ package com.rydvi.clean_vrn.ui.games
 import androidx.lifecycle.*
 import com.rydvi.clean_vrn.api.Coefficient
 import com.rydvi.clean_vrn.api.DataRepository
+import com.rydvi.clean_vrn.api.Error
 import com.rydvi.clean_vrn.api.Game
 
 
@@ -82,6 +83,10 @@ class GamesViewModel : ViewModel() {
 
     fun deleteGame(id: Long, callback: () -> Unit) {
         DataRepository.deleteGame(id, callback)
+    }
+
+    fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed:(Error)->Unit) {
+        DataRepository.completeTheGame(id, callbackSuccess, callbackFailed)
     }
 
 }

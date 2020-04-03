@@ -79,4 +79,9 @@
     <string name="user_type_organizator">Организатор</string>
     <string name="user_type_player">Участник</string>
     <string name="welcome">Добро пожаловать!</string>
+    <string name="game_complete">Завершить игру</string>
+    <string name="game_complete_the_game_msg">Вы действительно хотите завершить игру?</string>
+    <string name="game_complete_the_game_btn_ok">Завершить</string>
+    <string name="game_complete_the_game_btn_cancel">Отмена</string>
+    <string name="game_complete_the_game_completed_msg">Игра успешно завершена</string>
 </resources>
