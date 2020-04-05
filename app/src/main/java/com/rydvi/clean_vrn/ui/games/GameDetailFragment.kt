@@ -18,13 +18,11 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.dialog.Dialog
-import com.rydvi.clean_vrn.ui.utils.CreateEditMode
-import com.rydvi.clean_vrn.ui.utils.formatDateTime
-import com.rydvi.clean_vrn.ui.utils.isAdmin
-import com.rydvi.clean_vrn.ui.utils.parseISODate
+import com.rydvi.clean_vrn.ui.utils.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_game_detail.view.*
+import java.util.*
 
 /**
  * A fragment representing a single Game detail screen.
@@ -37,6 +35,10 @@ class GameDetailFragment : Fragment() {
     private var item: Game? = null
     private lateinit var gamesViewModel: GamesViewModel
     private lateinit var dialog: Dialog
+
+    private lateinit var btnDeleteGame: FloatingActionButton
+    private lateinit var btnEditGame: FloatingActionButton
+    private lateinit var btnCompleteTheGame: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,61 +76,82 @@ class GameDetailFragment : Fragment() {
                     (activity as MainActivity).showLoading(false)
                 })
             }
+
+            btnEditGame = rootView.findViewById(R.id.btn_edit_game)
+            if (!isAdmin()) btnEditGame.hide() else btnEditGame.show()
+            btnEditGame.setOnClickListener {
+                activity!!.findNavController(activity!!.nav_host_fragment.id)
+                    .navigate(R.id.nav_game_create_edit, Bundle().apply {
+                        putLong(GameCreateEditFragment.GAME_ID, item!!.id!!)
+                        putString(GameCreateEditFragment.GAME_MODE, CreateEditMode.EDIT.getMode())
+                    })
+            }
+
+            btnDeleteGame = rootView.findViewById(R.id.btn_delete_game)
+            if (!isAdmin()) btnDeleteGame.hide() else btnDeleteGame.show()
+            btnDeleteGame.setOnClickListener {
+                (activity as MainActivity).showLoading(true)
+                gamesViewModel.deleteGame(item!!.id!!) {
+                    activity!!.runOnUiThread {
+                        Toast.makeText(
+                            activity,
+                            resources.getString(R.string.msg_game_deleted),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    _navToGames()
+                }
+            }
+
+            btnCompleteTheGame = rootView.findViewById(R.id.btn_complete_the_game)
+            if (!isAdmin()) btnCompleteTheGame.visibility =
+                Button.GONE else btnCompleteTheGame.visibility = Button.VISIBLE
+            btnCompleteTheGame.setOnClickListener {
+                val resources = activity!!.resources
+                dialog.showDialogAcceptCancel(
+                    {
+                        (activity as MainActivity).showLoading(true)
+                        gamesViewModel.completeTheGame(item!!.id!!, {
+                            activity!!.runOnUiThread {
+                                Toast.makeText(
+                                    activity,
+                                    resources.getString(R.string.game_complete_the_game_completed_msg),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                (activity as MainActivity).showLoading(false)
+                            }
+                        }, { error ->
+                            (activity as MainActivity).errorHandler.showError(error)
+                            (activity as MainActivity).showLoading(false)
+                        })
+                    }, null,
+                    resources.getString(R.string.game_complete_the_game_msg),
+                    resources.getString(R.string.game_complete_the_game_btn_ok),
+                    resources.getString(R.string.game_complete_the_game_btn_cancel)
+                )
+            }
+
+            item?.id_status?.let {
+                when {
+                    it === GameStatus.completed.getTypeId() -> {
+                        btnDeleteGame.hide()
+                        btnEditGame.hide()
+                        btnCompleteTheGame.visibility = Button.GONE
+                    }
+                    it===GameStatus.started.getTypeId() -> {
+                        btnDeleteGame.hide()
+                        btnEditGame.hide()
+                        btnCompleteTheGame.visibility = Button.VISIBLE
+                    }
+                    else -> {
+                        btnDeleteGame.show()
+                        btnEditGame.show()
+                        btnCompleteTheGame.visibility = Button.VISIBLE
+                    }
+                }
+            }
         })
         gamesViewModel.refreshGames()
-        val btnEditGame = rootView.findViewById<FloatingActionButton>(R.id.btn_edit_game)
-        if (!isAdmin()) btnEditGame.hide() else btnEditGame.show()
-        btnEditGame.setOnClickListener {
-            activity!!.findNavController(activity!!.nav_host_fragment.id)
-                .navigate(R.id.nav_game_create_edit, Bundle().apply {
-                    putLong(GameCreateEditFragment.GAME_ID, item!!.id!!)
-                    putString(GameCreateEditFragment.GAME_MODE, CreateEditMode.EDIT.getMode())
-                })
-        }
-
-        val btnDeleteGame = rootView.findViewById<FloatingActionButton>(R.id.btn_delete_game)
-        if (!isAdmin()) btnDeleteGame.hide() else btnDeleteGame.show()
-        btnDeleteGame.setOnClickListener {
-            (activity as MainActivity).showLoading(true)
-            gamesViewModel.deleteGame(item!!.id!!) {
-                activity!!.runOnUiThread {
-                    Toast.makeText(
-                        activity,
-                        resources.getString(R.string.msg_game_deleted),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                _navToGames()
-            }
-        }
-
-        val btnCompleteTheGame = rootView.findViewById<Button>(R.id.btn_complete_the_game)
-        if (!isAdmin()) btnCompleteTheGame.visibility =
-            Button.GONE else btnCompleteTheGame.visibility = Button.VISIBLE
-        btnCompleteTheGame.setOnClickListener {
-            val resources = activity!!.resources
-            dialog.showDialogAcceptCancel(
-                {
-                    (activity as MainActivity).showLoading(true)
-                    gamesViewModel.completeTheGame(item!!.id!!, {
-                        activity!!.runOnUiThread {
-                            Toast.makeText(
-                                activity,
-                                resources.getString(R.string.game_complete_the_game_completed_msg),
-                                Toast.LENGTH_LONG
-                            ).show()
-                            (activity as MainActivity).showLoading(false)
-                        }
-                    }, { error ->
-                        (activity as MainActivity).errorHandler.showError(error)
-                        (activity as MainActivity).showLoading(false)
-                    })
-                }, null,
-                resources.getString(R.string.game_complete_the_game_msg),
-                resources.getString(R.string.game_complete_the_game_btn_ok),
-                resources.getString(R.string.game_complete_the_game_btn_ok)
-            )
-        }
 
         return rootView
     }
