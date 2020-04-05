@@ -63,7 +63,8 @@
     <string name="title_game_info">Game info</string>
     <string name="title_game_coefficients">Coefficients</string>
     <string name="inp_game_description">Description</string>
-    <string name="inp_game_datetime">Datetime start</string>
+    <string name="inp_game_date">Date start</string>
+    <string name="inp_game_time">Time start</string>
     <string name="msg_game_deleted">Game deleted successfully</string>
     <string name="game_complete">Сomplete the game</string>
     <string name="game_complete_the_game_msg">You really want complete the game?</string>

@@ -1,5 +1,8 @@
 package com.rydvi.clean_vrn.api
 
+import com.rydvi.clean_vrn.ui.utils.parseISODate
+import java.util.*
+
 class Game {
     var id: Long? = null
         get() = field
@@ -36,5 +39,7 @@ class Game {
         set(value) {
             field = value
         }
+
+    fun datetimeInDate(): Date? = parseISODate(datetime)
 
 }

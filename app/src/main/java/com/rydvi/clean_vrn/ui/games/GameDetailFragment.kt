@@ -19,7 +19,9 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.dialog.Dialog
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.formatDateTime
 import com.rydvi.clean_vrn.ui.utils.isAdmin
+import com.rydvi.clean_vrn.ui.utils.parseISODate
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_game_detail.view.*
@@ -62,8 +64,7 @@ class GameDetailFragment : Fragment() {
                 }
             }
             item?.let { game ->
-                rootView.txt_game_address.text = game.route
-                rootView.txt_game_datetime.text = game.datetime
+                rootView.txt_game_datetime.text = formatDateTime(game.datetimeInDate()!!)
                 rootView.txt_game_route.text = game.route
                 gamesViewModel.getCoefficients(game.id)?.observe(this, Observer {
                     setupRecyclerCoefficients(

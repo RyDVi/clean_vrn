@@ -1,10 +1,8 @@
 package com.rydvi.clean_vrn.api
 
 import android.app.Activity
-import android.widget.ProgressBar
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.ui.login.LoginActivity
-import kotlinx.android.synthetic.main.activity_login.*
 import org.codehaus.jackson.map.ObjectMapper
 import org.springframework.http.*
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter

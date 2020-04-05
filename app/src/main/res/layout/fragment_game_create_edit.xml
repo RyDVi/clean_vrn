@@ -36,13 +36,49 @@
             android:hint="@string/game_name"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/inp_game_datetime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/inp_game_datetime"
-            android:inputType="datetime" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/inp_game_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:hint="@string/inp_game_date"
+                android:inputType="date" />
+
+            <ImageButton
+                android:id="@+id/btn_game_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_btn_select_date" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/inp_game_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:enabled="false"
+                android:hint="@string/inp_game_time"
+                android:inputType="time" />
+
+            <ImageButton
+                android:id="@+id/btn_game_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_btn_select_time" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/inp_game_route"

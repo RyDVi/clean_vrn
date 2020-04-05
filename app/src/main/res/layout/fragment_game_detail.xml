@@ -69,26 +69,6 @@
                 style="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/lbl_game_address"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txt_game_address"
-                style="?android:attr/textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:orientation="vertical">
-
-            <TextView
-                style="?android:attr/textAppearanceLarge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/lbl_game_datetime"
                 android:textStyle="bold" />
 

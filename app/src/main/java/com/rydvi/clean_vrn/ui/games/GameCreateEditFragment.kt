@@ -1,10 +1,17 @@
 package com.rydvi.clean_vrn.ui.games
 
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
+import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,8 +25,10 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
+import com.rydvi.clean_vrn.ui.utils.parseWithZero
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
 
 
 class GameCreateEditFragment : Fragment() {
@@ -31,7 +40,14 @@ class GameCreateEditFragment : Fragment() {
 
     private lateinit var inpGameName: EditText
     private lateinit var inpGameRoute: EditText
-    private lateinit var inpGameDatetime: EditText
+    private lateinit var inpGameDate: EditText
+    private lateinit var inpGameTime: EditText
+
+    private var mYear: Int = 0
+    private var mMonth: Int = 0
+    private var mDay: Int = 0
+    private var mHour: Int = 0
+    private var mMinute: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +60,8 @@ class GameCreateEditFragment : Fragment() {
         recyclerCoefficients = rootView.findViewById(R.id.recycler_garbages_coefficients)
         inpGameName = rootView.findViewById(R.id.inp_game_name)
         inpGameRoute = rootView.findViewById(R.id.inp_game_route)
-        inpGameDatetime = rootView.findViewById(R.id.inp_game_datetime)
+        inpGameDate = rootView.findViewById(R.id.inp_game_date)
+        inpGameTime = rootView.findViewById(R.id.inp_game_time)
 
         editMode = getCreateEditModeByString(arguments!!.getString(GAME_MODE)!!)
 
@@ -79,13 +96,17 @@ class GameCreateEditFragment : Fragment() {
 
         val btnSave = rootView.findViewById<FloatingActionButton>(R.id.btn_game_save)
         btnSave.setOnClickListener {
+            val dateTime =
+                "$mYear-${parseWithZero(mMonth)}-${parseWithZero(mDay)}T${parseWithZero(mHour)}:${parseWithZero(
+                    mMinute
+                )}:00Z"
             (activity as MainActivity).showLoading(true)
             if (editMode === CreateEditMode.EDIT) {
                 if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {
                     gamesViewModel.updateGame(
                         game.id!!, inpGameName.text.toString(),
                         inpGameRoute.text.toString(),
-                        inpGameDatetime.text.toString()
+                        dateTime
                     ) {
                         gamesViewModel.updateCoefficients(game.id!!) {
                             navToGameDetail(game.id!!)
@@ -96,14 +117,52 @@ class GameCreateEditFragment : Fragment() {
                 gamesViewModel.createGame(
                     inpGameName.text.toString(),
                     inpGameRoute.text.toString(),
-                    inpGameDatetime.text.toString()
+                    dateTime
                 ) { createdGame ->
                     gamesViewModel.createCoefficients(createdGame.id!!) {
                         navToGameDetail(createdGame.id!!)
                     }
                 }
             }
+        }
 
+        val btnGameDate = rootView.findViewById<ImageButton>(R.id.btn_game_date)
+        btnGameDate.setOnClickListener {
+            val c = Calendar.getInstance()
+            mYear = c.get(Calendar.YEAR)
+            mMonth = c.get(Calendar.MONTH)
+            mDay = c.get(Calendar.DAY_OF_MONTH)
+            val datePickerDialog = DatePickerDialog(
+                activity!!,
+                OnDateSetListener { view, year, month, day ->
+                    val resultDay = if (day < 10) "0$day" else day
+                    val resultMonth = if (month < 10) "0${month + 1}" else month + 1
+                    inpGameDate.setText("$resultDay.$resultMonth.$year")
+                },
+                mYear,
+                mMonth,
+                mDay
+            )
+            datePickerDialog.show()
+        }
+
+        val btnGameTime = rootView.findViewById<ImageButton>(R.id.btn_game_time)
+        btnGameTime.setOnClickListener {
+            val c = Calendar.getInstance()
+            mHour = c.get(Calendar.HOUR_OF_DAY)
+            mMinute = c.get(Calendar.MINUTE)
+            val timePickerDialog = TimePickerDialog(
+                activity!!,
+                TimePickerDialog.OnTimeSetListener { view, hour, minute ->
+                    val resultHour = if (hour < 10) "0$hour" else hour
+                    val resultMinute = if (minute < 10) "0$minute" else minute
+                    inpGameTime.setText("$resultHour:$resultMinute")
+                },
+                mHour,
+                mMinute,
+                true
+            )
+            timePickerDialog.show()
         }
 
         return rootView

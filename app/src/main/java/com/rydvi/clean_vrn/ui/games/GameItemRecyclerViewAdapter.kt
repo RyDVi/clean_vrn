@@ -1,7 +1,7 @@
 package com.rydvi.clean_vrn.ui.games
 
-import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -14,8 +14,15 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
+import com.rydvi.clean_vrn.ui.utils.formatDateTime
+import com.rydvi.clean_vrn.ui.utils.parseISODate
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.game_list_content.view.*
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.util.*
+
 
 class GameItemRecyclerViewAdapter(
     private val activity: FragmentActivity,
@@ -44,7 +51,7 @@ class GameItemRecyclerViewAdapter(
                 Handler(activity.mainLooper).post {
                     activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_map)
                 }
-            },{})
+            }, {})
         } ?: run {
             //TODO: error get id of game
         }
@@ -60,12 +67,14 @@ class GameItemRecyclerViewAdapter(
         val item = values[position]
         holder.nameView.text = item.name.toString()
         when (item.id_status!!.toInt()) {
-            1 -> holder.nameView.setTextColor(Color.GREEN)
+            1 -> holder.nameView.setTextColor(Color.YELLOW)
             2 -> holder.nameView.setTextColor(Color.RED)
+            3 -> holder.nameView.setTextColor(Color.GREEN)
         }
         holder.descriptionView.text = item.description.toString()
-        holder.datetimeView.text = item.datetime.toString()
 
+        val date = parseISODate(item.datetime!!)
+        holder.datetimeView.text = formatDateTime(date)
 
         with(holder.itemView) {
             tag = item
