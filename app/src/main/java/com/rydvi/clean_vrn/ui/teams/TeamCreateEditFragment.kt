@@ -3,6 +3,7 @@ package com.rydvi.clean_vrn.ui.teams
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
+import com.rydvi.clean_vrn.ui.login.afterTextChanged
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -35,8 +37,12 @@ class TeamCreateEditFragment : Fragment() {
     private lateinit var team: Team
     private lateinit var recyclerViewCollectedGarbarages: RecyclerView
     private lateinit var editMode: CreateEditMode
+
     private lateinit var inpTeamName: TextInputEditText
     private lateinit var inpTeamNumber: TextInputEditText
+    private var hasErrorForm = false
+
+    private lateinit var btnTeamSave: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,51 +86,92 @@ class TeamCreateEditFragment : Fragment() {
                     }
 
                     team?.let {
-                        if(editMode===CreateEditMode.EDIT){
-                            activity?.toolbar?.title = activity!!.resources.getString(R.string.title_activity_team_edit)+
-                                    " №${team?.number}  ${team?.name}"
+                        if (editMode === CreateEditMode.EDIT) {
+                            activity?.toolbar?.title =
+                                activity!!.resources.getString(R.string.title_activity_team_edit) +
+                                        " №${team?.number}  ${team?.name}"
                         } else {
-                            activity?.toolbar?.title = activity!!.resources.getString(R.string.title_activity_team_create)
+                            activity?.toolbar?.title =
+                                activity!!.resources.getString(R.string.title_activity_team_create)
                         }
                     }
                     (activity as MainActivity).showLoading(false)
                 })
             })
         } else {
-            rootView.findViewById<LinearLayout>(R.id.vertical_layout_collected_garbages).visibility =
+            rootView.findViewById<LinearLayout>(R.id.vertical_layout_collected_garbages)
+                .visibility =
                 View.INVISIBLE
             (activity as MainActivity).showLoading(false)
         }
 
-        val btnTeamSave = rootView.findViewById<FloatingActionButton>(R.id.btn_team_save)
+        btnTeamSave = rootView.findViewById(R.id.btn_team_save)
         btnTeamSave.setOnClickListener {
-            (activity as MainActivity).showLoading(true)
-            if (editMode.getMode() === CreateEditMode.EDIT.getMode()) {
-                if (inpTeamName.text.toString() !== team.name ||
-                    inpTeamNumber.text.toString() !== team.number.toString()
-                ) {
-                    teamsViewModel.updateTeam(
-                        team.id!!,
+            if (!hasErrorForm) {
+                (activity as MainActivity).showLoading(true)
+                if (editMode.getMode() === CreateEditMode.EDIT.getMode()) {
+                    if (inpTeamName.text.toString() !== team.name ||
+                        inpTeamNumber.text.toString() !== team.number.toString()
+                    ) {
+                        teamsViewModel.updateTeam(
+                            team.id!!,
+                            inpTeamName.text.toString(),
+                            inpTeamNumber.text.toString().toLong()
+                        ) {
+                            _updateCollectedGarbagesAndNavToTeam(team.id!!)
+                        }
+                    } else {
+                        _updateCollectedGarbagesAndNavToTeam(team.id!!)
+                    }
+
+                } else {
+                    teamsViewModel.createTeam(
                         inpTeamName.text.toString(),
                         inpTeamNumber.text.toString().toLong()
                     ) {
-                        _updateCollectedGarbagesAndNavToTeam(team.id!!)
+                        _navToTeam(it.id!!)
                     }
-                } else {
-                    _updateCollectedGarbagesAndNavToTeam(team.id!!)
-                }
-
-            } else {
-                teamsViewModel.createTeam(
-                    inpTeamName.text.toString(),
-                    inpTeamNumber.text.toString().toLong()
-                ) {
-                    _navToTeam(it.id!!)
                 }
             }
         }
 
+        _setupFormStateUpdater()
+
         return rootView
+    }
+
+    private fun _setupFormStateUpdater() {
+        inpTeamName.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpTeamNumber.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        _updateFormState()
+    }
+
+    private fun _updateFormState() {
+        hasErrorForm = false
+        val resources = activity!!.resources
+        if (inpTeamName.text.toString() == "") {
+            hasErrorForm = true
+            inpTeamName.error = resources.getString(R.string.err_inp_team_name_empty)
+        } else {
+            inpTeamName.error = null
+        }
+
+        if (inpTeamNumber.text.toString() == "") {
+            hasErrorForm = true
+            inpTeamNumber.error = resources.getString(R.string.err_inp_team_number_empty)
+        } else {
+            inpTeamNumber.error = null
+        }
+
+        btnTeamSave.isEnabled = !hasErrorForm
     }
 
     private fun _updateCollectedGarbagesAndNavToTeam(idTeam: Long) {
