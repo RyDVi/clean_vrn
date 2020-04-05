@@ -75,6 +75,9 @@
     <!--  Игры редактировани/создание  -->
     <string name="title_activity_game_edit">Edit game</string>
     <string name="title_activity_game_create">Create game</string>
+    <string name="err_inp_game_date">Not correct date</string>
+    <string name="err_inp_game_time">Not correct time</string>
+    <string name="err_inp_game_name">Not correct game name</string>
 
     <!--  Организаторы  -->
     <string name="title_organizator_list">Organizators</string>
@@ -104,6 +107,12 @@
     <!--  Организаторы редактировани/создание  -->
     <string name="title_activity_organizator_edit">Edit organizator</string>
     <string name="title_activity_organizator_create">Create organizator</string>
+    <string name="err_inp_org_email_empty">Email is required</string>
+    <string name="err_inp_org_email_incorrect">Incorrect email</string>
+    <string name="err_inp_org_phone_empty">Phone is required</string>
+    <string name="err_inp_org_phone_incorrect">Phone incorrect</string>
+    <string name="err_inp_org_firstname_empty">Firstname not can be empty</string>
+    <string name="err_inp_org_lastname_empty">Lastname not can be empty</string>
 
     <!--  Map  -->
     <string name="title_activity_map">Map</string>
@@ -112,9 +121,5 @@
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
-    <string name="err_inp_game_date">Not correct date</string>
-    <string name="err_inp_game_time">Not correct time</string>
-    <string name="err_inp_game_name">Not correct game name</string>
-
 
 </resources>

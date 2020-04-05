@@ -208,6 +208,7 @@ class GameCreateEditFragment : Fragment() {
                 _updateFormState()
             }
         }
+        _updateFormState()
     }
 
     private fun _updateFormState() {

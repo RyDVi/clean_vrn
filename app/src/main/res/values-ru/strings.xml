@@ -85,4 +85,13 @@
     <string name="game_complete_the_game_btn_ok">Завершить</string>
     <string name="game_complete_the_game_btn_cancel">Отмена</string>
     <string name="game_complete_the_game_completed_msg">Игра успешно завершена</string>
+    <string name="err_inp_game_date">Дата введена неверно</string>
+    <string name="err_inp_game_time">Время введено неверно</string>
+    <string name="err_inp_game_name">Наименование игры введено неверно</string>
+    <string name="err_inp_org_email_empty">Email не может быть пустым</string>
+    <string name="err_inp_org_email_incorrect">Email введен неверно</string>
+    <string name="err_inp_org_phone_empty">Телефон не может быть пустым</string>
+    <string name="err_inp_org_phone_incorrect">Телефон введен неверно</string>
+    <string name="err_inp_org_firstname_empty">Имя не может быть пустым</string>
+    <string name="err_inp_org_lastname_empty">Фамилия не может быть пустым</string>
 </resources>

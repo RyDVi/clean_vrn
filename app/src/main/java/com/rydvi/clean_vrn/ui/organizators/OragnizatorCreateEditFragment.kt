@@ -3,6 +3,7 @@ package com.rydvi.clean_vrn.ui.organizators
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
+import com.rydvi.clean_vrn.ui.login.afterTextChanged
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -32,11 +34,15 @@ class OragnizatorCreateEditFragment : Fragment() {
     private lateinit var orgsViewModel: OrganizatorsViewModel
     private lateinit var org: Organizator
     private lateinit var editMode: CreateEditMode
+
     private lateinit var inpOrgLastname: EditText
     private lateinit var inpOrgFirstname: EditText
     private lateinit var inpOrgMiddlename: EditText
     private lateinit var inpOrgEmail: EditText
     private lateinit var inpOrgPhone: EditText
+    private var hasErrorForm = false
+
+    private lateinit var btnOrgSave: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,31 +79,99 @@ class OragnizatorCreateEditFragment : Fragment() {
             (activity as MainActivity).showLoading(false)
         }
 
-        val btnOrgSave = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_save)
+        btnOrgSave = rootView.findViewById(R.id.btn_organizator_save)
         btnOrgSave.setOnClickListener {
-            (activity as MainActivity).showLoading(true)
-            if (editMode === CreateEditMode.CREATE) {
-                org = Organizator()
-            }
-            org.lastname = inpOrgLastname.text.toString()
-            org.firstname = inpOrgFirstname.text.toString()
-            org.middlename = inpOrgMiddlename.text.toString()
-            org.email = inpOrgEmail.text.toString()
-            org.phone = inpOrgPhone.text.toString()
-
-            if (editMode === CreateEditMode.EDIT) {
-                orgsViewModel.updateOrganizator(org) {
-                    _navToTeam(org.id!!)
+            if (!hasErrorForm) {
+                (activity as MainActivity).showLoading(true)
+                if (editMode === CreateEditMode.CREATE) {
+                    org = Organizator()
                 }
-            } else {
-                orgsViewModel.createOrganizator(org) { createdOrg ->
-                    _navToTeam(createdOrg.id!!)
+                org.lastname = inpOrgLastname.text.toString()
+                org.firstname = inpOrgFirstname.text.toString()
+                org.middlename = inpOrgMiddlename.text.toString()
+                org.email = inpOrgEmail.text.toString()
+                org.phone = inpOrgPhone.text.toString()
+
+                if (editMode === CreateEditMode.EDIT) {
+                    orgsViewModel.updateOrganizator(org) {
+                        _navToTeam(org.id!!)
+                    }
+                } else {
+                    orgsViewModel.createOrganizator(org) { createdOrg ->
+                        _navToTeam(createdOrg.id!!)
+                    }
                 }
             }
-
         }
-        
+
+        _setupFormStateUpdater()
+
         return rootView
+    }
+
+    private fun _setupFormStateUpdater() {
+        inpOrgEmail.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpOrgFirstname.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpOrgLastname.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpOrgPhone.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpOrgMiddlename.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        _updateFormState()
+    }
+
+    private fun _updateFormState() {
+        hasErrorForm = false
+        val resources = activity!!.resources
+        if (inpOrgEmail.text.toString() == "") {
+            hasErrorForm = true
+            inpOrgEmail.error = resources.getString(R.string.err_inp_org_email_empty)
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(inpOrgEmail.text.toString()).matches()) {
+            hasErrorForm = true
+            inpOrgEmail.error = resources.getString(R.string.err_inp_org_email_incorrect)
+        } else {
+            inpOrgEmail.error = null
+        }
+
+        if (inpOrgPhone.text.toString() == "") {
+            hasErrorForm = true
+            inpOrgPhone.error = resources.getString(R.string.err_inp_org_phone_empty)
+        } else if (!inpOrgPhone.text.toString().matches(Regex("^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?\$"))) {
+            hasErrorForm = true
+            inpOrgPhone.error = resources.getString(R.string.err_inp_org_phone_incorrect)
+        } else {
+            inpOrgPhone.error = null
+        }
+
+        if (inpOrgFirstname.text.toString() == "") {
+            hasErrorForm = true
+            inpOrgFirstname.error = resources.getString(R.string.err_inp_org_firstname_empty)
+        }
+
+        if (inpOrgLastname.text.toString() == "") {
+            hasErrorForm = true
+            inpOrgLastname.error = resources.getString(R.string.err_inp_org_lastname_empty)
+        }
+
+        btnOrgSave.isEnabled = !hasErrorForm
     }
 
     private fun _navToTeam(idOrg: Long) {
