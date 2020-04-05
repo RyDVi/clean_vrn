@@ -112,6 +112,9 @@
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
+    <string name="err_inp_game_date">Not correct date</string>
+    <string name="err_inp_game_time">Not correct time</string>
+    <string name="err_inp_game_name">Not correct game name</string>
 
 
 </resources>

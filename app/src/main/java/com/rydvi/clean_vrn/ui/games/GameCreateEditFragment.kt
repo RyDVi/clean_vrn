@@ -23,6 +23,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
+import com.rydvi.clean_vrn.ui.login.LoginViewModelFactory
+import com.rydvi.clean_vrn.ui.login.afterTextChanged
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
 import com.rydvi.clean_vrn.ui.utils.parseWithZero
@@ -42,6 +44,9 @@ class GameCreateEditFragment : Fragment() {
     private lateinit var inpGameRoute: EditText
     private lateinit var inpGameDate: EditText
     private lateinit var inpGameTime: EditText
+    var hasErrorForm = false
+
+    private lateinit var btnSave: FloatingActionButton
 
     private var mYear: Int = 0
     private var mMonth: Int = 0
@@ -94,33 +99,35 @@ class GameCreateEditFragment : Fragment() {
         }
 
 
-        val btnSave = rootView.findViewById<FloatingActionButton>(R.id.btn_game_save)
+        btnSave = rootView.findViewById<FloatingActionButton>(R.id.btn_game_save)
         btnSave.setOnClickListener {
             val dateTime =
                 "$mYear-${parseWithZero(mMonth)}-${parseWithZero(mDay)}T${parseWithZero(mHour)}:${parseWithZero(
                     mMinute
                 )}:00Z"
             (activity as MainActivity).showLoading(true)
-            if (editMode === CreateEditMode.EDIT) {
-                if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {
-                    gamesViewModel.updateGame(
-                        game.id!!, inpGameName.text.toString(),
-                        inpGameRoute.text.toString(),
-                        dateTime
-                    ) {
-                        gamesViewModel.updateCoefficients(game.id!!) {
-                            navToGameDetail(game.id!!)
+            if (!hasErrorForm) {
+                if (editMode === CreateEditMode.EDIT) {
+                    if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {
+                        gamesViewModel.updateGame(
+                            game.id!!, inpGameName.text.toString(),
+                            inpGameRoute.text.toString(),
+                            dateTime
+                        ) {
+                            gamesViewModel.updateCoefficients(game.id!!) {
+                                navToGameDetail(game.id!!)
+                            }
                         }
                     }
-                }
-            } else {
-                gamesViewModel.createGame(
-                    inpGameName.text.toString(),
-                    inpGameRoute.text.toString(),
-                    dateTime
-                ) { createdGame ->
-                    gamesViewModel.createCoefficients(createdGame.id!!) {
-                        navToGameDetail(createdGame.id!!)
+                } else {
+                    gamesViewModel.createGame(
+                        inpGameName.text.toString(),
+                        inpGameRoute.text.toString(),
+                        dateTime
+                    ) { createdGame ->
+                        gamesViewModel.createCoefficients(createdGame.id!!) {
+                            navToGameDetail(createdGame.id!!)
+                        }
                     }
                 }
             }
@@ -138,6 +145,11 @@ class GameCreateEditFragment : Fragment() {
                     val resultDay = if (day < 10) "0$day" else day
                     val resultMonth = if (month < 10) "0${month + 1}" else month + 1
                     inpGameDate.setText("$resultDay.$resultMonth.$year")
+                    inpGameDate.apply {
+                        afterTextChanged {
+                            _updateFormState()
+                        }
+                    }
                 },
                 mYear,
                 mMonth,
@@ -157,6 +169,11 @@ class GameCreateEditFragment : Fragment() {
                     val resultHour = if (hour < 10) "0$hour" else hour
                     val resultMinute = if (minute < 10) "0$minute" else minute
                     inpGameTime.setText("$resultHour:$resultMinute")
+                    inpGameTime.apply {
+                        afterTextChanged {
+                            _updateFormState()
+                        }
+                    }
                 },
                 mHour,
                 mMinute,
@@ -165,7 +182,56 @@ class GameCreateEditFragment : Fragment() {
             timePickerDialog.show()
         }
 
+        _setupFormStateUpdater()
+
         return rootView
+    }
+
+    private fun _setupFormStateUpdater() {
+        inpGameRoute.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpGameDate.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpGameTime.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+        inpGameName.apply {
+            afterTextChanged {
+                _updateFormState()
+            }
+        }
+    }
+
+    private fun _updateFormState() {
+        hasErrorForm = false
+        val resources = activity!!.resources
+        if (inpGameDate.text.toString() == "") {
+            hasErrorForm = true
+            inpGameDate.error = resources.getString(R.string.err_inp_game_date)
+        } else {
+            inpGameDate.error = null
+        }
+        if (inpGameTime.text.toString() == "") {
+            hasErrorForm = true
+            inpGameTime.error = resources.getString(R.string.err_inp_game_time)
+        } else {
+            inpGameTime.error = null
+        }
+        if (inpGameName.text.toString() == "") {
+            hasErrorForm = true
+            inpGameName.error = resources.getString(R.string.err_inp_game_name)
+        } else {
+            inpGameName.error = null
+        }
+        btnSave.isEnabled = !hasErrorForm
     }
 
     fun setupRecyclerCoefficients(idGame: Long?) {
