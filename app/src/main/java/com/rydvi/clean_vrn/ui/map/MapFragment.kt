@@ -4,28 +4,60 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.rydvi.clean_vrn.R
 
-class MapFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: MapViewModel
+class MapFragment : Fragment(), OnMapReadyCallback {
+
+    private lateinit var mapViewModel: MapViewModel
+    private lateinit var mMap: GoogleMap
+    private lateinit var mMapView: MapView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        slideshowViewModel =
+        val rootView = inflater.inflate(R.layout.fragment_map, container, false)
+        mapViewModel =
             ViewModelProviders.of(this).get(MapViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_map, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
-        slideshowViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
-        return root
+        mMapView = rootView.findViewById(R.id.mapView)
+
+        return rootView
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        mMapView?.let {
+            mMapView.onCreate(savedInstanceState)
+            mMapView.onResume()
+            mMapView.getMapAsync(this)
+        }
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    override fun onMapReady(googleMap: GoogleMap) {
+        googleMap?.let {
+            mMap = googleMap
+
+            // Add a marker in Sydney and move the camera
+            val sydney = LatLng(-34.0, 151.0)
+            mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+            mMapView.onResume()
+        }
     }
 }
