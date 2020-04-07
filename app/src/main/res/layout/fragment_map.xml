@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+
+    </com.google.android.gms.maps.MapView>
+
+    <!--    <androidx.appcompat.widget.SearchView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/search_location"-->
+    <!--        app:queryHint="Search..."-->
+    <!--        app:iconifiedByDefault="false"-->
+    <!--        android:layout_margin="10dp"-->
+    <!--        android:elevation="5dp"-->
+    <!--        android:background="@drawable/bg_round"/>-->
+    <!--    <androidx.cardview.widget.CardView-->
+    <!--        android:id="@+id/idCardView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="5dp"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        app:cardCornerRadius="4dp">-->
+
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </fragment>
+    <!--    </androidx.cardview.widget.CardView>-->
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/btn_add_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_btn_add_place" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

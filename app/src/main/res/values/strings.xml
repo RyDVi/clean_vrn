@@ -123,5 +123,8 @@
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
+    <string name="add_place">Add place</string>
+    <string name="set_start_point">Set start point</string>
+    <string name="set_game_zone">Set game zone</string>
 
 </resources>

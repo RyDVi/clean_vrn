@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/add_place" android:title="@string/add_place"/>
+    <item android:id="@+id/set_start_point" android:title="@string/set_start_point"/>
+    <item android:id="@+id/set_game_zone" android:title="@string/set_game_zone"/>
+</menu>

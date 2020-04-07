@@ -71,4 +71,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.5'
     implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
 
+    //Google Maps Places API
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
 }
