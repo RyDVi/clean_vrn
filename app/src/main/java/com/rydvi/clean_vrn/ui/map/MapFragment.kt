@@ -1,9 +1,12 @@
 package com.rydvi.clean_vrn.ui.map
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
@@ -156,8 +159,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 mapEditMode = MapEditMode.reading
             }
 
-            mMap.setOnMarkerClickListener {
-
+            mMap.setOnMarkerClickListener { marker ->
+                _showMarkerDialogActions { dialogInterface, position, markerAction ->
+                    when (markerAction) {
+                        MarkerActions.rename -> {
+                        }
+                        MarkerActions.remove -> {
+                        }
+                        MarkerActions.move -> {
+                        }
+                    }
+                }
                 false
             }
 
@@ -246,18 +258,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    enum class MapEditMode {
-        reading {
-            override fun getModeId() = 1
-        },
-        edit {
-            override fun getModeId() = 2
-        },
-        add {
-            override fun getModeId() = 3
-        };
+    fun _showMarkerDialogActions(callbackItemClicked: (DialogInterface, Int, MarkerActions) -> Unit) {
+        val actions = arrayOf(
+            resources.getString(R.string.dlg_marker_move),
+            resources.getString(R.string.dlg_marker_remove),
+            resources.getString(R.string.dlg_marker_rename)
+        )
+        val adapter =
+            ArrayAdapter<String>(context!!, android.R.layout.select_dialog_item, actions)
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(resources.getString(R.string.dlg_marker_select_action))
+        builder.setAdapter(adapter) { dialogInterface, position ->
+            when (position) {
+                0 -> callbackItemClicked(dialogInterface, position, MarkerActions.move)
+                1 -> callbackItemClicked(dialogInterface, position, MarkerActions.remove)
+                2 -> callbackItemClicked(dialogInterface, position, MarkerActions.rename)
+            }
 
-        abstract fun getModeId(): Int
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    enum class MapEditMode {
+        reading, edit, add
     }
 
     enum class MapPlaceMode {
@@ -281,5 +305,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         };
 
         abstract fun getPlaceId(): Int
+    }
+
+    enum class MarkerActions {
+        rename, remove, move
     }
 }

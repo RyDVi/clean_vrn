@@ -118,13 +118,14 @@
 
     <!--  Map  -->
     <string name="title_activity_map">Map</string>
+    <string name="dlg_marker_remove">Remove</string>
+    <string name="dlg_marker_move">Move</string>
+    <string name="dlg_marker_rename">Rename</string>
+    <string name="dlg_marker_select_action">Select action</string>
 
     <!--  Обработчик ошибок  -->
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
-    <string name="add_place">Add place</string>
-    <string name="set_start_point">Set start point</string>
-    <string name="set_game_zone">Set game zone</string>
 
 </resources>
