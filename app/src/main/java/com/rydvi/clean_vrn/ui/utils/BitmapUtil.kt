@@ -3,6 +3,7 @@ package com.rydvi.clean_vrn.ui.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -18,8 +19,8 @@ fun bitmapDescriptorFromVector(context: Context, @DrawableRes resId: Int): Bitma
         drawable.intrinsicHeight
     )
     val bitmap = Bitmap.createBitmap(
-        drawable.intrinsicWidth,
-        drawable.intrinsicHeight,
+        drawable.intrinsicWidth + 40,
+        drawable.intrinsicHeight + 40,
         Bitmap.Config.ARGB_8888
     )
     val canvas = Canvas(bitmap)
@@ -33,9 +34,9 @@ fun bitmapDescriptorFromVectorInMapMarker(context: Context, @DrawableRes vectorD
     background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
     val vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)
     vectorDrawable!!.setBounds(
-        40,
+        60,
         20,
-        vectorDrawable.intrinsicWidth + 40,
+        vectorDrawable.intrinsicWidth + 60,
         vectorDrawable.intrinsicHeight + 20
     )
     val bitmap = Bitmap.createBitmap(
