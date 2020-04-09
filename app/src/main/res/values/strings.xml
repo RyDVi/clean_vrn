@@ -127,5 +127,14 @@
     <string name="dlg_error_ok">OK</string>
     <string name="dlg_error_msg">Message: %1$s</string>
     <string name="dlg_error_code">Code: %1$d</string>
+    <string name="dlg_place_remove_accept_msg">You really want remove this place?</string>
+    <string name="dlg_place_remove_accept_accept">Yes, remove</string>
+    <string name="dlg_place_remove_accept_cancel">Cancel</string>
+    <string name="dlg_marker_rename_title">Enter description</string>
+    <string name="dlg_marker_rename_accept">Accept</string>
+    <string name="dlg_marker_rename_cancel">Cancel</string>
+    <string name="dlg_place_move_accept_msg">You really want move place to this position?</string>
+    <string name="dlg_place_move_accept_accept">Yes, move</string>
+    <string name="dlg_place_move_accept_cancel">Cancel</string>
 
 </resources>

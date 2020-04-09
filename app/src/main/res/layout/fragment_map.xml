@@ -48,54 +48,114 @@
         android:layout_margin="@dimen/fab_margin"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/btn_set_place_quest_zone"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-            android:background="@drawable/bg_round"
-            android:foregroundGravity="clip_vertical"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_place_black" />
+        <LinearLayout
+            android:id="@+id/panel_markers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-        <ImageButton
-            android:id="@+id/btn_set_place_start"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-            android:background="@drawable/bg_round"
-            android:foregroundGravity="clip_vertical"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_start_flag" />
+            <ImageButton
+                android:id="@+id/btn_set_place_quest_zone"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                android:foregroundGravity="clip_vertical"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_place_black" />
 
-        <ImageButton
-            android:id="@+id/btn_add_garbage_bag"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-            android:background="@drawable/bg_round"
-            android:foregroundGravity="clip_vertical"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_bag_icon" />
+            <ImageButton
+                android:id="@+id/btn_set_place_start"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                android:foregroundGravity="clip_vertical"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_start_flag" />
 
-        <ImageButton
-            android:id="@+id/btn_add_toilet"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-            android:background="@drawable/bg_round"
-            app:srcCompat="@drawable/ic_toilet" />
+            <ImageButton
+                android:id="@+id/btn_add_garbage_bag"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                android:foregroundGravity="clip_vertical"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_bag_icon" />
 
-        <ImageButton
-            android:id="@+id/btn_add_another_place"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-            android:background="@drawable/bg_round"
-            android:foregroundGravity="clip_vertical"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_add_location_black_24dp" />
+            <ImageButton
+                android:id="@+id/btn_add_toilet"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                app:srcCompat="@drawable/ic_toilet" />
 
+            <ImageButton
+                android:id="@+id/btn_add_another_place"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                android:foregroundGravity="clip_vertical"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_add_location_black_24dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/panel_marker_control"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_marker_control_edit"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                android:foregroundGravity="clip_vertical"
+                android:scaleType="center"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
+
+            <ImageButton
+                android:id="@+id/btn_marker_control_remove"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                android:background="@drawable/bg_round"
+                android:foregroundGravity="clip_vertical"
+                android:scaleType="center"
+                app:srcCompat="@android:drawable/ic_menu_delete" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/panel_accept_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:visibility="visible"
+                app:backgroundTint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_btn_accept" />
+        </LinearLayout>
 
     </LinearLayout>
 
