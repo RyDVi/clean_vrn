@@ -8,37 +8,30 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
 
     </com.google.android.gms.maps.MapView>
 
-    <!--    <androidx.appcompat.widget.SearchView-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:id="@+id/search_location"-->
-    <!--        app:queryHint="Search..."-->
-    <!--        app:iconifiedByDefault="false"-->
-    <!--        android:layout_margin="10dp"-->
-    <!--        android:elevation="5dp"-->
-    <!--        android:background="@drawable/bg_round"/>-->
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/idCardView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="5dp"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        app:cardCornerRadius="4dp">-->
 
-    <fragment
-        android:id="@+id/autocomplete_fragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/idCardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="4dp">
 
-
-    </fragment>
-    <!--    </androidx.cardview.widget.CardView>-->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/bg_rectangle_round"
+            android:elevation="5dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search..." />
+    </androidx.cardview.widget.CardView>
 
 
     <LinearLayout
@@ -47,6 +40,16 @@
         android:layout_gravity="center|end"
         android:layout_margin="@dimen/fab_margin"
         android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/btn_remove_last_point"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+            android:background="@drawable/bg_round"
+            android:foregroundGravity="clip_vertical"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
         <LinearLayout
             android:id="@+id/panel_markers"

@@ -1,16 +1,14 @@
 package com.rydvi.clean_vrn.ui.map
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,6 +17,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Place
@@ -30,6 +29,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     private val VORONEZH_LOCATION = LatLng(51.668239, 39.192099)
 
+    private lateinit var mSearchView: SearchView
     private lateinit var mMapView: MapView
 
     private lateinit var mPanelMarkers: LinearLayout
@@ -47,15 +47,20 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var mBtnControlEdit: ImageButton
     private lateinit var mBtnControlRemove: ImageButton
 
+    private lateinit var mBtnRemoveLastPoint: ImageButton
+
     private lateinit var mapViewModel: MapViewModel
 
     private var mapEditMode = MapEditMode.Reading
     private var mapPlaceMode = MapPlaceMode.Nothing
     private var markerActionMode = MarkerActions.Nothing
-    private lateinit var currentMarker: Marker
+    private var currentMarker: Marker? = null
+    private var questZone: Polygon? = null
     private lateinit var lastLocation: LatLng
 
     private lateinit var markerControl: MarkerControl
+    private lateinit var polygonControl: PolygonControl
+    private lateinit var placesSearch: PlacesSearch
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,19 +85,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             mMapView.getMapAsync(this)
         }
 
-//        val autocompleteFragment =
-//            fragmentManager!!.findFragmentById(R.id.autocomplete_fragment)
-//
-//        (autocompleteFragment as PlaceAutocompleteFragment).setOnPlaceSelectedListener(object :
-//            PlaceSelectionListener {
-//            override fun onPlaceSelected(place: Place) {
-//                txtVw.text = place.name
-//            }
-//
-//            override fun onError(status: Status) {
-//                txtVw.text = status.toString()
-//            }
-//        })
+
     }
 
     /**
@@ -111,11 +104,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             map.setOnMarkerClickListener(this)
             map.setOnMarkerDragListener(this)
 
+            polygonControl = PolygonControl(map, context!!)
+
+            placesSearch = PlacesSearch(mSearchView, map, context!!)
+            mSearchView.setOnQueryTextListener(placesSearch)
+
             // Move camera to voronezh position
             map.moveCamera(CameraUpdateFactory.newLatLng(VORONEZH_LOCATION))
             map.animateCamera(CameraUpdateFactory.zoomTo(12.0f))
             map.uiSettings.isZoomControlsEnabled = true
-            map.uiSettings.isMyLocationButtonEnabled = true
+            map.isMyLocationEnabled = true
             mMapView.onResume()
         }
     }
@@ -150,7 +148,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         setModeOnlyReading()
                     }
                     MapPlaceMode.QuestZone -> {
-                        //TODO
+                        polygonControl.addPoint(clickLocation)
                     }
                 }
             }
@@ -168,7 +166,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 toggleButtons()
             },
             {
-                currentMarker.position = lastLocation
+                currentMarker?.position = lastLocation
                 setModeOnlyReading()
                 toggleButtons()
             },
@@ -192,6 +190,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     fun toggleButtons() {
+        mBtnRemoveLastPoint.visibility = ImageButton.GONE
         when {
             mapEditMode === MapEditMode.Reading -> {
                 //Если режим чтения карты, то отображаем возможность для добавления элементов
@@ -202,10 +201,21 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             mapEditMode === MapEditMode.Add -> {
                 //Если режим редактирования карты, то отображаем возможность отмены
                 // выбора текущего маркера и
-                mBtnAccept.hide()
-                mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
-                mPanelMarkers.visibility = LinearLayout.GONE
-                mPanelMarkerControl.visibility = LinearLayout.GONE
+                when (mapPlaceMode) {
+                    MapPlaceMode.QuestZone -> {
+                        mBtnAccept.show()
+                        mBtnRemoveLastPoint.visibility = ImageButton.VISIBLE
+                        mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+                        mPanelMarkers.visibility = LinearLayout.GONE
+                        mPanelMarkerControl.visibility = LinearLayout.GONE
+                    }
+                    else -> {
+                        mBtnAccept.hide()
+                        mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+                        mPanelMarkers.visibility = LinearLayout.GONE
+                        mPanelMarkerControl.visibility = LinearLayout.GONE
+                    }
+                }
             }
             mapEditMode === MapEditMode.Edit -> {
                 when (markerActionMode) {
@@ -225,7 +235,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         }
     }
 
-    fun setModeOnlyReading() {
+    private fun setModeOnlyReading() {
         mapEditMode = MapEditMode.Reading
         mapPlaceMode = MapPlaceMode.Nothing
         markerActionMode = MarkerActions.Nothing
@@ -290,11 +300,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                             id = it.tag as Long
                             location = it.position
                         }, {
-                            currentMarker.isDraggable = false
+                            currentMarker?.isDraggable = false
                             toggleButtons()
                         }, {
                             toggleButtons()
-                            currentMarker.remove()
+                            currentMarker?.remove()
                         })
                     }
                 }
@@ -304,6 +314,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         mBtnCancel = rootView.findViewById(R.id.btn_cancel)
         mBtnCancel.setOnClickListener {
+            if(mapPlaceMode === MapPlaceMode.QuestZone){
+                polygonControl.removePolygon()
+            }
             currentMarker?.hideInfoWindow()
             setModeOnlyReading()
             toggleButtons()
@@ -320,8 +333,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             descriptionInput.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
             Dialog(activity!!).showDialogAcceptCancelWithContent(
                 {
-                    currentMarker.snippet = descriptionInput.text.toString()
-                    currentMarker.hideInfoWindow()
+                    currentMarker?.snippet = descriptionInput.text.toString()
+                    currentMarker?.hideInfoWindow()
                     setModeOnlyReading()
                     toggleButtons()
                 },
@@ -340,7 +353,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                     mapViewModel.deletePlace(
                         Place(),
                         {
-                            currentMarker.remove()
+                            currentMarker?.remove()
                             setModeOnlyReading()
                             toggleButtons()
                         },
@@ -358,6 +371,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         mPanelMarkerControl = rootView.findViewById(R.id.panel_marker_control)
 
+        mSearchView = rootView.findViewById(R.id.search_location)
+
+        mBtnRemoveLastPoint = rootView.findViewById(R.id.btn_remove_last_point)
+        mBtnRemoveLastPoint.setOnClickListener {
+            polygonControl.removeLastPoint()
+        }
+
         toggleButtons()
     }
 
@@ -367,29 +387,5 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private fun _onClickedButttonFromPanel(clickedButton: ImageButton) {
         _setMapEditModeIfNotThis(MapEditMode.Add)
         toggleButtons()
-    }
-
-    /**
-     * Отображение диалога с действиями над маркером
-     */
-    fun _showMarkerDialogActions(callbackItemClicked: (DialogInterface, Int, MarkerActions) -> Unit) {
-        val actions = arrayOf(
-            resources.getString(R.string.dlg_marker_remove),
-            resources.getString(R.string.dlg_marker_rename)
-        )
-        val adapter =
-            ArrayAdapter<String>(context!!, android.R.layout.select_dialog_item, actions)
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(resources.getString(R.string.dlg_marker_select_action))
-        builder.setAdapter(adapter) { dialogInterface, position ->
-            when (position) {
-                0 -> callbackItemClicked(dialogInterface, position, MarkerActions.Move)
-                1 -> callbackItemClicked(dialogInterface, position, MarkerActions.Remove)
-                2 -> callbackItemClicked(dialogInterface, position, MarkerActions.Rename)
-            }
-
-        }
-        val dialog = builder.create()
-        dialog.show()
     }
 }

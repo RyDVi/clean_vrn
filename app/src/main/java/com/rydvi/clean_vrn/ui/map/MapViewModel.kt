@@ -7,8 +7,7 @@ import com.rydvi.clean_vrn.api.Error
 import com.rydvi.clean_vrn.api.Place
 
 class MapViewModel : ViewModel() {
-
-
+    
     fun createPlace(place: Place, success: (Place) -> Unit, failed: (Error) -> Unit) {
         success(place)
     }
