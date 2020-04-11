@@ -60,6 +60,12 @@ class PolygonControl(map: GoogleMap, context: Context) {
         return this
     }
 
+    fun removePolygon(polygon:Polygon){
+        polygon.remove()
+        //С первого раза не удаляет
+        polygon.remove()
+    }
+
     fun endBuild(): Polygon? {
         val buildedPolygon = currentPolygon
         currentPolygon = null

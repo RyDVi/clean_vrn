@@ -136,5 +136,11 @@
     <string name="dlg_place_move_accept_msg">You really want move place to this position?</string>
     <string name="dlg_place_move_accept_accept">Yes, move</string>
     <string name="dlg_place_move_accept_cancel">Cancel</string>
+    <string name="dlg_accept_reset_start_point_msg">You really want change start point?</string>
+    <string name="dlg_accept_reset_start_point_ok">Yes, change</string>
+    <string name="dlg_accept_reset_start_point_cancel">Cancel</string>
+    <string name="dlg_accept_reset_quest_zone_msg">You really want change quest zone?</string>
+    <string name="dlg_accept_reset_quest_zone_ok">Yes, change</string>
+    <string name="dlg_accept_reset_quest_zone_cancel">Cancel</string>
 
 </resources>

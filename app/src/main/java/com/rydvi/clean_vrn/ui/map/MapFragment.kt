@@ -56,6 +56,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private var markerActionMode = MarkerActions.Nothing
     private var currentMarker: Marker? = null
     private var questZone: Polygon? = null
+    private var startPlace: Marker? = null
     private lateinit var lastLocation: LatLng
 
     private lateinit var markerControl: MarkerControl
@@ -144,7 +145,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         setModeOnlyReading()
                     }
                     MapPlaceMode.StartPlace -> {
-                        markerControl.addStartPlace(clickLocation)
+                        startPlace?.remove()
+                        startPlace = markerControl.addStartPlace(clickLocation)
                         setModeOnlyReading()
                     }
                     MapPlaceMode.QuestZone -> {
@@ -279,42 +281,75 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         mBtnSetPlaceStart = rootView.findViewById(R.id.btn_set_place_start)
         mBtnSetPlaceStart.setOnClickListener {
-            mapPlaceMode = MapPlaceMode.StartPlace
-            _onClickedButttonFromPanel(it as ImageButton)
+            if (startPlace === null) {
+                mapPlaceMode = MapPlaceMode.StartPlace
+                _onClickedButttonFromPanel(it as ImageButton)
+            } else {
+                Dialog(activity!!).showDialogAcceptCancel(
+                    {
+                        mapPlaceMode = MapPlaceMode.StartPlace
+                        _onClickedButttonFromPanel(it as ImageButton)
+                    },
+                    null,
+                    resources.getString(R.string.dlg_accept_reset_start_point_msg),
+                    resources.getString(R.string.dlg_accept_reset_start_point_ok),
+                    resources.getString(R.string.dlg_accept_reset_start_point_cancel)
+                )
+            }
         }
 
         mBtnSetPlaceQuestZone = rootView.findViewById(R.id.btn_set_place_quest_zone)
         mBtnSetPlaceQuestZone.setOnClickListener {
-            mapPlaceMode = MapPlaceMode.QuestZone
-            _onClickedButttonFromPanel(it as ImageButton)
+            if (questZone === null) {
+                mapPlaceMode = MapPlaceMode.QuestZone
+                _onClickedButttonFromPanel(it as ImageButton)
+            } else {
+                Dialog(activity!!).showDialogAcceptCancel(
+                    {
+                        mapPlaceMode = MapPlaceMode.QuestZone
+                        _onClickedButttonFromPanel(it as ImageButton)
+                    },
+                    null,
+                    resources.getString(R.string.dlg_accept_reset_quest_zone_msg),
+                    resources.getString(R.string.dlg_accept_reset_quest_zone_ok),
+                    resources.getString(R.string.dlg_accept_reset_quest_zone_cancel)
+                )
+            }
         }
 
         mPanelMarkers = rootView.findViewById(R.id.panel_markers)
 
         mBtnAccept = rootView.findViewById(R.id.btn_accept)
         mBtnAccept.setOnClickListener {
-            currentMarker?.let {
-                when (markerActionMode) {
-                    MarkerActions.Move -> {
-                        mapViewModel.updatePlace(Place().apply {
-                            id = it.tag as Long
-                            location = it.position
-                        }, {
-                            currentMarker?.isDraggable = false
-                            toggleButtons()
-                        }, {
-                            toggleButtons()
-                            currentMarker?.remove()
-                        })
+            if (mapPlaceMode === MapPlaceMode.QuestZone && mapEditMode === MapEditMode.Add) {
+                questZone?.let { polygonControl.removePolygon(it) }
+                questZone = polygonControl.endBuild()
+                setModeOnlyReading()
+                toggleButtons()
+            } else {
+                currentMarker?.let {
+                    when (markerActionMode) {
+                        MarkerActions.Move -> {
+                            mapViewModel.updatePlace(Place().apply {
+                                id = it.tag as Long
+                                location = it.position
+                            }, {
+                                currentMarker?.isDraggable = false
+                                toggleButtons()
+                            }, {
+                                toggleButtons()
+                                currentMarker?.remove()
+                            })
+                        }
                     }
                 }
+                MarkerActions.Nothing
             }
-            MarkerActions.Nothing
         }
 
         mBtnCancel = rootView.findViewById(R.id.btn_cancel)
         mBtnCancel.setOnClickListener {
-            if(mapPlaceMode === MapPlaceMode.QuestZone){
+            if (mapPlaceMode === MapPlaceMode.QuestZone) {
                 polygonControl.removePolygon()
             }
             currentMarker?.hideInfoWindow()
@@ -375,7 +410,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         mBtnRemoveLastPoint = rootView.findViewById(R.id.btn_remove_last_point)
         mBtnRemoveLastPoint.setOnClickListener {
-            polygonControl.removeLastPoint()
+            if (polygonControl.removeLastPoint().getCurrentPolygon() === null) {
+                setModeOnlyReading()
+                toggleButtons()
+            }
         }
 
         toggleButtons()
