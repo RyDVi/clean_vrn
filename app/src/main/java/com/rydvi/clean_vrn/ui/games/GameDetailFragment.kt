@@ -78,7 +78,6 @@ class GameDetailFragment : Fragment() {
             }
 
             btnEditGame = rootView.findViewById(R.id.btn_edit_game)
-            if (!isAdmin()) btnEditGame.hide() else btnEditGame.show()
             btnEditGame.setOnClickListener {
                 activity!!.findNavController(activity!!.nav_host_fragment.id)
                     .navigate(R.id.nav_game_create_edit, Bundle().apply {
@@ -88,7 +87,6 @@ class GameDetailFragment : Fragment() {
             }
 
             btnDeleteGame = rootView.findViewById(R.id.btn_delete_game)
-            if (!isAdmin()) btnDeleteGame.hide() else btnDeleteGame.show()
             btnDeleteGame.setOnClickListener {
                 (activity as MainActivity).showLoading(true)
                 gamesViewModel.deleteGame(item!!.id!!) {
@@ -104,8 +102,31 @@ class GameDetailFragment : Fragment() {
             }
 
             btnCompleteTheGame = rootView.findViewById(R.id.btn_complete_the_game)
-            if (!isAdmin()) btnCompleteTheGame.visibility =
-                Button.GONE else btnCompleteTheGame.visibility = Button.VISIBLE
+            if (!isAdmin()) {
+                btnCompleteTheGame.visibility = Button.GONE
+                btnDeleteGame.hide()
+                btnEditGame.hide()
+            } else {
+                item?.id_status?.let {
+                    when {
+                        it === GameStatus.completed.getTypeId() -> {
+                            btnDeleteGame.hide()
+                            btnEditGame.hide()
+                            btnCompleteTheGame.visibility = Button.GONE
+                        }
+                        it === GameStatus.started.getTypeId() -> {
+                            btnDeleteGame.hide()
+                            btnEditGame.hide()
+                            btnCompleteTheGame.visibility = Button.VISIBLE
+                        }
+                        else -> {
+                            btnDeleteGame.show()
+                            btnEditGame.show()
+                            btnCompleteTheGame.visibility = Button.VISIBLE
+                        }
+                    }
+                }
+            }
             btnCompleteTheGame.setOnClickListener {
                 val resources = activity!!.resources
                 dialog.showDialogAcceptCancel(
@@ -129,26 +150,6 @@ class GameDetailFragment : Fragment() {
                     resources.getString(R.string.game_complete_the_game_btn_ok),
                     resources.getString(R.string.game_complete_the_game_btn_cancel)
                 )
-            }
-
-            item?.id_status?.let {
-                when {
-                    it === GameStatus.completed.getTypeId() -> {
-                        btnDeleteGame.hide()
-                        btnEditGame.hide()
-                        btnCompleteTheGame.visibility = Button.GONE
-                    }
-                    it===GameStatus.started.getTypeId() -> {
-                        btnDeleteGame.hide()
-                        btnEditGame.hide()
-                        btnCompleteTheGame.visibility = Button.VISIBLE
-                    }
-                    else -> {
-                        btnDeleteGame.show()
-                        btnEditGame.show()
-                        btnCompleteTheGame.visibility = Button.VISIBLE
-                    }
-                }
             }
         })
         gamesViewModel.refreshGames()
