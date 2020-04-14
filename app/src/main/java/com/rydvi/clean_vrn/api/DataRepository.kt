@@ -383,6 +383,14 @@ object DataRepository {
             callbackFailed
         )
 
+    fun getPlaces(success: (Array<Place>) -> Unit?, failed: (Error) -> Unit) = sendRequest(
+        "games_places.php",
+        HttpMethod.GET,
+        null,
+        Array<Place>::class.java,
+        { success(it!!) },
+        failed
+    )
 
     fun createPlace(place: Place, success: (Place) -> Unit, failed: (Error) -> Unit) {
         val bodyMap = LinkedHashMap<String, Any>()
@@ -413,6 +421,44 @@ object DataRepository {
             failed
         )
     }
+
+    fun updatePlace(place: Place, success: () -> Unit, failed: (Error) -> Unit) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["description"] = if (place.description !== null) place.description!! else ""
+        place.point?.let { point ->
+            bodyMap["point"] = LinkedHashMap<String, Double>().apply {
+                this["latitude"] = point.latitude!!
+                this["longitude"] = point.longitude!!
+            }
+        }
+        place.polygon?.let { polygon ->
+            val points = ArrayList<LinkedHashMap<String, Double>>()
+            for (point in polygon) {
+                points.add(LinkedHashMap<String, Double>().apply {
+                    this["latitude"] = point.latitude!!
+                    this["longitude"] = point.longitude!!
+                })
+            }
+            bodyMap["polygon"] = points
+        }
+        sendRequest(
+            "games_places.php?id=${place.id}",
+            HttpMethod.PUT,
+            bodyMap,
+            Void::class.java,
+            { success() },
+            failed
+        )
+    }
+
+    fun removePlace(id: Long, success: () -> Unit, failed: (Error) -> Unit) = sendRequest(
+        "games_places.php?id=$id",
+        HttpMethod.DELETE,
+        null,
+        Void::class.java,
+        { success() },
+        failed
+    )
 
     fun <T> sendRequest(
         scriptNameWithParams: String,

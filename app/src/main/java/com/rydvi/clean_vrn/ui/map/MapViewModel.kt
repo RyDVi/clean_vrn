@@ -5,24 +5,36 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Error
+import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.api.Place
 
 class MapViewModel : ViewModel() {
-    
+    private var dataPlaces: MutableLiveData<Array<Place>>? = null
+
     fun createPlace(place: Place, success: (Place) -> Unit, failed: (Error) -> Unit) {
-       DataRepository.createPlace(place, success, failed)
+        DataRepository.createPlace(place, success, failed)
     }
 
     fun updatePlace(
         place: Place,
-        succcess: () -> Unit,
+        success: () -> Unit,
         failed: (Error) -> Unit
     ) {
-        succcess()
+        DataRepository.updatePlace(place, success, failed)
     }
 
-    fun deletePlace(place: Place, success: () -> Unit, failed: (Error) -> Unit) {
-        success()
+    fun removePlace(id: Long, success: () -> Unit, failed: (Error) -> Unit) {
+        DataRepository.removePlace(id, success, failed)
+    }
+
+    fun getPlaces(): MutableLiveData<Array<Place>> {
+        if (dataPlaces == null) {
+            dataPlaces = MutableLiveData()
+            DataRepository.getPlaces({
+                dataPlaces?.postValue(it)
+            }, {})
+        }
+        return dataPlaces!!
     }
 
     private val _text = MutableLiveData<String>().apply {

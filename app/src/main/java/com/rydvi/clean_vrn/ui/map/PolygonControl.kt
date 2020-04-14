@@ -52,7 +52,7 @@ class PolygonControl(map: GoogleMap, context: Context) {
         return this
     }
 
-    fun removePolygon():PolygonControl{
+    fun removePolygon(): PolygonControl {
         currentPolygon?.remove()
         //С первого раза не удаляет
         currentPolygon?.remove()
@@ -60,7 +60,7 @@ class PolygonControl(map: GoogleMap, context: Context) {
         return this
     }
 
-    fun removePolygon(polygon:Polygon){
+    fun removePolygon(polygon: Polygon) {
         polygon.remove()
         //С первого раза не удаляет
         polygon.remove()
@@ -73,4 +73,12 @@ class PolygonControl(map: GoogleMap, context: Context) {
     }
 
     fun getCurrentPolygon() = currentPolygon
+
+    fun createFromPoints(googlePoints: Array<LatLng>): Polygon? {
+        var polygonOptions = PolygonOptions().clickable(false).fillColor(Color.GRAY)
+        for (point in googlePoints) {
+            polygonOptions.add(point)
+        }
+        return mMap.addPolygon(polygonOptions)
+    }
 }

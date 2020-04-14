@@ -24,4 +24,8 @@ class LatLng {
         return this
     }
 
+    fun toGoogleLatLng(): LatLng {
+        return com.google.android.gms.maps.model.LatLng(latitude!!, longitude!!)
+    }
+
 }

@@ -39,4 +39,14 @@ class Place {
         set(value) {
             field = value
         }
+
+    fun getGooglePolygonPoints(): Array<com.google.android.gms.maps.model.LatLng>? {
+        var googlePoints: Array<com.google.android.gms.maps.model.LatLng> = arrayOf()
+        polygon?.let {
+            for (coordinate in it) {
+                googlePoints = googlePoints!!.plusElement(coordinate.toGoogleLatLng())
+            }
+        }
+        return if (googlePoints.isNotEmpty()) googlePoints else null
+    }
 }
