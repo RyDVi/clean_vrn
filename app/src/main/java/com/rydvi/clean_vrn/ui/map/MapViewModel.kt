@@ -3,13 +3,14 @@ package com.rydvi.clean_vrn.ui.map
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Error
 import com.rydvi.clean_vrn.api.Place
 
 class MapViewModel : ViewModel() {
     
     fun createPlace(place: Place, success: (Place) -> Unit, failed: (Error) -> Unit) {
-        success(place)
+       DataRepository.createPlace(place, success, failed)
     }
 
     fun updatePlace(

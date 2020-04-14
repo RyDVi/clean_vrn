@@ -142,5 +142,9 @@
     <string name="dlg_accept_reset_quest_zone_msg">You really want change quest zone?</string>
     <string name="dlg_accept_reset_quest_zone_ok">Yes, change</string>
     <string name="dlg_accept_reset_quest_zone_cancel">Cancel</string>
+    <string name="map_marker_title_garbage">Garbage</string>
+    <string name="map_marker_title_toilet">Toilet</string>
+    <string name="map_marker_title_another_place">Another place</string>
+    <string name="map_marker_title_start_place">Start place</string>
 
 </resources>

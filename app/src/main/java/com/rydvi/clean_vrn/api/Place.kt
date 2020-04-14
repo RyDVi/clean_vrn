@@ -1,9 +1,10 @@
 package com.rydvi.clean_vrn.api
 
-import com.google.android.gms.maps.model.LatLng
+import org.codehaus.jackson.annotate.JsonIgnoreProperties
 import org.codehaus.jackson.annotate.JsonProperty
 
-class Place{
+@JsonIgnoreProperties(ignoreUnknown = true)
+class Place {
     @JsonProperty("id")
     var id: Long? = null
         get() = field
@@ -11,15 +12,22 @@ class Place{
             field = value
         }
 
-    @JsonProperty("location")
-    var location: LatLng? = null
+    @JsonProperty("point")
+    var point: LatLng? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    @JsonProperty("polygon")
+    var polygon: Array<LatLng>? = null
         get() = field
         set(value) {
             field = value
         }
 
     @JsonProperty("type")
-    var placeType: Long? = null
+    var placeType: Int? = null
         get() = field
         set(value) {
             field = value

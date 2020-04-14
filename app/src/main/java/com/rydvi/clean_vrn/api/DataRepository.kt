@@ -375,13 +375,44 @@ object DataRepository {
 
     fun completeTheGame(id: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) =
         sendRequest(
-            "games_control.php?id=$id",
+            "complete_the_game.php?id=$id",
             HttpMethod.GET,
             null,
             Void::class.java,
             { callbackSuccess() },
             callbackFailed
         )
+
+
+    fun createPlace(place: Place, success: (Place) -> Unit, failed: (Error) -> Unit) {
+        val bodyMap = LinkedHashMap<String, Any>()
+        bodyMap["id_place_type"] = place.placeType!!
+        bodyMap["description"] = if (place.description !== null) place.description!! else ""
+        place.point?.let { point ->
+            bodyMap["point"] = LinkedHashMap<String, Double>().apply {
+                this["latitude"] = point.latitude!!
+                this["longitude"] = point.longitude!!
+            }
+        }
+        place.polygon?.let { polygon ->
+            val points = ArrayList<LinkedHashMap<String, Double>>()
+            for (point in polygon) {
+                points.add(LinkedHashMap<String, Double>().apply {
+                    this["latitude"] = point.latitude!!
+                    this["longitude"] = point.longitude!!
+                })
+            }
+            bodyMap["polygon"] = points
+        }
+        sendRequest(
+            "games_places.php",
+            HttpMethod.POST,
+            bodyMap,
+            Place::class.java,
+            { success(it!!) },
+            failed
+        )
+    }
 
     fun <T> sendRequest(
         scriptNameWithParams: String,

@@ -133,20 +133,35 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             MapEditMode.Add -> {
                 when (mapPlaceMode) {
                     MapPlaceMode.Toilet -> {
-                        markerControl.addToilet(clickLocation)
+                        mapViewModel.createPlace(Place().apply {
+                            point =
+                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
+                            placeType = MapPlaceMode.Toilet.getPlaceId()
+                        }, { place -> markerControl.addToilet(clickLocation, place.id) }, {})
                         setModeOnlyReading()
                     }
                     MapPlaceMode.GarbagePlace -> {
-                        markerControl.addGarbage(clickLocation)
+                        mapViewModel.createPlace(Place().apply {
+                            point =
+                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
+                            placeType = MapPlaceMode.GarbagePlace.getPlaceId()
+                        }, { place -> markerControl.addGarbage(clickLocation, place.id) }, {})
                         setModeOnlyReading()
                     }
                     MapPlaceMode.AnotherPlace -> {
-                        markerControl.addAnotherPlace(clickLocation)
+                        mapViewModel.createPlace(Place().apply {
+                            point =
+                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
+                            placeType = MapPlaceMode.AnotherPlace.getPlaceId()
+                        }, { place -> markerControl.addAnotherPlace(clickLocation, place.id) }, {})
                         setModeOnlyReading()
                     }
                     MapPlaceMode.StartPlace -> {
                         startPlace?.remove()
-                        startPlace = markerControl.addStartPlace(clickLocation)
+                        mapViewModel.createPlace(Place().apply {
+                            point =
+                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
+                        }, { place -> markerControl.addStartPlace(clickLocation, place.id) }, {})
                         setModeOnlyReading()
                     }
                     MapPlaceMode.QuestZone -> {
@@ -324,6 +339,20 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             if (mapPlaceMode === MapPlaceMode.QuestZone && mapEditMode === MapEditMode.Add) {
                 questZone?.let { polygonControl.removePolygon(it) }
                 questZone = polygonControl.endBuild()
+                var polygonPoints:Array<com.rydvi.clean_vrn.api.LatLng>?=null
+                for (point in questZone!!.points) {
+                    polygonPoints = if(polygonPoints===null){
+                        arrayOf(com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(point))
+                    } else {
+                        polygonPoints.plusElement(com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(point))
+                    }
+                }
+                mapViewModel.createPlace(Place().apply {
+                    polygon = polygonPoints
+                    placeType = MapPlaceMode.QuestZone.getPlaceId()
+                }, { }, {
+
+                })
                 setModeOnlyReading()
                 toggleButtons()
             } else {
@@ -332,7 +361,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         MarkerActions.Move -> {
                             mapViewModel.updatePlace(Place().apply {
                                 id = it.tag as Long
-                                location = it.position
+                                point =
+                                    com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(it.position)
                             }, {
                                 currentMarker?.isDraggable = false
                                 toggleButtons()

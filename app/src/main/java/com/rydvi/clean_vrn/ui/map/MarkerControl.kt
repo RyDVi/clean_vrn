@@ -18,7 +18,12 @@ class MarkerControl(map: GoogleMap, context: Context) {
     /**
      * Добавление маркера на карту
      */
-    fun addMarker(location: LatLng, title: String, @DrawableRes drawableId: Int?): Marker {
+    fun addMarker(
+        location: LatLng,
+        title: String, @DrawableRes drawableId: Int?,
+        id: Long?,
+        placeMode: MapPlaceMode
+    ): Marker {
         val addedMarker = mMap.addMarker(
             MarkerOptions().position(location).title(title).icon(
                 drawableId?.let {
@@ -28,35 +33,59 @@ class MarkerControl(map: GoogleMap, context: Context) {
                 }
             ).draggable(true)
         )
-        addedMarker.tag = 1
+        addedMarker.tag = makeMarkerUnique(placeMode, id)
         return addedMarker
     }
 
     /**
      * Добавление маркера отходов
      */
-    fun addGarbage(location: LatLng): Marker {
-        return addMarker(location, "Garbage", R.drawable.ic_bag_icon)
+    fun addGarbage(location: LatLng, id: Long?): Marker {
+        return addMarker(
+            location,
+            context.resources.getString(R.string.map_marker_title_garbage),
+            R.drawable.ic_bag_icon,
+            id,
+            MapPlaceMode.GarbagePlace
+        )
     }
 
     /**
      * Добавление маркера туалета
      */
-    fun addToilet(location: LatLng): Marker {
-        return addMarker(location, "Toilet", R.drawable.ic_toilet)
+    fun addToilet(location: LatLng, id: Long?): Marker {
+        return addMarker(
+            location,
+            context.resources.getString(R.string.map_marker_title_toilet),
+            R.drawable.ic_toilet,
+            id,
+            MapPlaceMode.Toilet
+        )
     }
 
     /**
      * Добавление маркера с неизвестным местом
      */
-    fun addAnotherPlace(location: LatLng): Marker {
-        return addMarker(location, "Another place", null)
+    fun addAnotherPlace(location: LatLng, id: Long?): Marker {
+        return addMarker(
+            location,
+            context.resources.getString(R.string.map_marker_title_another_place),
+            null,
+            id,
+            MapPlaceMode.AnotherPlace
+        )
     }
 
     /**
      * Добавление маркера с точкой старта
      */
-    fun addStartPlace(location: LatLng): Marker {
-        return addMarker(location, "Start place", R.drawable.ic_start_flag)
+    fun addStartPlace(location: LatLng, id: Long?): Marker {
+        return addMarker(
+            location,
+            context.resources.getString(R.string.map_marker_title_start_place),
+            R.drawable.ic_start_flag,
+            id,
+            MapPlaceMode.StartPlace
+        )
     }
 }
