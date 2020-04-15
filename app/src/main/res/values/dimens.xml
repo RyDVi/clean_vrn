@@ -10,4 +10,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_list_margin_1">2dp</dimen>
     <dimen name="title_form_size">24sp</dimen>
+    <dimen name="list_margin">16dp</dimen>
+    <dimen name="list_item_margin">16dp</dimen>
+    <dimen name="list_item_padding">16dp</dimen>
 </resources>
