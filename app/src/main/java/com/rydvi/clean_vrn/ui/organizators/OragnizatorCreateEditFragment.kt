@@ -149,7 +149,7 @@ class OragnizatorCreateEditFragment : Fragment() {
         if (inpOrgPhone.text.toString() == "") {
             hasErrorForm = true
             inpOrgPhone.error = resources.getString(R.string.err_inp_org_phone_empty)
-        } else if (!inpOrgPhone.text.toString().matches(Regex("^(\\s*)?(\\+)?([- _():=+]?\\d[- _():=+]?){10,14}(\\s*)?\$"))) {
+        } else if (!inpOrgPhone.text.toString().matches(Regex("^\\d{10}\$"))) {
             hasErrorForm = true
             inpOrgPhone.error = resources.getString(R.string.err_inp_org_phone_incorrect)
         } else {

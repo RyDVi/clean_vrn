@@ -10,7 +10,7 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="action_sign_in_as_player">Sign in as player</string>
     <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_username">Not a valid email or phone number</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_login_app_name">Clean.VRN</string>
@@ -110,9 +110,9 @@
     <string name="title_activity_organizator_edit">Edit organizator</string>
     <string name="title_activity_organizator_create">Create organizator</string>
     <string name="err_inp_org_email_empty">Email is required</string>
-    <string name="err_inp_org_email_incorrect">Incorrect email</string>
+    <string name="err_inp_org_email_incorrect">Incorrect email. Enter email in format email@mail.ru</string>
     <string name="err_inp_org_phone_empty">Phone is required</string>
-    <string name="err_inp_org_phone_incorrect">Phone incorrect</string>
+    <string name="err_inp_org_phone_incorrect">Phone incorrect. Enter phone in format 9005553535</string>
     <string name="err_inp_org_firstname_empty">Firstname not can be empty</string>
     <string name="err_inp_org_lastname_empty">Lastname not can be empty</string>
 
