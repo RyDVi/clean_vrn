@@ -68,8 +68,14 @@ class GamesFragment : Fragment() {
 
     private fun setupRecyclerView(recyclerView: RecyclerView, games: MutableLiveData<Array<Game>>) {
         games.value?.let {
+            it.sortWith(
+                compareBy(
+                    //Необходимо поменять местами 2 и 3, чтобы запланированные были раньше оконченных
+                    { game -> if (game.id_status == 2.toLong()) 3 else if (game.id_status == 3.toLong()) 2 else 1 },
+                    { game -> game.datetime })
+            )
             recyclerView.adapter =
-                GameItemRecyclerViewAdapter(activity!!, games.value!!.toList(), twoPane)
+                GameItemRecyclerViewAdapter(activity!!, it.toList(), twoPane)
         }
     }
 

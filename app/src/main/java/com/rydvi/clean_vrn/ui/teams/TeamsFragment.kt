@@ -35,7 +35,7 @@ class TeamsFragment : Fragment() {
         teamsViewModel =
             ViewModelProviders.of(this).get(TeamsViewModel::class.java)
         teamsViewModel.getTeams().observe(this, Observer {
-            val teamList:RecyclerView = root.findViewById(R.id.team_list)
+            val teamList: RecyclerView = root.findViewById(R.id.team_list)
             setupRecyclerView(teamList, it)
         })
         if (team_detail_container != null) {
@@ -60,11 +60,12 @@ class TeamsFragment : Fragment() {
         recyclerView: RecyclerView,
         teams: Array<Team>
     ) {
+        teams.sortWith(compareBy({ it.name?.toUpperCase() }, { it.sumPoints }))
         recyclerView.adapter =
             TeamItemRecyclerViewAdapter(activity!!, teams.toList(), twoPane)
     }
 
-    private fun onRefreshTeamsRecyclerView(){
+    private fun onRefreshTeamsRecyclerView() {
         teamsViewModel = ViewModelProviders.of(this).get(TeamsViewModel::class.java)
         teamsViewModel.refreshTeams()?.observe(this, Observer {
             swipeRefreshTeams.isRefreshing = false

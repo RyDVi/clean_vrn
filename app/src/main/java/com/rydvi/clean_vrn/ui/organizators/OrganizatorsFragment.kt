@@ -24,7 +24,7 @@ class OrganizatorsFragment : Fragment() {
 
     private lateinit var organizatorsViewModel: OrganizatorsViewModel
     private var twoPane: Boolean = false
-    private lateinit var swipeRefreshOrganizators:SwipeRefreshLayout
+    private lateinit var swipeRefreshOrganizators: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +45,10 @@ class OrganizatorsFragment : Fragment() {
         btnOrgAdd.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_organizator_create_edit, Bundle().apply {
-                    putString(OragnizatorCreateEditFragment.ORG_MODE, CreateEditMode.CREATE.getMode())
+                    putString(
+                        OragnizatorCreateEditFragment.ORG_MODE,
+                        CreateEditMode.CREATE.getMode()
+                    )
                 })
         }
 
@@ -56,11 +59,17 @@ class OrganizatorsFragment : Fragment() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, organizators: Array<Organizator>) {
+        organizators.sortWith(
+            compareBy(
+                { it.lastname?.toUpperCase() },
+                { it.firstname?.toUpperCase() },
+                { it.middlename?.toUpperCase() })
+        )
         recyclerView.adapter =
             OrganizatorItemRecyclerViewAdapter(activity!!, organizators.toList(), twoPane)
     }
 
-    private fun onRefreshOrganizatorsRecyclerView(){
+    private fun onRefreshOrganizatorsRecyclerView() {
         organizatorsViewModel = ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
         organizatorsViewModel.refreshOrganizators()?.observe(this, Observer {
             swipeRefreshOrganizators.isRefreshing = false
