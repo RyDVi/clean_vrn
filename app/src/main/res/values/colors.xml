@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="text_title_header_column">#000000</color>
+    <color name="colorTextGameStatusStarted">#FFDC33</color>
+    <color name="colorTextGameStatusEnded">#9B2D30</color>
+    <color name="colorTextGameStatusPlanned">#009B76</color>
 </resources>

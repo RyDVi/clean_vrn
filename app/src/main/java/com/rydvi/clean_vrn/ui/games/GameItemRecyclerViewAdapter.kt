@@ -52,8 +52,6 @@ class GameItemRecyclerViewAdapter(
                     activity.findNavController(R.id.nav_host_fragment).navigate(R.id.nav_map)
                 }
             }, {})
-        } ?: run {
-            //TODO: error get id of game
         }
     }
 
@@ -67,9 +65,21 @@ class GameItemRecyclerViewAdapter(
         val item = values[position]
         holder.nameView.text = item.name.toString()
         when (item.id_status!!.toInt()) {
-            1 -> holder.nameView.setTextColor(Color.YELLOW)
-            2 -> holder.nameView.setTextColor(Color.RED)
-            3 -> holder.nameView.setTextColor(Color.GREEN)
+            1 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusStarted,null))
+            } else {
+                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusStarted))
+            }
+            2 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusEnded,null))
+            } else {
+                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusEnded))
+            }
+            3 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusPlanned,null))
+            } else {
+                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusPlanned))
+            }
         }
         holder.descriptionView.text = item.description.toString()
 
