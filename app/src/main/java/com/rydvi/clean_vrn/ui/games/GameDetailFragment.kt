@@ -139,6 +139,9 @@ class GameDetailFragment : Fragment() {
                                     resources.getString(R.string.game_complete_the_game_completed_msg),
                                     Toast.LENGTH_LONG
                                 ).show()
+                                btnCompleteTheGame.visibility = Button.GONE
+                                btnDeleteGame.hide()
+                                btnEditGame.hide()
                                 (activity as MainActivity).showLoading(false)
                             }
                         }, { error ->
