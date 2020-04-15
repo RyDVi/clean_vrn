@@ -183,7 +183,7 @@ class OragnizatorCreateEditFragment : Fragment() {
                     }, NavOptions.Builder()
                         .setPopUpTo(
                             R.id.nav_organizators,
-                            true
+                            false
                         ).build()
                 )
         }

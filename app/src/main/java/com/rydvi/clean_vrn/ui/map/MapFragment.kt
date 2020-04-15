@@ -114,20 +114,20 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             placesSearch = PlacesSearch(mSearchView, map, context!!)
             mSearchView.setOnQueryTextListener(placesSearch)
 
-            mapViewModel.getPlaces()?.observe(this, Observer { places ->
-                for (place in places) {
-                    if (place.placeType === MapPlaceMode.QuestZone.getPlaceId()) {
-                        polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
-                    } else {
-                        var marker = markerControl.addMarkerByPlaceTypeID(
-                            place.point!!.toGoogleLatLng(),
-                            place.id,
-                            place.placeType!!,
-                            place.description!!
-                        )
-                    }
-                }
-            })
+//            mapViewModel.getPlaces()?.observe(this, Observer { places ->
+//                for (place in places) {
+//                    if (place.placeType === MapPlaceMode.QuestZone.getPlaceId()) {
+//                        polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
+//                    } else {
+//                        markerControl.addMarkerByPlaceTypeID(
+//                            place.point!!.toGoogleLatLng(),
+//                            place.id,
+//                            place.placeType!!,
+//                            place.description!!
+//                        )
+//                    }
+//                }
+//            })
 
             // Move camera to voronezh position
             map.moveCamera(CameraUpdateFactory.newLatLng(VORONEZH_LOCATION))

@@ -191,7 +191,7 @@ class TeamCreateEditFragment : Fragment() {
                     }, NavOptions.Builder()
                         .setPopUpTo(
                             R.id.nav_teams,
-                            true
+                            false
                         ).build()
                 )
         }
