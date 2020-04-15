@@ -108,11 +108,7 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 },
-                    {
-                        //                        error ->
-//                    errorHandler.showError(error)
-//                    showLoading(false)
-                    }
+                    { }
                 )
             }
 
@@ -121,11 +117,8 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString(), true, {
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
-                }, {
-//                        error ->
-//                    errorHandler.showError(error)
-//                    showLoading(false)
-                })
+                }, { }
+                )
             }
         }
     }

@@ -152,55 +152,53 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             MapEditMode.Add -> {
                 when (mapPlaceMode) {
                     MapPlaceMode.Toilet -> {
-                        (activity as MainActivity).showLoading(true)
                         mapViewModel.createPlace(Place().apply {
                             point =
                                 com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
                             placeType = MapPlaceMode.Toilet.getPlaceId()
-                            (activity as MainActivity).showLoading(false)
-                        }, { place -> markerControl.addToilet(clickLocation, place.id, null) }, {
-                            (activity as MainActivity).showLoading(false)
-                            (activity as MainActivity).errorHandler.showError(it)
-                        })
+                        }, { place -> markerControl.addToilet(clickLocation, place.id, null) }, { })
                         setModeOnlyReading()
                     }
                     MapPlaceMode.GarbagePlace -> {
-                        (activity as MainActivity).showLoading(true)
-                        mapViewModel.createPlace(Place().apply {
-                            point =
-                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
-                            placeType = MapPlaceMode.GarbagePlace.getPlaceId()
-                            (activity as MainActivity).showLoading(false)
-                        }, { place -> markerControl.addGarbage(clickLocation, place.id, null) }, {
-                            (activity as MainActivity).showLoading(false)
-                            (activity as MainActivity).errorHandler.showError(it)
-                        })
+                        mapViewModel.createPlace(
+                            Place().apply {
+                                point =
+                                    com.rydvi.clean_vrn.api.LatLng()
+                                        .parseGoogleLatLng(clickLocation)
+                                placeType = MapPlaceMode.GarbagePlace.getPlaceId()
+                            },
+                            { place -> markerControl.addGarbage(clickLocation, place.id, null) },
+                            { })
                         setModeOnlyReading()
                     }
                     MapPlaceMode.AnotherPlace -> {
-                        (activity as MainActivity).showLoading(true)
-                        mapViewModel.createPlace(Place().apply {
-                            point =
-                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
-                            placeType = MapPlaceMode.AnotherPlace.getPlaceId()
-                            (activity as MainActivity).showLoading(false)
-                        }, { place -> markerControl.addAnotherPlace(clickLocation, place.id, null) }, {
-                            (activity as MainActivity).showLoading(false)
-                            (activity as MainActivity).errorHandler.showError(it)
-                        })
+                        mapViewModel.createPlace(
+                            Place().apply {
+                                point =
+                                    com.rydvi.clean_vrn.api.LatLng()
+                                        .parseGoogleLatLng(clickLocation)
+                                placeType = MapPlaceMode.AnotherPlace.getPlaceId()
+                            },
+                            { place ->
+                                markerControl.addAnotherPlace(
+                                    clickLocation,
+                                    place.id,
+                                    null
+                                )
+                            },
+                            { })
                         setModeOnlyReading()
                     }
                     MapPlaceMode.StartPlace -> {
                         startPlace?.remove()
-                        (activity as MainActivity).showLoading(true)
-                        mapViewModel.createPlace(Place().apply {
-                            point =
-                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
-                            (activity as MainActivity).showLoading(false)
-                        }, { place -> markerControl.addStartPlace(clickLocation, place.id, null) }, {
-                            (activity as MainActivity).showLoading(false)
-                            (activity as MainActivity).errorHandler.showError(it)
-                        })
+                        mapViewModel.createPlace(
+                            Place().apply {
+                                point =
+                                    com.rydvi.clean_vrn.api.LatLng()
+                                        .parseGoogleLatLng(clickLocation)
+                            },
+                            { place -> markerControl.addStartPlace(clickLocation, place.id, null) },
+                            { })
                         setModeOnlyReading()
                     }
                     MapPlaceMode.QuestZone -> {
@@ -218,16 +216,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onMarkerDragEnd(marker: Marker) {
         Dialog(activity!!).showDialogAcceptCancel(
             {
-                (activity as MainActivity).showLoading(true)
                 mapViewModel.updatePlace(Place().apply {
                     point = com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(marker.position)
                     description = marker.snippet
-                }, {
-                    (activity as MainActivity).showLoading(false)
-                }, {
+                }, { }, {
                     marker.position = lastLocation
-                    (activity as MainActivity).errorHandler.showError(it)
-                    (activity as MainActivity).showLoading(false)
                 })
                 setModeOnlyReading()
                 toggleButtons()
@@ -401,16 +394,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         )
                     }
                 }
-                (activity as MainActivity).showLoading(true)
                 mapViewModel.createPlace(Place().apply {
                     polygon = polygonPoints
                     placeType = MapPlaceMode.QuestZone.getPlaceId()
-                }, {
-                    (activity as MainActivity).showLoading(false)
-                }, {
-                    (activity as MainActivity).showLoading(false)
-                    (activity as MainActivity).errorHandler.showError(it)
-                })
+                }, { }, { })
 
                 setModeOnlyReading()
                 toggleButtons()
@@ -418,7 +405,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 currentMarker?.let {
                     when (markerActionMode) {
                         MarkerActions.Move -> {
-                            (activity as MainActivity).showLoading(true)
                             mapViewModel.updatePlace(Place().apply {
                                 id = it.tag as Long
                                 point =
@@ -426,12 +412,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                             }, {
                                 currentMarker?.isDraggable = false
                                 toggleButtons()
-                                (activity as MainActivity).showLoading(false)
                             }, {
                                 toggleButtons()
                                 currentMarker?.remove()
-                                (activity as MainActivity).showLoading(false)
-                                (activity as MainActivity).errorHandler.showError(it)
                             })
                         }
                     }
@@ -462,17 +445,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             Dialog(activity!!).showDialogAcceptCancelWithContent(
                 {
                     val descriptionText = descriptionInput.text.toString()
-                    (activity as MainActivity).showLoading(true)
                     mapViewModel.updatePlace(Place().apply {
                         description = descriptionText
                         id = (currentMarker!!.tag as MarkerUnique).id
                         point = com.rydvi.clean_vrn.api.LatLng()
                             .parseGoogleLatLng(currentMarker!!.position)
-                        (activity as MainActivity).showLoading(false)
-                    }, { currentMarker?.snippet = descriptionText }, {
-                        (activity as MainActivity).errorHandler.showError(it)
-                        (activity as MainActivity).showLoading(false)
-                    })
+                    }, { currentMarker?.snippet = descriptionText }, { })
 
                     currentMarker?.hideInfoWindow()
                     setModeOnlyReading()
@@ -491,20 +469,16 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             Dialog(activity!!).showDialogAcceptCancel(
                 {
                     currentMarker?.let { currentMarker ->
-                        (activity as MainActivity).showLoading(true)
                         mapViewModel.removePlace(
                             (currentMarker.tag as MarkerUnique).id!!,
                             {
                                 currentMarker.remove()
                                 setModeOnlyReading()
                                 toggleButtons()
-                                (activity as MainActivity).showLoading(false)
                             },
                             {
                                 setModeOnlyReading()
                                 toggleButtons()
-                                (activity as MainActivity).showLoading(false)
-                                (activity as MainActivity).errorHandler.showError(it)
                             })
                     }
                 },

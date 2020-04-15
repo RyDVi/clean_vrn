@@ -46,8 +46,6 @@ class GameDetailFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_game_detail, container, false)
 
-        (activity as MainActivity).showLoading(true)
-
         dialog = Dialog(activity!!)
         gamesViewModel =
             ViewModelProviders.of(activity!!).get(GamesViewModel::class.java)
@@ -73,7 +71,6 @@ class GameDetailFragment : Fragment() {
                         rootView.recycler_game_detail_coefficients,
                         game.id
                     )
-                    (activity as MainActivity).showLoading(false)
                 })
             }
 
@@ -88,7 +85,6 @@ class GameDetailFragment : Fragment() {
 
             btnDeleteGame = rootView.findViewById(R.id.btn_delete_game)
             btnDeleteGame.setOnClickListener {
-                (activity as MainActivity).showLoading(true)
                 gamesViewModel.deleteGame(item!!.id!!) {
                     activity!!.runOnUiThread {
                         Toast.makeText(
@@ -131,7 +127,6 @@ class GameDetailFragment : Fragment() {
                 val resources = activity!!.resources
                 dialog.showDialogAcceptCancel(
                     {
-                        (activity as MainActivity).showLoading(true)
                         gamesViewModel.completeTheGame(item!!.id!!, {
                             activity!!.runOnUiThread {
                                 Toast.makeText(
@@ -142,12 +137,8 @@ class GameDetailFragment : Fragment() {
                                 btnCompleteTheGame.visibility = Button.GONE
                                 btnDeleteGame.hide()
                                 btnEditGame.hide()
-                                (activity as MainActivity).showLoading(false)
                             }
-                        }, { error ->
-                            (activity as MainActivity).errorHandler.showError(error)
-                            (activity as MainActivity).showLoading(false)
-                        })
+                        }, { })
                     }, null,
                     resources.getString(R.string.game_complete_the_game_msg),
                     resources.getString(R.string.game_complete_the_game_btn_ok),

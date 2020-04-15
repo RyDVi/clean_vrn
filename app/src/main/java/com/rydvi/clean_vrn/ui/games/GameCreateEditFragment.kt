@@ -60,8 +60,6 @@ class GameCreateEditFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_game_create_edit, container, false)
 
-        (activity as MainActivity).showLoading(true)
-
         recyclerCoefficients = rootView.findViewById(R.id.recycler_garbages_coefficients)
         inpGameName = rootView.findViewById(R.id.inp_game_name)
         inpGameRoute = rootView.findViewById(R.id.inp_game_route)
@@ -84,7 +82,6 @@ class GameCreateEditFragment : Fragment() {
 
                 gamesViewModel.getCoefficients(idGame)?.observe(this, Observer { coefficients ->
                     setupRecyclerCoefficients(idGame)
-                    (activity as MainActivity).showLoading(false)
                 })
                 game?.let {
                     activity?.toolbar?.title =
@@ -94,7 +91,6 @@ class GameCreateEditFragment : Fragment() {
         } else {
             gamesViewModel.getCoefficients(null)?.observe(this, Observer {
                 setupRecyclerCoefficients(null)
-                (activity as MainActivity).showLoading(false)
             })
         }
 
@@ -105,7 +101,6 @@ class GameCreateEditFragment : Fragment() {
                 "$mYear-${parseWithZero(mMonth)}-${parseWithZero(mDay)}T${parseWithZero(mHour)}:${parseWithZero(
                     mMinute
                 )}:00Z"
-            (activity as MainActivity).showLoading(true)
             if (!hasErrorForm) {
                 if (editMode === CreateEditMode.EDIT) {
                     if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {

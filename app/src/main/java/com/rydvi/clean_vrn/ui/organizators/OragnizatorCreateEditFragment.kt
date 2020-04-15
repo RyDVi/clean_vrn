@@ -49,7 +49,6 @@ class OragnizatorCreateEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_organizator_create_edit, container, false)
-        (activity as MainActivity).showLoading(true)
 
         inpOrgLastname = rootView.findViewById(R.id.inp_organizator_lastname)
         inpOrgFirstname = rootView.findViewById(R.id.inp_organizator_firstname)
@@ -72,17 +71,13 @@ class OragnizatorCreateEditFragment : Fragment() {
 
                 activity?.toolbar?.title =
                     activity!!.resources.getString(R.string.title_activity_organizator_edit) + " ${org?.lastname}"
-
-                (activity as MainActivity).showLoading(false)
             })
         } else {
-            (activity as MainActivity).showLoading(false)
         }
 
         btnOrgSave = rootView.findViewById(R.id.btn_organizator_save)
         btnOrgSave.setOnClickListener {
             if (!hasErrorForm) {
-                (activity as MainActivity).showLoading(true)
                 if (editMode === CreateEditMode.CREATE) {
                     org = Organizator()
                 }

@@ -32,14 +32,12 @@ class OrganizatorsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_organizators, container, false)
-        (activity as MainActivity).showLoading(true)
 
         organizatorsViewModel =
             ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
         organizatorsViewModel.getOrganizators().observe(this, Observer {
             val organzatorList = root.findViewById<RecyclerView>(R.id.organizator_list)
             setupRecyclerView(organzatorList, it)
-            (activity as MainActivity).showLoading(false)
         })
 
         val btnOrgAdd = root.findViewById<FloatingActionButton>(R.id.btn_organizator_add)

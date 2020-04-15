@@ -33,7 +33,7 @@ class TeamDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_team_detail, container, false)
-        (activity as MainActivity).showLoading(true)
+
         teamsViewModel =
             ViewModelProviders.of(this).get(TeamsViewModel::class.java)
 
@@ -83,7 +83,6 @@ class TeamDetailFragment : Fragment() {
                                 team!!.sumPoints.toString()
                             )
                         )
-                        (activity as MainActivity).showLoading(false)
                     })
 
             }
@@ -103,7 +102,6 @@ class TeamDetailFragment : Fragment() {
         val btnTeamDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_team_delete)
         if (isPlayer()) btnTeamDelete.hide() else btnTeamDelete.show()
         btnTeamDelete.setOnClickListener {
-            (activity as MainActivity).showLoading(true)
             teamsViewModel.deleteTeam(team!!.id!!) {
                 activity!!.runOnUiThread {
                     Toast.makeText(

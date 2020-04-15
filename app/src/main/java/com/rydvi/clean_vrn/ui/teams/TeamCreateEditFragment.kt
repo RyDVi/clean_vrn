@@ -49,7 +49,6 @@ class TeamCreateEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_team_create_edit, container, false)
-        (activity as MainActivity).showLoading(true)
 
         editMode = getCreateEditModeByString(arguments!!.getString(TEAM_MODE)!!)
 
@@ -95,20 +94,17 @@ class TeamCreateEditFragment : Fragment() {
                                 activity!!.resources.getString(R.string.title_activity_team_create)
                         }
                     }
-                    (activity as MainActivity).showLoading(false)
                 })
             })
         } else {
             rootView.findViewById<LinearLayout>(R.id.vertical_layout_collected_garbages)
                 .visibility =
                 View.INVISIBLE
-            (activity as MainActivity).showLoading(false)
         }
 
         btnTeamSave = rootView.findViewById(R.id.btn_team_save)
         btnTeamSave.setOnClickListener {
             if (!hasErrorForm) {
-                (activity as MainActivity).showLoading(true)
                 if (editMode.getMode() === CreateEditMode.EDIT.getMode()) {
                     if (inpTeamName.text.toString() !== team.name ||
                         inpTeamNumber.text.toString() !== team.number.toString()

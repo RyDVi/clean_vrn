@@ -34,7 +34,6 @@ class OrganizatorDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_organizator_detail, container, false)
-        (activity as MainActivity).showLoading(true)
 
         orgsViewModel =
             ViewModelProviders.of(this).get(OrganizatorsViewModel::class.java)
@@ -58,7 +57,6 @@ class OrganizatorDetailFragment : Fragment() {
                     rootView.findViewById<TextView>(R.id.txt_organizator_phone).text =
                         organizator?.phone
                 }
-                (activity as MainActivity).showLoading(false)
             }
         })
         orgsViewModel.refreshOrganizators()
@@ -76,7 +74,6 @@ class OrganizatorDetailFragment : Fragment() {
         val btnOrgDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_delete)
         if (!isAdmin()) btnOrgDelete.hide() else btnOrgDelete.show()
         btnOrgDelete.setOnClickListener {
-            (activity as MainActivity).showLoading(true)
             orgsViewModel.deleteOrganizator(organizator!!.id!!) {
                 activity!!.runOnUiThread {
                     Toast.makeText(
@@ -93,11 +90,9 @@ class OrganizatorDetailFragment : Fragment() {
         if (!isAdmin()) btnOrgGenPassword.visibility = View.GONE else btnOrgGenPassword.visibility = View.VISIBLE
         btnOrgGenPassword.setOnClickListener {
             acceptDialog {
-                (activity as MainActivity).showLoading(true)
                 orgsViewModel.generatePassword(organizator!!.id!!) { generatedPassword ->
                     showDialogGeneratedPassword(generatedPassword)
                     activity!!.runOnUiThread {
-                        (activity as MainActivity).showLoading(false)
                     }
                 }
             }
