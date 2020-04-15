@@ -159,13 +159,15 @@ object DataRepository {
     fun updateTeam(
         id_team: Long,
         name: String,
-        number: Long,
+        number: Long?,
         callbackSuccess: (team: Team) -> Unit,
         callbackFailed: (Error) -> Unit
     ) {
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["name"] = name
-        bodyMap["number"] = number
+        if (number !== null) {
+            bodyMap["number"] = number
+        }
         sendRequest(
             "teams.php?id_team=$id_team",
             HttpMethod.PUT,
@@ -178,13 +180,15 @@ object DataRepository {
 
     fun createTeam(
         name: String,
-        number: Long,
+        number: Long?,
         callbackSuccess: (team: Team) -> Unit,
         callbackFailed: (Error) -> Unit
     ) {
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["name"] = name
-        bodyMap["number"] = number
+        if (number !== null) {
+            bodyMap["number"] = number
+        }
         sendRequest(
             "teams.php",
             HttpMethod.POST,

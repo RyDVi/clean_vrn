@@ -32,11 +32,11 @@ class TeamsViewModel : ViewModel() {
         return dataTeams
     }
 
-    fun updateTeam(idTeam: Long, name: String, number: Long, callback: (team: Team) -> Unit) {
+    fun updateTeam(idTeam: Long, name: String, number: Long?, callback: (team: Team) -> Unit) {
         dataRepository.updateTeam(idTeam, name, number, callback, {})
     }
 
-    fun createTeam(name: String, number: Long, callback: (team: Team) -> Unit) {
+    fun createTeam(name: String, number: Long?, callback: (team: Team) -> Unit) {
         dataRepository.createTeam(name, number, callback, {})
     }
 

@@ -112,7 +112,8 @@ class TeamCreateEditFragment : Fragment() {
                         teamsViewModel.updateTeam(
                             team.id!!,
                             inpTeamName.text.toString(),
-                            inpTeamNumber.text.toString().toLong()
+                            if (inpTeamNumber.text.toString().isNotEmpty())
+                                inpTeamNumber.text.toString().toLong() else null
                         ) {
                             _updateCollectedGarbagesAndNavToTeam(team.id!!)
                         }
@@ -123,7 +124,8 @@ class TeamCreateEditFragment : Fragment() {
                 } else {
                     teamsViewModel.createTeam(
                         inpTeamName.text.toString(),
-                        inpTeamNumber.text.toString().toLong()
+                        if (inpTeamNumber.text.toString().isNotEmpty())
+                            inpTeamNumber.text.toString().toLong() else null
                     ) {
                         _navToTeam(it.id!!)
                     }
@@ -160,12 +162,12 @@ class TeamCreateEditFragment : Fragment() {
             inpTeamName.error = null
         }
 
-        if (inpTeamNumber.text.toString() == "") {
-            hasErrorForm = true
-            inpTeamNumber.error = resources.getString(R.string.err_inp_team_number_empty)
-        } else {
-            inpTeamNumber.error = null
-        }
+//        if (inpTeamNumber.text.toString() == "") {
+//            hasErrorForm = true
+//            inpTeamNumber.error = resources.getString(R.string.err_inp_team_number_empty)
+//        } else {
+//            inpTeamNumber.error = null
+//        }
 
         btnTeamSave.isEnabled = !hasErrorForm
     }
