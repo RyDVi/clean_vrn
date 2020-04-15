@@ -49,9 +49,6 @@ class TeamDetailFragment : Fragment() {
                     }
                 }
             }
-//            team?.let {
-//                rootView.team_sum_points.text = it.sumPoints.toString()
-//            }
 
             team?.let {
                 teamsViewModel.getCollectedGarbages(it.id!!)
