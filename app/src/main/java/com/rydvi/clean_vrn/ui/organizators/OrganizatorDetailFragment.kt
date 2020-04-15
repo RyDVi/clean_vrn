@@ -47,9 +47,9 @@ class OrganizatorDetailFragment : Fragment() {
                         activity!!.resources.getString(R.string.title_organizator_detail) + " ${organizator?.lastname}"
 
                     rootView.findViewById<TextView>(R.id.txt_organizator_lastname).text =
-                        organizator?.firstname
-                    rootView.findViewById<TextView>(R.id.txt_organizator_firstname).text =
                         organizator?.lastname
+                    rootView.findViewById<TextView>(R.id.txt_organizator_firstname).text =
+                        organizator?.firstname
                     rootView.findViewById<TextView>(R.id.txt_organizator_middlename).text =
                         organizator?.middlename
                     rootView.findViewById<TextView>(R.id.txt_organizator_email).text =
