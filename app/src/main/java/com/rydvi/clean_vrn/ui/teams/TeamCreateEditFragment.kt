@@ -22,6 +22,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.games.GameDetailFragment
+import com.rydvi.clean_vrn.ui.games.GarbageCoefficientItemRecyclerViewAdapter
 import com.rydvi.clean_vrn.ui.login.afterTextChanged
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
@@ -104,6 +105,7 @@ class TeamCreateEditFragment : Fragment() {
 
         btnTeamSave = rootView.findViewById(R.id.btn_team_save)
         btnTeamSave.setOnClickListener {
+            _updateFormState()
             if (!hasErrorForm) {
                 if (editMode.getMode() === CreateEditMode.EDIT.getMode()) {
                     if (inpTeamName.text.toString() !== team.name ||
@@ -162,14 +164,12 @@ class TeamCreateEditFragment : Fragment() {
             inpTeamName.error = null
         }
 
-//        if (inpTeamNumber.text.toString() == "") {
-//            hasErrorForm = true
-//            inpTeamNumber.error = resources.getString(R.string.err_inp_team_number_empty)
-//        } else {
-//            inpTeamNumber.error = null
-//        }
-
         btnTeamSave.isEnabled = !hasErrorForm
+        recyclerViewCollectedGarbarages?.adapter?.let {
+            if ((it as CollectedGarbarageItemRecyclerViewAdapter).onCheckTextsHasError()) {
+                hasErrorForm = true
+            }
+        }
     }
 
     private fun _updateCollectedGarbagesAndNavToTeam(idTeam: Long) {

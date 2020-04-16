@@ -72,7 +72,7 @@ class GarbageCoefficientItemRecyclerViewAdapter(
             val count = text.toIntOrNull()
             if (count === null || count < 0) {
                 item.error =
-                    parentActivity.resources.getString(R.string.err_inp_game_coefficient)
+                    parentActivity.resources.getString(R.string.err_inp_team_garbage)
                 hasError = true
             }
         }

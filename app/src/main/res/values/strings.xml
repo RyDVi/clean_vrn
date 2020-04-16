@@ -48,6 +48,7 @@
     <string name="title_activity_team_create">Create team</string>
     <string name="err_inp_team_name_empty">Name not can be empty</string>
     <string name="err_inp_team_number_empty">Number not can be empty</string>
+    <string name="err_inp_team_garbage">Garbage must be more or equal 0 and not empty</string>
 
     <!--  Игры  -->
     <string name="title_activity_games">Games</string>

@@ -97,4 +97,5 @@
     <string name="err_inp_team_name_empty">Наименование не может быть пустым</string>
     <string name="err_inp_team_number_empty">Номер не может быть пустым</string>
     <string name="err_inp_game_coefficient">Коэффициент должен быть больше или равен нулю и не пустым</string>
+    <string name="err_inp_team_garbage">Количество пакетов мусора/отходов должно быть больше или равно нулю и не пустым</string>
 </resources>
