@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -22,9 +23,13 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Place
 import com.rydvi.clean_vrn.ui.dialog.Dialog
 import com.rydvi.clean_vrn.ui.error.ErrorHandler
+import com.rydvi.clean_vrn.ui.utils.GameStatus
+import com.rydvi.clean_vrn.ui.utils.isAdmin
+import com.rydvi.clean_vrn.ui.utils.isPlayer
 import org.springframework.http.HttpMethod
 
 
@@ -135,6 +140,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             map.uiSettings.isZoomControlsEnabled = true
             map.isMyLocationEnabled = true
             mMapView.onResume()
+
+            toggleButtons()
         }
     }
 
@@ -251,47 +258,68 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     fun toggleButtons() {
         mBtnRemoveLastPoint.visibility = ImageButton.GONE
-        when {
-            mapEditMode === MapEditMode.Reading -> {
-                //Если режим чтения карты, то отображаем возможность для добавления элементов
-                mPanelMarkers.visibility = LinearLayout.VISIBLE
-                mPanelAcceptButtons.visibility = LinearLayout.GONE
-                mPanelMarkerControl.visibility = LinearLayout.GONE
-            }
-            mapEditMode === MapEditMode.Add -> {
-                //Если режим редактирования карты, то отображаем возможность отмены
-                // выбора текущего маркера и
-                when (mapPlaceMode) {
-                    MapPlaceMode.QuestZone -> {
-                        mBtnAccept.show()
-                        mBtnRemoveLastPoint.visibility = ImageButton.VISIBLE
-                        mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
-                        mPanelMarkers.visibility = LinearLayout.GONE
-                        mPanelMarkerControl.visibility = LinearLayout.GONE
-                    }
-                    else -> {
-                        mBtnAccept.hide()
-                        mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
-                        mPanelMarkers.visibility = LinearLayout.GONE
-                        mPanelMarkerControl.visibility = LinearLayout.GONE
-                    }
-                }
-            }
-            mapEditMode === MapEditMode.Edit -> {
-                when (markerActionMode) {
-                    MarkerActions.Move -> {
-                        mPanelMarkerControl.visibility = LinearLayout.GONE
+        DataRepository.selectedGame?.let {
+            if (it.id_status !== GameStatus.completed.getTypeId() && isAdmin()) {
+                when {
+                    mapEditMode === MapEditMode.Reading -> {
+                        //Если режим чтения карты, то отображаем возможность для добавления элементов
+                        mPanelMarkers.visibility = LinearLayout.VISIBLE
                         mPanelAcceptButtons.visibility = LinearLayout.GONE
-                        mPanelMarkers.visibility = LinearLayout.GONE
+                        mPanelMarkerControl.visibility = LinearLayout.GONE
                     }
-                    else -> {
-                        mBtnAccept.hide()
-                        mPanelMarkerControl.visibility = LinearLayout.VISIBLE
-                        mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
-                        mPanelMarkers.visibility = LinearLayout.GONE
+                    mapEditMode === MapEditMode.Add -> {
+                        //Если режим редактирования карты, то отображаем возможность отмены
+                        // выбора текущего маркера и
+                        when (mapPlaceMode) {
+                            MapPlaceMode.QuestZone -> {
+                                mBtnAccept.show()
+                                mBtnRemoveLastPoint.visibility = ImageButton.VISIBLE
+                                mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+                                mPanelMarkers.visibility = LinearLayout.GONE
+                                mPanelMarkerControl.visibility = LinearLayout.GONE
+                            }
+                            else -> {
+                                mBtnAccept.hide()
+                                mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+                                mPanelMarkers.visibility = LinearLayout.GONE
+                                mPanelMarkerControl.visibility = LinearLayout.GONE
+                            }
+                        }
+                    }
+                    mapEditMode === MapEditMode.Edit -> {
+                        when (markerActionMode) {
+                            MarkerActions.Move -> {
+                                mPanelMarkerControl.visibility = LinearLayout.GONE
+                                mPanelAcceptButtons.visibility = LinearLayout.GONE
+                                mPanelMarkers.visibility = LinearLayout.GONE
+                            }
+                            else -> {
+                                mBtnAccept.hide()
+                                mPanelMarkerControl.visibility = LinearLayout.VISIBLE
+                                mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+                                mPanelMarkers.visibility = LinearLayout.GONE
+                            }
+                        }
                     }
                 }
+            } else {
+                mBtnAccept.hide()
+                mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+                mPanelMarkers.visibility = LinearLayout.GONE
+                mPanelMarkerControl.visibility = LinearLayout.GONE
+                mBtnCancel.hide()
             }
+            //Сокрытие кнопок дл указания места проведения игры и места старта игры, если игра началась
+            if (it.id_status === GameStatus.started.getTypeId()) {
+                mBtnSetPlaceQuestZone.visibility = Button.GONE
+                mBtnSetPlaceStart.visibility = Button.GONE
+            }
+        } ?: run {
+            mBtnAccept.hide()
+            mPanelAcceptButtons.visibility = LinearLayout.VISIBLE
+            mPanelMarkers.visibility = LinearLayout.GONE
+            mPanelMarkerControl.visibility = LinearLayout.GONE
+            mBtnCancel.hide()
         }
     }
 

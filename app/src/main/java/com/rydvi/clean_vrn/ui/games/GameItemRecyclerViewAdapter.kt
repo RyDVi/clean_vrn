@@ -1,6 +1,5 @@
 package com.rydvi.clean_vrn.ui.games
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -13,15 +12,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.formatDateTime
 import com.rydvi.clean_vrn.ui.utils.parseISODate
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.game_list_content.view.*
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class GameItemRecyclerViewAdapter(
@@ -43,6 +39,7 @@ class GameItemRecyclerViewAdapter(
     private val onClickListener: View.OnClickListener = View.OnClickListener { v ->
         //Устанавливаем выбранную игру
         val item = v.tag as Game
+        DataRepository.selectedGame = item
         val gamesViewModel =
             ViewModelProviders.of(activity).get(GamesViewModel::class.java)
         item.id?.let {
@@ -66,17 +63,32 @@ class GameItemRecyclerViewAdapter(
         holder.nameView.text = item.name.toString()
         when (item.id_status!!.toInt()) {
             1 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusStarted,null))
+                holder.nameView.setTextColor(
+                    activity.resources.getColor(
+                        R.color.colorTextGameStatusStarted,
+                        null
+                    )
+                )
             } else {
                 holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusStarted))
             }
             2 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusEnded,null))
+                holder.nameView.setTextColor(
+                    activity.resources.getColor(
+                        R.color.colorTextGameStatusEnded,
+                        null
+                    )
+                )
             } else {
                 holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusEnded))
             }
             3 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusPlanned,null))
+                holder.nameView.setTextColor(
+                    activity.resources.getColor(
+                        R.color.colorTextGameStatusPlanned,
+                        null
+                    )
+                )
             } else {
                 holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusPlanned))
             }

@@ -13,10 +13,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.GameStatus
 import com.rydvi.clean_vrn.ui.utils.isAdmin
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -27,6 +28,10 @@ class OrganizatorDetailFragment : Fragment() {
 
     private var organizator: Organizator? = null
     private lateinit var orgsViewModel: OrganizatorsViewModel
+
+    private lateinit var btnOrgDelete: FloatingActionButton
+    private lateinit var btnOrgGenPassword: Button
+    private lateinit var btnOrgEdit: FloatingActionButton
 
 
     override fun onCreateView(
@@ -61,8 +66,7 @@ class OrganizatorDetailFragment : Fragment() {
         })
         orgsViewModel.refreshOrganizators()
 
-        val btnOrgEdit = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_edit)
-        if (!isAdmin()) btnOrgEdit.hide() else btnOrgEdit.show()
+        btnOrgEdit = rootView.findViewById(R.id.btn_organizator_edit)
         btnOrgEdit.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_organizator_create_edit, Bundle().apply {
@@ -71,8 +75,7 @@ class OrganizatorDetailFragment : Fragment() {
                 })
         }
 
-        val btnOrgDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_organizator_delete)
-        if (!isAdmin()) btnOrgDelete.hide() else btnOrgDelete.show()
+        btnOrgDelete = rootView.findViewById(R.id.btn_organizator_delete)
         btnOrgDelete.setOnClickListener {
             orgsViewModel.deleteOrganizator(organizator!!.id!!) {
                 activity!!.runOnUiThread {
@@ -86,8 +89,7 @@ class OrganizatorDetailFragment : Fragment() {
             }
         }
 
-        val btnOrgGenPassword = rootView.findViewById<Button>(R.id.btn_generate_password)
-        if (!isAdmin()) btnOrgGenPassword.visibility = View.GONE else btnOrgGenPassword.visibility = View.VISIBLE
+        btnOrgGenPassword = rootView.findViewById(R.id.btn_generate_password)
         btnOrgGenPassword.setOnClickListener {
             acceptDialog {
                 orgsViewModel.generatePassword(organizator!!.id!!) { generatedPassword ->
@@ -97,6 +99,7 @@ class OrganizatorDetailFragment : Fragment() {
                 }
             }
         }
+        toggleButtons()
         return rootView
     }
 
@@ -126,6 +129,30 @@ class OrganizatorDetailFragment : Fragment() {
         activity!!.runOnUiThread {
             builder.create().show()
         }
+    }
+
+    fun toggleButtons() {
+        DataRepository.selectedGame?.let {
+            if (it.id_status !== GameStatus.completed.getTypeId()) {
+                if (!isAdmin()) {
+                    hideAllButtons()
+                } else {
+                    btnOrgDelete.show()
+                    btnOrgEdit.show()
+                    btnOrgGenPassword.visibility = View.VISIBLE
+                }
+            } else {
+                hideAllButtons()
+            }
+        }?:run  {
+            hideAllButtons()
+        }
+    }
+
+    fun hideAllButtons() {
+        btnOrgDelete.hide()
+        btnOrgEdit.hide()
+        btnOrgGenPassword.visibility = View.GONE
     }
 
     private fun _navToOrgs() {

@@ -29,7 +29,7 @@ class MarkerControl(map: GoogleMap, context: Context) {
             MarkerOptions().position(location).title(title).icon(
                 drawableId?.let {
                     bitmapDescriptorFromVectorInMapMarker(context!!, drawableId)
-                }?.also {
+                }?:run  {
                     bitmapDescriptorFromVector(context!!, R.drawable.ic_map_pin_filled_blue_48dp)
                 }
             ).draggable(true)

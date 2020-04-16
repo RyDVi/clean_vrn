@@ -13,8 +13,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Organizator
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.GameStatus
 import com.rydvi.clean_vrn.ui.utils.isAdmin
 import com.rydvi.clean_vrn.ui.utils.isPlayer
 import kotlinx.android.synthetic.main.content_main.*
@@ -25,6 +27,8 @@ class OrganizatorsFragment : Fragment() {
     private lateinit var organizatorsViewModel: OrganizatorsViewModel
     private var twoPane: Boolean = false
     private lateinit var swipeRefreshOrganizators: SwipeRefreshLayout
+
+    private lateinit var btnOrgAdd: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,8 +44,7 @@ class OrganizatorsFragment : Fragment() {
             setupRecyclerView(organzatorList, it)
         })
 
-        val btnOrgAdd = root.findViewById<FloatingActionButton>(R.id.btn_organizator_add)
-        if (!isAdmin()) btnOrgAdd.hide() else btnOrgAdd.show()
+        btnOrgAdd = root.findViewById(R.id.btn_organizator_add)
         btnOrgAdd.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_organizator_create_edit, Bundle().apply {
@@ -55,6 +58,7 @@ class OrganizatorsFragment : Fragment() {
         swipeRefreshOrganizators = root.findViewById(R.id.swipeRefreshOrganizators)
         swipeRefreshOrganizators.setOnRefreshListener { onRefreshOrganizatorsRecyclerView() }
 
+        toggleButtons()
         return root
     }
 
@@ -74,5 +78,17 @@ class OrganizatorsFragment : Fragment() {
         organizatorsViewModel.refreshOrganizators()?.observe(this, Observer {
             swipeRefreshOrganizators.isRefreshing = false
         })
+    }
+
+    fun toggleButtons(){
+        DataRepository.selectedGame?.let {
+            if(it.id_status!== GameStatus.completed.getTypeId()){
+                if (!isAdmin()) btnOrgAdd.hide() else btnOrgAdd.show()
+            } else {
+                btnOrgAdd.hide()
+            }
+        }?:run  {
+            btnOrgAdd.hide()
+        }
     }
 }

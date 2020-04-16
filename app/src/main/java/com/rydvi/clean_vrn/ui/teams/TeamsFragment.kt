@@ -13,8 +13,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.GameStatus
 import com.rydvi.clean_vrn.ui.utils.isAdmin
 import com.rydvi.clean_vrn.ui.utils.isPlayer
 import kotlinx.android.synthetic.main.content_main.*
@@ -25,6 +27,8 @@ class TeamsFragment : Fragment() {
     private var twoPane: Boolean = false
     private lateinit var teamsViewModel: TeamsViewModel
     private lateinit var swipeRefreshTeams: SwipeRefreshLayout
+
+    private lateinit var btnTeamAdd:FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,8 +46,7 @@ class TeamsFragment : Fragment() {
             twoPane = true
         }
 
-        val btnTeamAdd = root.findViewById<FloatingActionButton>(R.id.btn_team_add)
-        if (isPlayer()) btnTeamAdd.hide() else btnTeamAdd.show()
+        btnTeamAdd = root.findViewById(R.id.btn_team_add)
         btnTeamAdd.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_team_create_edit, Bundle().apply {
@@ -53,6 +56,7 @@ class TeamsFragment : Fragment() {
 
         swipeRefreshTeams = root.findViewById(R.id.swipeRefreshTeams)
         swipeRefreshTeams.setOnRefreshListener { onRefreshTeamsRecyclerView() }
+        toggleButtons()
         return root
     }
 
@@ -70,5 +74,17 @@ class TeamsFragment : Fragment() {
         teamsViewModel.refreshTeams()?.observe(this, Observer {
             swipeRefreshTeams.isRefreshing = false
         })
+    }
+
+    fun toggleButtons(){
+        DataRepository.selectedGame?.let {
+            if(it.id_status!==GameStatus.completed.getTypeId()){
+                if (isPlayer()) btnTeamAdd.hide() else btnTeamAdd.show()
+            } else {
+                btnTeamAdd.hide()
+            }
+        }?:run {
+            btnTeamAdd.hide()
+        }
     }
 }

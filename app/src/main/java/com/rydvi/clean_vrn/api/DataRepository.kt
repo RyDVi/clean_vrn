@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate
 object DataRepository {
     private const val base_url = "http://192.168.0.1"
 
+    var selectedGame: Game? = null
+
     private var session: Session? = null
     fun getSession() = session
 
@@ -535,7 +537,7 @@ object DataRepository {
     private fun getErrorByEx(httpErrorEx: HttpClientErrorException): Error? =
         httpErrorEx.responseBodyAsByteArray?.let {
             ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
-        }?.also {
+        }?:run  {
             Error().apply {
                 msg = httpErrorEx.message
                 code = httpErrorEx.statusCode.value()

@@ -16,8 +16,10 @@ import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
+import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Team
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
+import com.rydvi.clean_vrn.ui.utils.GameStatus
 import com.rydvi.clean_vrn.ui.utils.isPlayer
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -27,6 +29,9 @@ class TeamDetailFragment : Fragment() {
 
     private lateinit var teamsViewModel: TeamsViewModel
     private var team: Team? = null
+
+    private lateinit var btnTeamEdit: FloatingActionButton
+    private lateinit var btnTeamDelete: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +49,9 @@ class TeamDetailFragment : Fragment() {
                     val idTeam: Long = it.getLong(ARG_ITEM_ID)
                     team = teams.find { team -> team.id == idTeam }
                     team?.let {
-                        activity?.toolbar?.title = activity!!.resources.getString(R.string.title_team_detail)+
-                            " №${team?.number}  ${team?.name}"
+                        activity?.toolbar?.title =
+                            activity!!.resources.getString(R.string.title_team_detail) +
+                                    " №${team?.number}  ${team?.name}"
                     }
                 }
             }
@@ -89,8 +95,7 @@ class TeamDetailFragment : Fragment() {
         })
         teamsViewModel.refreshTeams()
 
-        val btnTeamEdit = rootView.findViewById<FloatingActionButton>(R.id.btn_team_edit)
-        if (isPlayer()) btnTeamEdit.hide() else btnTeamEdit.show()
+        btnTeamEdit = rootView.findViewById(R.id.btn_team_edit)
         btnTeamEdit.setOnClickListener {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_team_create_edit, Bundle().apply {
@@ -99,8 +104,7 @@ class TeamDetailFragment : Fragment() {
                 })
         }
 
-        val btnTeamDelete = rootView.findViewById<FloatingActionButton>(R.id.btn_team_delete)
-        if (isPlayer()) btnTeamDelete.hide() else btnTeamDelete.show()
+        btnTeamDelete = rootView.findViewById(R.id.btn_team_delete)
         btnTeamDelete.setOnClickListener {
             teamsViewModel.deleteTeam(team!!.id!!) {
                 activity!!.runOnUiThread {
@@ -113,7 +117,7 @@ class TeamDetailFragment : Fragment() {
                 _navToTeams()
             }
         }
-
+        toggleButtons()
         return rootView
     }
 
@@ -165,6 +169,26 @@ class TeamDetailFragment : Fragment() {
         activity!!.runOnUiThread {
             activity!!.findNavController(activity!!.nav_host_fragment.id)
                 .navigate(R.id.nav_teams)
+        }
+    }
+
+    fun toggleButtons() {
+        DataRepository.selectedGame?.let {
+            if (it.id_status !== GameStatus.completed.getTypeId()) {
+                if (isPlayer()) {
+                    btnTeamEdit.hide()
+                    btnTeamDelete.hide()
+                } else {
+                    btnTeamEdit.show()
+                    btnTeamDelete.show()
+                }
+            } else {
+                btnTeamEdit.hide()
+                btnTeamDelete.hide()
+            }
+        }?:run {
+            btnTeamEdit.hide()
+            btnTeamDelete.hide()
         }
     }
 
