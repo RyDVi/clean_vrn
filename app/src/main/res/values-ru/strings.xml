@@ -98,4 +98,8 @@
     <string name="err_inp_team_number_empty">Номер не может быть пустым</string>
     <string name="err_inp_game_coefficient">Коэффициент должен быть больше или равен нулю и не пустым</string>
     <string name="err_inp_team_garbage">Количество пакетов мусора/отходов должно быть больше или равно нулю и не пустым</string>
+    <string name="txt_game_status_started">Начата</string>
+    <string name="txt_game_status_completed">Завершена</string>
+    <string name="txt_game_status_planned">Запланирована</string>
+    <string name="lbl_game_status">Статус</string>
 </resources>

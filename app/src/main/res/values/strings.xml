@@ -74,6 +74,10 @@
     <string name="game_complete_the_game_btn_ok">Complete</string>
     <string name="game_complete_the_game_btn_cancel">Cancel</string>
     <string name="game_complete_the_game_completed_msg">Game completed successfully</string>
+    <string name="txt_game_status_started">Started</string>
+    <string name="txt_game_status_completed">Completed</string>
+    <string name="txt_game_status_planned">Planned</string>
+    <string name="lbl_game_status">Status</string>
 
     <!--  Игры редактировани/создание  -->
     <string name="title_activity_game_edit">Edit game</string>
@@ -148,5 +152,4 @@
     <string name="map_marker_title_toilet">Toilet</string>
     <string name="map_marker_title_another_place">Another place</string>
     <string name="map_marker_title_start_place">Start place</string>
-
 </resources>

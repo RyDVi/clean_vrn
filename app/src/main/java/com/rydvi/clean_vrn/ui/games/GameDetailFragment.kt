@@ -66,6 +66,13 @@ class GameDetailFragment : Fragment() {
             item?.let { game ->
                 rootView.txt_game_datetime.text = formatDateTime(game.datetimeInDate()!!)
                 rootView.txt_game_route.text = game.route
+                rootView.txt_game_status.text = getTextByGameStatus(context!!, game.id_status!!)
+                rootView.txt_game_status.setTextColor(
+                    getColorByGameStatus(
+                        context!!,
+                        game.id_status!!
+                    )!!
+                )
                 gamesViewModel.refreshCoefficients(game.id)?.observe(this, Observer {
                     setupRecyclerCoefficients(
                         rootView.recycler_game_detail_coefficients,
