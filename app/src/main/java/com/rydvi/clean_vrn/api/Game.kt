@@ -1,6 +1,6 @@
 package com.rydvi.clean_vrn.api
 
-import com.rydvi.clean_vrn.ui.utils.parseISODate
+import com.rydvi.clean_vrn.ui.utils.parseDate
 import java.util.*
 
 class Game {
@@ -40,6 +40,6 @@ class Game {
             field = value
         }
 
-    fun datetimeInDate(): Date? = parseISODate(datetime)
+    fun datetimeInDate(): Date? = parseDate(datetime)
 
 }

@@ -15,7 +15,6 @@ import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.utils.formatDateTime
-import com.rydvi.clean_vrn.ui.utils.parseISODate
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.game_list_content.view.*
 
@@ -95,8 +94,8 @@ class GameItemRecyclerViewAdapter(
         }
         holder.descriptionView.text = item.description.toString()
 
-        val date = parseISODate(item.datetime!!)
-        holder.datetimeView.text = formatDateTime(date)
+        val date = item.datetimeInDate()
+        holder.datetimeView.text = date?.let { formatDateTime(it) } ?: ""
 
         with(holder.itemView) {
             tag = item

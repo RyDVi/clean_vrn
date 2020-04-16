@@ -20,4 +20,14 @@ fun parseISODate(dateISO: String?): Date {
     }
 }
 
-fun formatDateTime(date: Date): String = SimpleDateFormat("dd.MM.yyyy hh:mm").format(date)
+fun parseDate(date: String?): Date? {
+    date?.let {
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
+    } ?: run {
+        return null
+    }
+}
+
+fun formatDateTime(date: Date): String = SimpleDateFormat("dd.MM.yyyy HH:mm").format(date)
+fun formatDate(date: Date): String = SimpleDateFormat("dd.MM.yyyy").format(date)
+fun formatTime(date: Date): String = SimpleDateFormat("HH:mm").format(date)

@@ -20,9 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.ui.login.afterTextChanged
-import com.rydvi.clean_vrn.ui.utils.CreateEditMode
-import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
-import com.rydvi.clean_vrn.ui.utils.parseWithZero
+import com.rydvi.clean_vrn.ui.utils.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
@@ -74,7 +72,7 @@ class GameCreateEditFragment : Fragment() {
                 inpGameName.setText(game.name)
                 inpGameRoute.setText(game.route)
 
-
+                setupDatetimeFields(rootView, game)
                 gamesViewModel.getCoefficients(idGame)?.observe(this, Observer { coefficients ->
                     setupRecyclerCoefficients(idGame)
                 })
@@ -87,15 +85,15 @@ class GameCreateEditFragment : Fragment() {
             gamesViewModel.getCoefficients(null)?.observe(this, Observer {
                 setupRecyclerCoefficients(null)
             })
+            setupDatetimeFields(rootView, null)
         }
-
 
         btnSave = rootView.findViewById<FloatingActionButton>(R.id.btn_game_save)
         btnSave.setOnClickListener {
             val dateTime =
-                "$mYear-${parseWithZero(mMonth)}-${parseWithZero(mDay)}T${parseWithZero(mHour)}:${parseWithZero(
+                "$mYear-${parseWithZero(mMonth)}-${parseWithZero(mDay)} ${parseWithZero(mHour)}:${parseWithZero(
                     mMinute
-                )}:00Z"
+                )}:00"
             _updateFormState()
             if (!hasErrorForm) {
                 if (editMode === CreateEditMode.EDIT) {
@@ -124,15 +122,39 @@ class GameCreateEditFragment : Fragment() {
             }
         }
 
+        _setupFormStateUpdater()
+
+        return rootView
+    }
+
+    private fun setupDatetimeFields(rootView: View, game: Game?) {
+        val calendar = Calendar.getInstance()
+        game?.let {
+            val currentDatetime = it.datetimeInDate()!!
+            //Установка полученного времени игры
+            inpGameDate.setText(formatDate(currentDatetime))
+            inpGameTime.setText(formatTime(currentDatetime))
+            calendar.time = currentDatetime
+            mYear = calendar.get(Calendar.YEAR)
+            mMonth = calendar.get(Calendar.MONTH) + 1
+            mDay = calendar.get(Calendar.DAY_OF_MONTH)
+            mHour = calendar.get(Calendar.HOUR_OF_DAY)
+            mMinute = calendar.get(Calendar.MINUTE)
+        }
+
         val btnGameDate = rootView.findViewById<ImageButton>(R.id.btn_game_date)
         btnGameDate.setOnClickListener {
-            val c = Calendar.getInstance()
-            mYear = c.get(Calendar.YEAR)
-            mMonth = c.get(Calendar.MONTH)
-            mDay = c.get(Calendar.DAY_OF_MONTH)
+            if (game == null) {
+                mYear = calendar.get(Calendar.YEAR)
+                mMonth = calendar.get(Calendar.MONTH)
+                mDay = calendar.get(Calendar.DAY_OF_MONTH)
+            }
             val datePickerDialog = DatePickerDialog(
                 activity!!,
-                OnDateSetListener { view, year, month, day ->
+                OnDateSetListener { _, year, month, day ->
+                    mDay = day
+                    mMonth = month + 1
+                    mYear = year
                     val resultDay = if (day < 10) "0$day" else day
                     val resultMonth = if (month < 10) "0${month + 1}" else month + 1
                     inpGameDate.setText("$resultDay.$resultMonth.$year")
@@ -151,12 +173,15 @@ class GameCreateEditFragment : Fragment() {
 
         val btnGameTime = rootView.findViewById<ImageButton>(R.id.btn_game_time)
         btnGameTime.setOnClickListener {
-            val c = Calendar.getInstance()
-            mHour = c.get(Calendar.HOUR_OF_DAY)
-            mMinute = c.get(Calendar.MINUTE)
+            if(game==null){
+                mHour = calendar.get(Calendar.HOUR_OF_DAY)
+                mMinute = calendar.get(Calendar.MINUTE)
+            }
             val timePickerDialog = TimePickerDialog(
                 activity!!,
                 TimePickerDialog.OnTimeSetListener { view, hour, minute ->
+                    mHour = hour
+                    mMinute = minute
                     val resultHour = if (hour < 10) "0$hour" else hour
                     val resultMinute = if (minute < 10) "0$minute" else minute
                     inpGameTime.setText("$resultHour:$resultMinute")
@@ -172,10 +197,6 @@ class GameCreateEditFragment : Fragment() {
             )
             timePickerDialog.show()
         }
-
-        _setupFormStateUpdater()
-
-        return rootView
     }
 
     private fun _setupFormStateUpdater() {
