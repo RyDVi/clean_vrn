@@ -66,7 +66,7 @@ class GameDetailFragment : Fragment() {
             item?.let { game ->
                 rootView.txt_game_datetime.text = formatDateTime(game.datetimeInDate()!!)
                 rootView.txt_game_route.text = game.route
-                gamesViewModel.getCoefficients(game.id)?.observe(this, Observer {
+                gamesViewModel.refreshCoefficients(game.id)?.observe(this, Observer {
                     setupRecyclerCoefficients(
                         rootView.recycler_game_detail_coefficients,
                         game.id
@@ -147,7 +147,6 @@ class GameDetailFragment : Fragment() {
             }
         })
         gamesViewModel.refreshGames()
-
         return rootView
     }
 

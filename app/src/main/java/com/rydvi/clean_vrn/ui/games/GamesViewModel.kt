@@ -30,6 +30,16 @@ class GamesViewModel : ViewModel() {
         return dataGames
     }
 
+    fun refreshCoefficients(idGame: Long?): MutableLiveData<Array<Coefficient>>? {
+        if (dataCoefficients == null) {
+            dataCoefficients = MutableLiveData()
+        }
+        DataRepository.getCoefficients(idGame, {
+            dataCoefficients?.postValue(it)
+        }, {})
+        return dataCoefficients
+    }
+
     fun selectGame(id_game: Long, callbackSuccess: () -> Unit, callbackFailed: (Error) -> Unit) {
         DataRepository.selectGame(id_game, callbackSuccess, callbackFailed)
     }
@@ -39,7 +49,7 @@ class GamesViewModel : ViewModel() {
             dataCoefficients = MutableLiveData()
             DataRepository.getCoefficients(idGame, {
                 dataCoefficients?.postValue(it)
-            },{})
+            }, {})
         }
         return dataCoefficients!!
     }
