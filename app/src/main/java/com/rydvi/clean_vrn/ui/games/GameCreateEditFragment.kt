@@ -4,12 +4,9 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
@@ -20,10 +17,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Game
-import com.rydvi.clean_vrn.ui.login.LoginViewModelFactory
 import com.rydvi.clean_vrn.ui.login.afterTextChanged
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
@@ -101,6 +96,7 @@ class GameCreateEditFragment : Fragment() {
                 "$mYear-${parseWithZero(mMonth)}-${parseWithZero(mDay)}T${parseWithZero(mHour)}:${parseWithZero(
                     mMinute
                 )}:00Z"
+            _updateFormState()
             if (!hasErrorForm) {
                 if (editMode === CreateEditMode.EDIT) {
                     if (inpGameName.text.toString() !== game.name || inpGameRoute.text.toString() !== game.route) {
@@ -228,10 +224,16 @@ class GameCreateEditFragment : Fragment() {
             inpGameName.error = null
         }
         btnSave.isEnabled = !hasErrorForm
+        //Не запрещаем нажимать кнопку, но статус всё-равно меняем на ошибку
+        recyclerCoefficients?.adapter?.let {
+            if ((it as GarbageCoefficientItemRecyclerViewAdapter).onCheckTextsHasError()) {
+                hasErrorForm = true
+            }
+        }
     }
 
     fun setupRecyclerCoefficients(idGame: Long?) {
-        val adapterGarbagesCoefficients =
+        val adapterGarbageCoefficients =
             GarbageCoefficientItemRecyclerViewAdapter(
                 activity!!,
                 gamesViewModel.getCoefficients(idGame),
@@ -242,7 +244,7 @@ class GameCreateEditFragment : Fragment() {
 
         recyclerCoefficients.apply {
             layoutManager = linearLayoutManagerVertical
-            adapter = adapterGarbagesCoefficients
+            adapter = adapterGarbageCoefficients
         }
     }
 

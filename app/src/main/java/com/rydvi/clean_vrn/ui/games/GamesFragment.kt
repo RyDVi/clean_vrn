@@ -18,6 +18,7 @@ import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
+import com.rydvi.clean_vrn.ui.interfaces.OnEditText
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.UserType
 import com.rydvi.clean_vrn.ui.utils.getUserTypeByTypeId

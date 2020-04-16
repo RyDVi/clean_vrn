@@ -80,6 +80,7 @@
     <string name="err_inp_game_date">Not correct date</string>
     <string name="err_inp_game_time">Not correct time</string>
     <string name="err_inp_game_name">Not correct game name</string>
+    <string name="err_inp_game_coefficient">Coefficient must be more or equal 0 and not empty</string>
 
     <!--  Организаторы  -->
     <string name="title_organizator_list">Organizators</string>

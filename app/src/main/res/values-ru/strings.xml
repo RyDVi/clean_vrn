@@ -96,4 +96,5 @@
     <string name="err_inp_org_lastname_empty">Фамилия не может быть пустым</string>
     <string name="err_inp_team_name_empty">Наименование не может быть пустым</string>
     <string name="err_inp_team_number_empty">Номер не может быть пустым</string>
+    <string name="err_inp_game_coefficient">Коэффициент должен быть больше или равен нулю и не пустым</string>
 </resources>
