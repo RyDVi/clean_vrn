@@ -36,6 +36,13 @@ class MapViewModel : ViewModel() {
         return dataPlaces!!
     }
 
+    fun refreshPlaces(): MutableLiveData<Array<Place>> {
+        DataRepository.getPlaces({
+            dataPlaces?.postValue(it)
+        }, {})
+        return dataPlaces!!
+    }
+
     private val _text = MutableLiveData<String>().apply {
         value = "This is map Fragment"
     }

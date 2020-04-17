@@ -26,7 +26,7 @@ class Place {
             field = value
         }
 
-    @JsonProperty("type")
+    @JsonProperty("id_place_type")
     var placeType: Int? = null
         get() = field
         set(value) {

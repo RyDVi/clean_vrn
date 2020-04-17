@@ -11,6 +11,8 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -67,6 +69,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var polygonControl: PolygonControl
     private lateinit var placesSearch: PlacesSearch
 
+    private lateinit var googleMap: GoogleMap
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,6 +81,25 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         mapViewModel =
             ViewModelProviders.of(this).get(MapViewModel::class.java)
         _setupButtonsAndClickListeners(rootView)
+
+        mapViewModel.getPlaces()?.observe(this, Observer { places ->
+            googleMap?.let {
+                googleMap.clear()
+                for (place in places) {
+                    if (place.placeType === MapPlaceMode.QuestZone.getPlaceId()) {
+                        polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
+                    } else {
+                        markerControl.addMarkerByPlaceTypeID(
+                            place.point!!.toGoogleLatLng(),
+                            place.id,
+                            place.placeType!!,
+                            place.description!!
+                        )
+                    }
+                }
+            }
+        })
+        mapViewModel.refreshPlaces()
 
         return rootView
     }
@@ -89,8 +112,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             mMapView.onResume()
             mMapView.getMapAsync(this)
         }
-
-
     }
 
     /**
@@ -104,6 +125,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
      */
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap?.let { map ->
+            this@MapFragment.googleMap = map
             markerControl = MarkerControl(map, activity!!)
             map.setOnMapClickListener(this)
             map.setOnMarkerClickListener(this)
@@ -114,27 +136,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             placesSearch = PlacesSearch(mSearchView, map, context!!)
             mSearchView.setOnQueryTextListener(placesSearch)
 
-//            mapViewModel.getPlaces()?.observe(this, Observer { places ->
-//                for (place in places) {
-//                    if (place.placeType === MapPlaceMode.QuestZone.getPlaceId()) {
-//                        polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
-//                    } else {
-//                        markerControl.addMarkerByPlaceTypeID(
-//                            place.point!!.toGoogleLatLng(),
-//                            place.id,
-//                            place.placeType!!,
-//                            place.description!!
-//                        )
-//                    }
-//                }
-//            })
-
             // Move camera to voronezh position
             map.moveCamera(CameraUpdateFactory.newLatLng(VORONEZH_LOCATION))
             map.animateCamera(CameraUpdateFactory.zoomTo(12.0f))
             map.uiSettings.isZoomControlsEnabled = true
             map.isMyLocationEnabled = true
             mMapView.onResume()
+
+            mapViewModel.refreshPlaces()
 
             toggleButtons()
         }
