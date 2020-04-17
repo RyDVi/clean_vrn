@@ -1,12 +1,9 @@
 package com.rydvi.clean_vrn.ui.login
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,10 +11,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.ui.error.ErrorHandler
+import com.rydvi.clean_vrn.ui.teams.TeamCreateEditFragment
+import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString
 
 class LoginActivity : AppCompatActivity() {
 
@@ -105,6 +108,12 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString(), false, {
+                    //Сохранение учетных данных
+                    UserData(
+                        this@LoginActivity,
+                        username = username.text.toString(),
+                        password = password.text.toString()
+                    ).save()
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 },
@@ -120,6 +129,27 @@ class LoginActivity : AppCompatActivity() {
                 }, { }
                 )
             }
+        }
+
+        if(intent.getBooleanExtra(LOGOUT_NAV_EXTRA, false)){
+            UserData.clear(this)
+        } else {
+            tryLoadUserData(this)
+        }
+    }
+
+    /**
+     * Попытка загрузки учетных данных
+     */
+    private fun tryLoadUserData(context: Context) {
+        val userData = UserData(this, null, null).load()
+        if (!userData.username.isNullOrEmpty() && !userData.password.isNullOrEmpty()) {
+            loginViewModel.login(userData.username!!, userData.password!!, false, {
+                val intent = Intent(context, MainActivity::class.java)
+                context.startActivity(intent)
+            },
+                { }
+            )
         }
     }
 
@@ -142,6 +172,10 @@ class LoginActivity : AppCompatActivity() {
         runOnUiThread {
             loading.visibility = if (isShow) View.VISIBLE else View.GONE
         }
+    }
+
+    companion object {
+        const val LOGOUT_NAV_EXTRA = "logout_nav"
     }
 }
 

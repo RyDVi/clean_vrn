@@ -22,6 +22,7 @@ import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.ui.error.ErrorHandler
 import com.rydvi.clean_vrn.ui.games.GamesFragment
 import com.rydvi.clean_vrn.ui.login.LoginActivity
+import com.rydvi.clean_vrn.ui.login.UserData
 import com.rydvi.clean_vrn.ui.utils.UserType
 import com.rydvi.clean_vrn.ui.utils.isAdmin
 
@@ -87,7 +88,9 @@ class MainActivity : AppCompatActivity() {
                     //Переопределяем кнопку меню exit
                     R.id.nav_exit -> {
                         DataRepository.logout({
-                            val intent = Intent(this, LoginActivity::class.java)
+                            UserData.clear(this)
+                            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                            intent.putExtra(LoginActivity.LOGOUT_NAV_EXTRA, true)
                             startActivity(intent)
                         }, {})
                         true
