@@ -1,9 +1,7 @@
 package com.rydvi.clean_vrn.ui.dialog
 
 import android.app.Activity
-import android.text.InputType
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 
 class Dialog(activity: Activity) {

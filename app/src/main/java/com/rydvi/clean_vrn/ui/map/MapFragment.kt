@@ -11,7 +11,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,16 +20,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Place
 import com.rydvi.clean_vrn.ui.dialog.Dialog
-import com.rydvi.clean_vrn.ui.error.ErrorHandler
 import com.rydvi.clean_vrn.ui.utils.GameStatus
 import com.rydvi.clean_vrn.ui.utils.isAdmin
-import com.rydvi.clean_vrn.ui.utils.isPlayer
-import org.springframework.http.HttpMethod
 
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,

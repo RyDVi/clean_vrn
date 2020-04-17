@@ -7,7 +7,6 @@ import androidx.appcompat.widget.SearchView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import java.io.IOException
 
 class PlacesSearch(searchView: SearchView, map: GoogleMap, context: Context) :

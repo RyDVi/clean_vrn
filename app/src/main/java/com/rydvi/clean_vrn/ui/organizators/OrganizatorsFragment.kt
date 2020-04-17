@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -52,7 +53,11 @@ class OrganizatorsFragment : Fragment() {
                         OragnizatorCreateEditFragment.ORG_MODE,
                         CreateEditMode.CREATE.getMode()
                     )
-                })
+                }, NavOptions.Builder()
+                    .setPopUpTo(
+                        R.id.nav_organizators,
+                        false
+                    ).build())
         }
 
         organizatorsViewModel.refreshOrganizators()

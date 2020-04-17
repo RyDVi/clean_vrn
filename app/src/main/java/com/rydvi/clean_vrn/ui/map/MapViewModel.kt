@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Error
-import com.rydvi.clean_vrn.api.Game
 import com.rydvi.clean_vrn.api.Place
 
 class MapViewModel : ViewModel() {

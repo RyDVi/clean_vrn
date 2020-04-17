@@ -278,7 +278,7 @@ class GameCreateEditFragment : Fragment() {
                     }, NavOptions.Builder()
                         .setPopUpTo(
                             R.id.nav_games,
-                            true
+                            false
                         ).build()
                 )
         }

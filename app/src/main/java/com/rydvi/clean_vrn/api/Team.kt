@@ -1,7 +1,6 @@
 package com.rydvi.clean_vrn.api
 
 import org.codehaus.jackson.annotate.JsonProperty
-import org.codehaus.jackson.annotate.JsonValue
 
 class Team{
     var id:Long? = null

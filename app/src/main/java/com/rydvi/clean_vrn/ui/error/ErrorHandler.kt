@@ -1,8 +1,6 @@
 package com.rydvi.clean_vrn.ui.error
 
 import android.app.Activity
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AlertDialog
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Error

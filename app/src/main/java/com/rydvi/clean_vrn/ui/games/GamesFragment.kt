@@ -1,6 +1,5 @@
 package com.rydvi.clean_vrn.ui.games
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,14 +13,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
-import com.rydvi.clean_vrn.api.DataRepository
 import com.rydvi.clean_vrn.api.Game
-import com.rydvi.clean_vrn.ui.interfaces.OnEditText
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
-import com.rydvi.clean_vrn.ui.utils.UserType
-import com.rydvi.clean_vrn.ui.utils.getUserTypeByTypeId
 import com.rydvi.clean_vrn.ui.utils.isAdmin
 import kotlinx.android.synthetic.main.content_main.*
 

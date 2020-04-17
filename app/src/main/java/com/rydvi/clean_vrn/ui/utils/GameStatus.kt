@@ -3,7 +3,6 @@ package com.rydvi.clean_vrn.ui.utils
 import android.content.Context
 import android.os.Build
 import com.rydvi.clean_vrn.R
-import kotlinx.android.synthetic.main.fragment_game_detail.view.*
 
 enum class GameStatus {
     started {

@@ -1,15 +1,12 @@
 package com.rydvi.clean_vrn.ui.teams
 
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
@@ -18,11 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
-import com.rydvi.clean_vrn.MainActivity
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
-import com.rydvi.clean_vrn.ui.games.GameDetailFragment
-import com.rydvi.clean_vrn.ui.games.GarbageCoefficientItemRecyclerViewAdapter
 import com.rydvi.clean_vrn.ui.login.afterTextChanged
 import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import com.rydvi.clean_vrn.ui.utils.getCreateEditModeByString

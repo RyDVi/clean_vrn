@@ -1,6 +1,5 @@
 package com.rydvi.clean_vrn.ui.teams
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.Team
-import com.rydvi.clean_vrn.ui.games.GameDetailFragment
-import com.rydvi.clean_vrn.ui.utils.CreateEditMode
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.team_list_content.view.*
 

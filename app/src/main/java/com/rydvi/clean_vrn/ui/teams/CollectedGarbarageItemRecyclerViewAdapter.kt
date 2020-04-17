@@ -1,6 +1,5 @@
 package com.rydvi.clean_vrn.ui.teams
 
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.rydvi.clean_vrn.R
 import com.rydvi.clean_vrn.api.CollectedGarbage
 import com.rydvi.clean_vrn.ui.interfaces.OnEditText
