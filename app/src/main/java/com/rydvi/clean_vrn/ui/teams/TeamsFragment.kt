@@ -54,6 +54,8 @@ class TeamsFragment : Fragment() {
                 })
         }
 
+        teamsViewModel.refreshTeams()
+
         swipeRefreshTeams = root.findViewById(R.id.swipeRefreshTeams)
         swipeRefreshTeams.setOnRefreshListener { onRefreshTeamsRecyclerView() }
         toggleButtons()
