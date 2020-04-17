@@ -55,6 +55,8 @@ class OrganizatorsFragment : Fragment() {
                 })
         }
 
+        organizatorsViewModel.refreshOrganizators()
+
         swipeRefreshOrganizators = root.findViewById(R.id.swipeRefreshOrganizators)
         swipeRefreshOrganizators.setOnRefreshListener { onRefreshOrganizatorsRecyclerView() }
 
