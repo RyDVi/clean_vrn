@@ -102,4 +102,27 @@
     <string name="txt_game_status_completed">Завершена</string>
     <string name="txt_game_status_planned">Запланирована</string>
     <string name="lbl_game_status">Статус</string>
+    <string name="dlg_marker_remove">Удалить</string>
+    <string name="dlg_marker_move">Перенести</string>
+    <string name="dlg_marker_rename">Переименовать</string>
+    <string name="dlg_marker_select_action">Выберите действие</string>
+    <string name="dlg_place_remove_accept_msg">Вы действительно хотите удалить это место?</string>
+    <string name="dlg_place_remove_accept_accept">Да, удалить</string>
+    <string name="dlg_place_remove_accept_cancel">Отмена</string>
+    <string name="dlg_marker_rename_title">Введите описание</string>
+    <string name="dlg_marker_rename_accept">Подтвердить</string>
+    <string name="dlg_marker_rename_cancel">Отмена</string>
+    <string name="dlg_place_move_accept_msg">Вы действительно хотите перенести место на эту позицию?</string>
+    <string name="dlg_place_move_accept_accept">Да, перенести</string>
+    <string name="dlg_place_move_accept_cancel">Отмена</string>
+    <string name="dlg_accept_reset_start_point_msg">Вы действительно хотите изменить точку старта?</string>
+    <string name="dlg_accept_reset_start_point_ok">Да, изменить</string>
+    <string name="dlg_accept_reset_start_point_cancel">Отмена</string>
+    <string name="dlg_accept_reset_quest_zone_msg">Вы действительно хотите изменить зону проведения квеста?</string>
+    <string name="dlg_accept_reset_quest_zone_ok">Да, изменить</string>
+    <string name="dlg_accept_reset_quest_zone_cancel">Отмена</string>
+    <string name="map_marker_title_garbage">Отходы</string>
+    <string name="map_marker_title_toilet">Туалет</string>
+    <string name="map_marker_title_another_place">Другое место</string>
+    <string name="map_marker_title_start_place">Точка старта</string>
 </resources>
