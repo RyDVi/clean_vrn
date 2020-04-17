@@ -104,7 +104,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
      */
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap?.let { map ->
-            markerControl = MarkerControl(map, context!!)
+            markerControl = MarkerControl(map, activity!!)
             map.setOnMapClickListener(this)
             map.setOnMarkerClickListener(this)
             map.setOnMarkerDragListener(this)
@@ -154,11 +154,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             MapEditMode.Add -> {
                 when (mapPlaceMode) {
                     MapPlaceMode.Toilet -> {
-                        mapViewModel.createPlace(Place().apply {
-                            point =
-                                com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(clickLocation)
-                            placeType = MapPlaceMode.Toilet.getPlaceId()
-                        }, { place -> markerControl.addToilet(clickLocation, place.id, null) }, { })
+                        mapViewModel.createPlace(
+                            Place().apply {
+                                point =
+                                    com.rydvi.clean_vrn.api.LatLng()
+                                        .parseGoogleLatLng(clickLocation)
+                                placeType = MapPlaceMode.Toilet.getPlaceId()
+                            },
+                            { place -> markerControl.addToilet(clickLocation, place.id, null) {} },
+                            { })
                         setModeOnlyReading()
                     }
                     MapPlaceMode.GarbagePlace -> {
@@ -169,7 +173,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                                         .parseGoogleLatLng(clickLocation)
                                 placeType = MapPlaceMode.GarbagePlace.getPlaceId()
                             },
-                            { place -> markerControl.addGarbage(clickLocation, place.id, null) },
+                            { place -> markerControl.addGarbage(clickLocation, place.id, null) {} },
                             { })
                         setModeOnlyReading()
                     }
@@ -186,20 +190,29 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                                     clickLocation,
                                     place.id,
                                     null
-                                )
+                                ) {}
                             },
                             { })
                         setModeOnlyReading()
                     }
                     MapPlaceMode.StartPlace -> {
-                        startPlace?.remove()
                         mapViewModel.createPlace(
                             Place().apply {
                                 point =
                                     com.rydvi.clean_vrn.api.LatLng()
                                         .parseGoogleLatLng(clickLocation)
+                                placeType = MapPlaceMode.StartPlace.getPlaceId()
                             },
-                            { place -> markerControl.addStartPlace(clickLocation, place.id, null) },
+                            { place ->
+                                startPlace?.remove()
+                                markerControl.addStartPlace(
+                                    clickLocation,
+                                    place.id,
+                                    null
+                                ) {
+                                    startPlace = it
+                                }
+                            },
                             { })
                         setModeOnlyReading()
                     }
