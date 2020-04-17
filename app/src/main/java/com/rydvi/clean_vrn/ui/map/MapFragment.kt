@@ -87,14 +87,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 googleMap.clear()
                 for (place in places) {
                     if (place.placeType === MapPlaceMode.QuestZone.getPlaceId()) {
-                        polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
+                        questZone =
+                            polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
                     } else {
-                        markerControl.addMarkerByPlaceTypeID(
+                        var createdMarker = markerControl.addMarkerByPlaceTypeID(
                             place.point!!.toGoogleLatLng(),
                             place.id,
                             place.placeType!!,
                             place.description!!
                         )
+                        if (place.placeType === MapPlaceMode.StartPlace.getPlaceId()) {
+                            startPlace = createdMarker
+                        }
                     }
                 }
             }
