@@ -431,6 +431,7 @@ object DataRepository {
     fun updatePlace(place: Place, success: () -> Unit, failed: (Error) -> Unit) {
         val bodyMap = LinkedHashMap<String, Any>()
         bodyMap["description"] = if (place.description !== null) place.description!! else ""
+        bodyMap["id_place_type"] = place.placeType!!
         place.point?.let { point ->
             bodyMap["point"] = LinkedHashMap<String, Double>().apply {
                 this["latitude"] = point.latitude!!
@@ -504,14 +505,19 @@ object DataRepository {
             error = getErrorByEx(ex)
         }
         if (statusCode === HttpStatus.OK || statusCode === HttpStatus.CREATED) {
-            callbackSuccess(responseBody)
             activity?.let {
-                if (it is MainActivity) {
-                    it.showLoading(false)
-                } else if (it is LoginActivity) {
-                    it.showLoading(false)
+                it.runOnUiThread {
+                    callbackSuccess(responseBody)
+                    if (it is MainActivity) {
+                        it.showLoading(false)
+                    } else if (it is LoginActivity) {
+                        it.showLoading(false)
+                    }
                 }
+            } ?: run {
+                callbackSuccess(responseBody)
             }
+
         } else {
             callbackFailed(error!!)
             activity?.let {
@@ -537,7 +543,7 @@ object DataRepository {
     private fun getErrorByEx(httpErrorEx: HttpClientErrorException): Error? =
         httpErrorEx.responseBodyAsByteArray?.let {
             ObjectMapper().readValue(httpErrorEx.responseBodyAsByteArray, Error::class.java)
-        }?:run  {
+        } ?: run {
             Error().apply {
                 msg = httpErrorEx.message
                 code = httpErrorEx.statusCode.value()

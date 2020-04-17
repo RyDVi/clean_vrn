@@ -161,7 +161,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                                         .parseGoogleLatLng(clickLocation)
                                 placeType = MapPlaceMode.Toilet.getPlaceId()
                             },
-                            { place -> markerControl.addToilet(clickLocation, place.id, null) {} },
+                            { place -> markerControl.addToilet(clickLocation, place.id, null) },
                             { })
                         setModeOnlyReading()
                     }
@@ -173,7 +173,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                                         .parseGoogleLatLng(clickLocation)
                                 placeType = MapPlaceMode.GarbagePlace.getPlaceId()
                             },
-                            { place -> markerControl.addGarbage(clickLocation, place.id, null) {} },
+                            { place -> markerControl.addGarbage(clickLocation, place.id, null) },
                             { })
                         setModeOnlyReading()
                     }
@@ -190,7 +190,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                                     clickLocation,
                                     place.id,
                                     null
-                                ) {}
+                                )
                             },
                             { })
                         setModeOnlyReading()
@@ -205,13 +205,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                             },
                             { place ->
                                 startPlace?.remove()
-                                markerControl.addStartPlace(
+                                startPlace = markerControl.addStartPlace(
                                     clickLocation,
                                     place.id,
                                     null
-                                ) {
-                                    startPlace = it
-                                }
+                                )
                             },
                             { })
                         setModeOnlyReading()
@@ -234,6 +232,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                 mapViewModel.updatePlace(Place().apply {
                     point = com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(marker.position)
                     description = marker.snippet
+                    id = (marker.tag as MarkerUnique).id
+                    placeType = (marker.tag as MarkerUnique).placeMode.getPlaceId()
                 }, { }, {
                     marker.position = lastLocation
                 })
@@ -442,9 +442,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                     when (markerActionMode) {
                         MarkerActions.Move -> {
                             mapViewModel.updatePlace(Place().apply {
-                                id = it.tag as Long
+                                id = (it.tag as MarkerUnique).id
                                 point =
                                     com.rydvi.clean_vrn.api.LatLng().parseGoogleLatLng(it.position)
+                                placeType = (it.tag as MarkerUnique).placeMode.getPlaceId()
                             }, {
                                 currentMarker?.isDraggable = false
                                 toggleButtons()
@@ -486,6 +487,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         id = (currentMarker!!.tag as MarkerUnique).id
                         point = com.rydvi.clean_vrn.api.LatLng()
                             .parseGoogleLatLng(currentMarker!!.position)
+                        placeType = (currentMarker!!.tag as MarkerUnique).placeMode.getPlaceId()
                     }, { currentMarker?.snippet = descriptionText }, { })
 
                     currentMarker?.hideInfoWindow()
