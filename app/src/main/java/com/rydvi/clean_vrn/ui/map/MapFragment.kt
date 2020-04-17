@@ -154,11 +154,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        currentMarker = marker
-        markerActionMode = MarkerActions.Nothing
-        mapEditMode = MapEditMode.Edit
-        toggleButtons()
-
+        if(mapPlaceMode!=MapPlaceMode.QuestZone) {
+            currentMarker = marker
+            markerActionMode = MarkerActions.Nothing
+            mapEditMode = MapEditMode.Edit
+            toggleButtons()
+        }
         return false
     }
 
