@@ -517,17 +517,20 @@ object DataRepository {
             } ?: run {
                 callbackSuccess(responseBody)
             }
-
         } else {
-            callbackFailed(error!!)
             activity?.let {
-                if (it is MainActivity) {
-                    it.errorHandler.showError(error)
-                    it.showLoading(false)
-                } else if (it is LoginActivity) {
-                    it.errorHandler.showError(error)
-                    it.showLoading(false)
+                it.runOnUiThread {
+                    callbackFailed(error!!)
+                    if (it is MainActivity) {
+                        it.errorHandler.showError(error)
+                        it.showLoading(false)
+                    } else if (it is LoginActivity) {
+                        it.errorHandler.showError(error)
+                        it.showLoading(false)
+                    }
                 }
+            }?: run {
+                callbackFailed(error!!)
             }
         }
     }).start()
