@@ -89,6 +89,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                     if (place.placeType === MapPlaceMode.QuestZone.getPlaceId()) {
                         questZone =
                             polygonControl.createFromPoints(place.getGooglePolygonPoints()!!)
+                        googleMap.moveCamera(
+                            CameraUpdateFactory.newLatLng(
+                                LatLng(
+                                    questZone!!.points[0].latitude,
+                                    questZone!!.points[0].longitude
+                                )
+                            )
+                        )
+                        googleMap.animateCamera(CameraUpdateFactory.zoomTo(14.0f))
                     } else {
                         var createdMarker = markerControl.addMarkerByPlaceTypeID(
                             place.point!!.toGoogleLatLng(),
@@ -98,6 +107,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         )
                         if (place.placeType === MapPlaceMode.StartPlace.getPlaceId()) {
                             startPlace = createdMarker
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLng(startPlace!!.position))
+                            googleMap.animateCamera(CameraUpdateFactory.zoomTo(14.0f))
                         }
                     }
                 }
@@ -154,7 +165,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        if(mapPlaceMode!=MapPlaceMode.QuestZone) {
+        if (mapPlaceMode != MapPlaceMode.QuestZone) {
             currentMarker = marker
             markerActionMode = MarkerActions.Nothing
             mapEditMode = MapEditMode.Edit
