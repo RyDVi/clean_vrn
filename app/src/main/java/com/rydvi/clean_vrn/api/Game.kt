@@ -22,12 +22,6 @@ class Game {
             field = value
         }
 
-    var description: String? = null
-        get() = field
-        set(value) {
-            field = value
-        }
-
     var route: String? = null
         get() = field
         set(value) {

@@ -5,6 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\dmitr\\Desktop\\Подписка на приложение\\rydvi.clean_vrn')
+            storePassword 'MegaMesilovo1997'
+            keyAlias = 'AppCleanVrn'
+            keyPassword 'MegaMesilovo1997'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     dataBinding {
@@ -24,6 +32,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     packagingOptions {

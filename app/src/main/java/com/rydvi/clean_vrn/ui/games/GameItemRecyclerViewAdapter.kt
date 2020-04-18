@@ -92,7 +92,7 @@ class GameItemRecyclerViewAdapter(
                 holder.nameView.setTextColor(activity.resources.getColor(R.color.colorTextGameStatusPlanned))
             }
         }
-        holder.descriptionView.text = item.description.toString()
+        holder.routeView.text = item?.route.let { it } ?: ""
 
         val date = item.datetimeInDate()
         holder.datetimeView.text = date?.let { formatDateTime(it) } ?: ""
@@ -108,7 +108,7 @@ class GameItemRecyclerViewAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameView: TextView = view.name
-        val descriptionView: TextView = view.description
+        val routeView: TextView = view.route
         val datetimeView: TextView = view.datetime
     }
 }

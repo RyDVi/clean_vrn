@@ -65,7 +65,6 @@
     <string name="game_save">Save</string>
     <string name="title_game_info">Game info</string>
     <string name="title_game_coefficients">Coefficients</string>
-    <string name="inp_game_description">Description</string>
     <string name="inp_game_date">Date start</string>
     <string name="inp_game_time">Time start</string>
     <string name="msg_game_deleted">Game deleted successfully</string>
